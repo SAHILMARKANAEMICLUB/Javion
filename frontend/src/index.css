@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --black: #0A0A0A;
+  --white: #FFFFFF;
+  --off-white: #F5F3EF;
+  --warm-grey: #E8E4DF;
+  --text-primary: #1A1A1A;
+  --text-body: #3D3D3D;
+  --text-muted: #888880;
+  --accent-warm: #B8A898;
+  --bg-page: #F5F3EF;
+  --bg-dark: #111111;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Typography utilities */
+.font-display { font-family: 'Playfair Display', serif; }
+.font-body { font-family: 'Inter', sans-serif; }
+
+.eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.headline-mixed {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.headline-mixed em,
+.headline-mixed .em {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--text-primary);
+}
+
+/* Marquee animations */
+@keyframes scroll-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes scroll-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+  will-change: transform;
+}
+.marquee-left  { animation: scroll-left  40s linear infinite; }
+.marquee-right { animation: scroll-right 45s linear infinite; }
+.marquee-left:hover, .marquee-right:hover { animation-play-state: paused; }
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 28s linear infinite;
+  will-change: transform;
+}
+.ticker-track:hover { animation-play-state: paused; }
+
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50%      { transform: translateY(8px); opacity: 1; }
+}
+.scroll-indicator { animation: bounceDown 2s ease-in-out infinite; }
+
+/* Selection */
+::selection {
+  background: #1A1A1A;
+  color: #F5F3EF;
+}
+
+/* Smooth scroll hint */
+html { scroll-behavior: auto; }
+
+/* Hide horizontal scroll on body for marquees */
+body { overflow-x: hidden; }
+
+/* Link reset */
+a { color: inherit; text-decoration: none; }
+
+/* Image base */
+img { display: block; max-width: 100%; }
+
+/* Shadcn vars (keep defaults compatible) */
+@layer base {
+  :root {
+    --background: 38 27% 95%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 0 0% 10%;
+    --primary-foreground: 38 27% 95%;
+    --secondary: 38 15% 90%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 38 15% 90%;
+    --muted-foreground: 60 4% 53%;
+    --accent: 38 15% 90%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 38 15% 88%;
+    --input: 38 15% 88%;
+    --ring: 0 0% 10%;
+    --radius: 0.25rem;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+}
