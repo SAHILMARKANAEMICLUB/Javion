@@ -52,7 +52,7 @@ export default function ProjectCard({ project, height = '60vh' }) {
           {project.excerpt}
         </p>
         <div
-          className="mt-5 inline-flex items-center gap-2 bg-white text-[#1A1A1A] px-4 py-2 text-[12px]"
+          className="mt-5 inline-flex items-center gap-2 bg-white text-[#F5F3EF] px-4 py-2 text-[12px]"
           style={{
             letterSpacing: '0.08em',
             borderRadius: 2,

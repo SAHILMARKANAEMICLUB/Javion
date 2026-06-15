@@ -94,7 +94,7 @@ export default function ProjectCarousel({ projects }) {
                 {p.excerpt}
               </p>
               <div
-                className="mt-5 inline-flex items-center gap-2 bg-white text-[#1A1A1A] px-4 py-2 text-[12px] opacity-0 group-hover:opacity-100 transition-all duration-500"
+                className="mt-5 inline-flex items-center gap-2 bg-white text-[#F5F3EF] px-4 py-2 text-[12px] opacity-0 group-hover:opacity-100 transition-all duration-500"
                 style={{
                   letterSpacing: '0.1em',
                   borderRadius: 2,
@@ -117,9 +117,9 @@ export default function ProjectCarousel({ projects }) {
           disabled={!canPrev}
           className="w-12 h-12 flex items-center justify-center transition-opacity"
           style={{
-            border: '1px solid #1A1A1A',
+            border: '1px solid #F5F3EF',
             borderRadius: 999,
-            color: '#1A1A1A',
+            color: '#F5F3EF',
             opacity: canPrev ? 1 : 0.3,
           }}
         >
@@ -131,9 +131,9 @@ export default function ProjectCarousel({ projects }) {
           disabled={!canNext}
           className="w-12 h-12 flex items-center justify-center transition-opacity"
           style={{
-            border: '1px solid #1A1A1A',
+            border: '1px solid #F5F3EF',
             borderRadius: 999,
-            color: '#1A1A1A',
+            color: '#F5F3EF',
             opacity: canNext ? 1 : 0.3,
           }}
         >

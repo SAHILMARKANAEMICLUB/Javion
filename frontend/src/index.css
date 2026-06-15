@@ -9,12 +9,12 @@
   --white: #FFFFFF;
   --off-white: #F5F3EF;
   --warm-grey: #E8E4DF;
-  --text-primary: #1A1A1A;
-  --text-body: #3D3D3D;
-  --text-muted: #888880;
+  --text-primary: #F5F3EF;
+  --text-body: #C9C4BC;
+  --text-muted: #88847C;
   --accent-warm: #B8A898;
-  --bg-page: #F5F3EF;
-  --bg-dark: #111111;
+  --bg-page: #0A0A0A;
+  --bg-dark: #0A0A0A;
 }
 
 html, body {
@@ -44,13 +44,13 @@ html, body {
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: #B8A898;
 }
 
 .headline-mixed {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Cormorant Garamond', 'Playfair Display', serif;
   font-weight: 300;
-  color: var(--text-primary);
+  color: #F5F3EF;
   line-height: 1.15;
   letter-spacing: -0.01em;
 }
@@ -60,7 +60,7 @@ html, body {
   font-family: 'Playfair Display', serif;
   font-weight: 700;
   font-style: italic;
-  color: var(--text-primary);
+  color: #F5F3EF;
 }
 
 /* Marquee animations */

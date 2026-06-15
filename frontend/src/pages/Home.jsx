@@ -212,7 +212,7 @@ export default function Home() {
       <section
         id="welcome"
         className="relative px-6 md:px-[6vw] py-28 md:py-40 overflow-hidden"
-        style={{ backgroundColor: '#F5F3EF' }}
+        style={{ backgroundColor: '#0A0A0A' }}
       >
         {/* H2 centered */}
         <div className="max-w-5xl mx-auto text-center relative z-10">
@@ -266,7 +266,7 @@ export default function Home() {
       </section>
 
       {/* REALISATIONS — horizontal carousel */}
-      <section className="py-24" style={{ backgroundColor: '#F5F3EF' }}>
+      <section className="py-24" style={{ backgroundColor: '#0A0A0A' }}>
         <div data-animate className="px-6 md:px-[8vw]">
           <div className="eyebrow">Réalisations</div>
           <h2
@@ -285,7 +285,7 @@ export default function Home() {
           <Link
             to="/realisations"
             className="inline-flex items-center gap-2 text-[14px] border-b pb-1 hover:opacity-60 transition-opacity"
-            style={{ color: '#1A1A1A', borderColor: '#1A1A1A' }}
+            style={{ color: '#F5F3EF', borderColor: '#F5F3EF' }}
           >
             Découvrir toutes nos réalisations <ArrowRight size={14} strokeWidth={1.5} />
           </Link>
@@ -293,7 +293,7 @@ export default function Home() {
       </section>
 
       {/* TEAM PREVIEW */}
-      <section className="px-6 md:px-[8vw] py-28" style={{ backgroundColor: '#F5F3EF' }}>
+      <section className="px-6 md:px-[8vw] py-28" style={{ backgroundColor: '#0A0A0A' }}>
         <div data-animate className="max-w-7xl mx-auto">
           <div className="eyebrow">Notre équipe</div>
           <h2
@@ -317,7 +317,7 @@ export default function Home() {
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500" />
             <div
-              className="absolute bottom-8 right-8 inline-flex items-center gap-2 bg-white text-[#1A1A1A] px-5 py-3 text-[12px]"
+              className="absolute bottom-8 right-8 inline-flex items-center gap-2 bg-white text-[#F5F3EF] px-5 py-3 text-[12px]"
               style={{ letterSpacing: '0.1em', borderRadius: 2 }}
             >
               Découvrir l'équipe <ArrowRight size={14} strokeWidth={1.5} />
@@ -326,7 +326,7 @@ export default function Home() {
         </Link>
         <p
           className="max-w-2xl mt-12"
-          style={{ color: '#3D3D3D', fontSize: 18, lineHeight: 1.85 }}
+          style={{ color: '#C9C4BC', fontSize: 18, lineHeight: 1.85 }}
           data-animate
         >
           Passionnés par le travail du métal et du fer forgé, notre équipe vous

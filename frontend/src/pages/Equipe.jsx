@@ -25,7 +25,7 @@ export default function Equipe() {
   }, []);
 
   return (
-    <main style={{ backgroundColor: '#F5F3EF' }}>
+    <main style={{ backgroundColor: '#0A0A0A' }}>
       {/* Hero text */}
       <section className="px-6 md:px-[8vw] pt-36 md:pt-44 pb-20">
         <div className="max-w-5xl">
@@ -59,7 +59,7 @@ export default function Equipe() {
           <h2 className="headline-mixed mt-4" style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}>
             Notre <em>histoire</em>
           </h2>
-          <p className="mt-8" style={{ color: '#3D3D3D', fontSize: 18, lineHeight: 1.85, maxWidth: 680 }}>
+          <p className="mt-8" style={{ color: '#C9C4BC', fontSize: 18, lineHeight: 1.85, maxWidth: 680 }}>
             Fondé sur une exigence simple — celle du geste juste — Metal360 réunit aujourd'hui une équipe d'artisans
             métalliers formés aux techniques traditionnelles comme aux outils numériques les plus récents. De la
             conception au montage, chaque étape est pensée comme un acte d'auteur.
@@ -78,8 +78,8 @@ export default function Equipe() {
             <h3 className="headline-mixed mt-3" style={{ fontSize: 'clamp(28px, 3.6vw, 44px)' }}>
               <em>{FOUNDER.name}</em>
             </h3>
-            <div className="mt-2 italic text-[15px]" style={{ color: '#888880' }}>{FOUNDER.role}</div>
-            <p className="mt-6" style={{ color: '#3D3D3D', fontSize: 17, lineHeight: 1.85 }}>
+            <div className="mt-2 italic text-[15px]" style={{ color: '#88847C' }}>{FOUNDER.role}</div>
+            <p className="mt-6" style={{ color: '#C9C4BC', fontSize: 17, lineHeight: 1.85 }}>
               {FOUNDER.bio}
             </p>
           </div>

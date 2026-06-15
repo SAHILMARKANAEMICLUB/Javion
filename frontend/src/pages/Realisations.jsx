@@ -34,7 +34,7 @@ export default function Realisations() {
   }, [visible]);
 
   return (
-    <main style={{ backgroundColor: '#F5F3EF' }}>
+    <main style={{ backgroundColor: '#0A0A0A' }}>
       {/* Hero text */}
       <section className="px-6 md:px-[8vw] pt-36 md:pt-44 pb-16">
         <div className="max-w-5xl">
@@ -47,14 +47,14 @@ export default function Realisations() {
             <span className="word inline-block">dernières&nbsp;</span>
             <em className="word inline-block">créations</em>
           </h1>
-          <p className="mt-6 max-w-xl" style={{ color: '#3D3D3D', fontSize: 18, lineHeight: 1.7 }}>
+          <p className="mt-6 max-w-xl" style={{ color: '#C9C4BC', fontSize: 18, lineHeight: 1.7 }}>
             Une sélection de pièces uniques, façonnées dans notre atelier — escaliers, garde-corps, portails, mobilier et travaux d'exception.
           </p>
         </div>
       </section>
 
       {/* Filter */}
-      <section className="px-6 md:px-[8vw] sticky top-[72px] z-30 py-4" style={{ backgroundColor: '#F5F3EF' }}>
+      <section className="px-6 md:px-[8vw] sticky top-[72px] z-30 py-4" style={{ backgroundColor: '#0A0A0A' }}>
         <div className="max-w-7xl mx-auto flex flex-wrap items-center gap-x-6 gap-y-3">
           {CATEGORIES.map((c) => {
             const active = filter === c;
@@ -64,9 +64,9 @@ export default function Realisations() {
                 onClick={() => setFilter(active ? null : c)}
                 className="text-[13px] transition-colors duration-200"
                 style={{
-                  color: active ? '#1A1A1A' : '#888880',
+                  color: active ? '#F5F3EF' : '#88847C',
                   paddingBottom: 4,
-                  borderBottom: active ? '2px solid #1A1A1A' : '2px solid transparent',
+                  borderBottom: active ? '2px solid #F5F3EF' : '2px solid transparent',
                 }}
               >
                 {c}
@@ -77,7 +77,7 @@ export default function Realisations() {
             <button
               onClick={() => setFilter(null)}
               className="ml-auto inline-flex items-center gap-1 text-[12px]"
-              style={{ color: '#1A1A1A' }}
+              style={{ color: '#F5F3EF' }}
             >
               <X size={14} strokeWidth={1.5} /> Effacer le filtre
             </button>
@@ -138,7 +138,7 @@ export default function Realisations() {
                     ))}
                   </div>
                 )}
-                <span className="inline-flex items-center gap-2 bg-white text-[#1A1A1A] px-4 py-2 text-[12px] w-fit" style={{ letterSpacing: '0.08em', borderRadius: 2 }}>
+                <span className="inline-flex items-center gap-2 bg-white text-[#F5F3EF] px-4 py-2 text-[12px] w-fit" style={{ letterSpacing: '0.08em', borderRadius: 2 }}>
                   Voir la réalisation <ArrowRight size={14} strokeWidth={1.5} />
                 </span>
               </div>
@@ -149,9 +149,9 @@ export default function Realisations() {
         <div className="text-center mt-16">
           <button
             className="text-[13px] px-6 py-3 transition-colors"
-            style={{ border: '1px solid #1A1A1A', color: '#1A1A1A', borderRadius: 2, letterSpacing: '0.06em' }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#1A1A1A'; e.currentTarget.style.color = '#FFFFFF'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#1A1A1A'; }}
+            style={{ border: '1px solid #F5F3EF', color: '#F5F3EF', borderRadius: 2, letterSpacing: '0.06em' }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#F5F3EF'; e.currentTarget.style.color = '#FFFFFF'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#F5F3EF'; }}
           >
             Voir plus de créations
           </button>
