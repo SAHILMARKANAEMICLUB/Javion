@@ -3,8 +3,14 @@ import { ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { HERO_VIDEO, HERO_VIDEO_FALLBACK, PROJECTS, GRID_IMAGES, TEAM_PHOTO } from '../mock';
-import ProjectCard from '../components/ProjectCard';
+import {
+  HERO_VIDEO,
+  HERO_VIDEO_FALLBACK,
+  PROJECTS,
+  GRID_IMAGES,
+  TEAM_PHOTO,
+} from '../mock';
+import ProjectCarousel from '../components/ProjectCarousel';
 import Testimonials from '../components/Testimonials';
 import ContactBlock from '../components/ContactBlock';
 
@@ -12,23 +18,72 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const heroRef = useRef(null);
-  const sectionsRef = useRef([]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Hero entrance
       gsap.from('.hero-h1 .word', {
-        y: 60,
+        y: 80,
         opacity: 0,
         rotateX: -20,
-        duration: 0.9,
+        duration: 1.1,
         ease: 'power3.out',
-        stagger: 0.08,
+        stagger: 0.1,
         delay: 0.3,
       });
-      gsap.from('.hero-sub', { opacity: 0, y: 20, duration: 0.8, delay: 1.1, ease: 'power2.out' });
-      gsap.from('.hero-scroll', { opacity: 0, duration: 0.8, delay: 1.4 });
+      gsap.from('.hero-sub', {
+        opacity: 0,
+        y: 24,
+        duration: 0.9,
+        delay: 1.2,
+        ease: 'power2.out',
+      });
+      gsap.from('.hero-scroll', { opacity: 0, duration: 0.8, delay: 1.5 });
 
+      // Welcome H2 word-by-word reveal
+      gsap.utils.toArray('.welcome-h2 .w').forEach((el, i) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            delay: i * 0.04,
+            scrollTrigger: { trigger: '.welcome-h2', start: 'top 80%' },
+          }
+        );
+      });
+
+      // Scattered photos parallax + entrance
+      gsap.utils.toArray('.scatter-img').forEach((el) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 60, scale: 0.94 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 1.1,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 92%' },
+          }
+        );
+        // light parallax
+        gsap.to(el, {
+          yPercent: -10,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        });
+      });
+
+      // Generic section animation
       gsap.utils.toArray('[data-animate]').forEach((el) => {
         gsap.fromTo(
           el,
@@ -42,128 +97,191 @@ export default function Home() {
           }
         );
       });
-
-      gsap.utils.toArray('.grid-img').forEach((el, i) => {
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 40, scale: 0.97 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.8,
-            ease: 'power2.out',
-            delay: (i % 6) * 0.06,
-            scrollTrigger: { trigger: el, start: 'top 90%' },
-          }
-        );
-      });
     });
     return () => ctx.revert();
   }, []);
 
+  // Welcome H2 split into words for staggered reveal
+  const welcomeWords = [
+    { t: 'Bienvenue', em: false },
+    { t: 'chez', em: false },
+    { t: 'Metal360,', em: true },
+    { t: 'où', em: false },
+    { t: 'notre', em: false },
+    { t: 'métier', em: false },
+    { t: 'de', em: false },
+    { t: 'métallier', em: false },
+    { t: 'est', em: false },
+    { t: 'bien', em: false },
+    { t: 'plus', em: false },
+    { t: "qu'une", em: false },
+    { t: 'simple', em: false },
+    { t: 'fabrication,', em: false },
+    { t: "c'est", em: false },
+    { t: 'une', em: false },
+    { t: 'expérience', em: true },
+    { t: 'complète', em: true },
+    { t: 'de', em: false },
+    { t: 'bout', em: false },
+    { t: 'en', em: false },
+    { t: 'bout.', em: false },
+  ];
+
   return (
     <main>
       {/* HERO */}
-      <section ref={heroRef} className="relative w-full overflow-hidden" style={{ height: '100vh' }}>
+      <section
+        ref={heroRef}
+        className="relative w-full overflow-hidden"
+        style={{ height: '100vh' }}
+      >
         <video
           autoPlay
           muted
           loop
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          poster="https://images.unsplash.com/photo-1683470157212-cd4005549fce?crop=entropy&cs=srgb&fm=jpg&w=2000&q=85"
+          poster={GRID_IMAGES[2]}
         >
           <source src={HERO_VIDEO} type="video/mp4" />
           <source src={HERO_VIDEO_FALLBACK} type="video/mp4" />
         </video>
-        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(10,10,10,0.45)' }} />
+        <div
+          className="absolute inset-0"
+          style={{ backgroundColor: 'rgba(10,10,10,0.5)' }}
+        />
         <div className="relative z-10 h-full flex flex-col items-center justify-center px-6 text-center">
           <h1
             className="hero-h1 text-white"
             style={{
-              fontSize: 'clamp(56px, 11vw, 140px)',
+              fontSize: 'clamp(64px, 12vw, 160px)',
               lineHeight: 1.0,
               letterSpacing: '-0.02em',
             }}
           >
-            <span className="word inline-block font-display italic" style={{ fontWeight: 700 }}>Metal</span>{' '}
-            <span className="word inline-block font-body" style={{ fontWeight: 300 }}>360</span>
+            <span
+              className="word inline-block font-display italic"
+              style={{ fontWeight: 700 }}
+            >
+              Metal
+            </span>{' '}
+            <span
+              className="word inline-block font-body"
+              style={{ fontWeight: 300 }}
+            >
+              360
+            </span>
           </h1>
           <p
-            className="hero-sub mt-8 text-white mx-auto"
+            className="hero-sub mt-10 text-white mx-auto"
             style={{
-              maxWidth: 720,
+              maxWidth: 760,
               fontWeight: 300,
-              fontSize: 18,
+              fontSize: 19,
               lineHeight: 1.7,
-              color: 'rgba(255,255,255,0.88)',
+              color: 'rgba(255,255,255,0.9)',
             }}
           >
-            <em className="font-display not-italic" style={{ fontStyle: 'italic', fontWeight: 700 }}>Passionnés et inspirés par les métaux</em>, nous transformons l'acier, l'inox et l'aluminium &amp; concevons des ouvrages métalliques uniques pour embellir vos intérieurs et extérieurs.
+            <span
+              className="font-display italic"
+              style={{ fontWeight: 700 }}
+            >
+              Passionnés et inspirés par les métaux
+            </span>
+            , nous transformons l'acier, l'inox et l'aluminium &amp; concevons
+            des ouvrages métalliques uniques pour embellir vos intérieurs et
+            extérieurs.
           </p>
         </div>
-        <div
+        <a
+          href="#welcome"
           className="hero-scroll absolute bottom-10 left-0 right-0 flex flex-col items-center scroll-indicator"
           style={{ color: 'rgba(255,255,255,0.85)' }}
         >
-          <span className="text-[11px] uppercase" style={{ letterSpacing: '0.18em' }}>Défiler</span>
-          <ChevronDown size={20} strokeWidth={1.2} className="mt-2" />
-        </div>
+          <span
+            className="text-[11px] uppercase"
+            style={{ letterSpacing: '0.2em' }}
+          >
+            Défiler
+          </span>
+          <ChevronDown size={22} strokeWidth={1.2} className="mt-2" />
+        </a>
       </section>
 
-      {/* WELCOME / ABOUT */}
-      <section className="px-6 md:px-[8vw] py-24 md:py-32" style={{ backgroundColor: '#F5F3EF' }}>
-        <div className="max-w-4xl mx-auto text-center" data-animate>
+      {/* WELCOME — scattered editorial layout */}
+      <section
+        id="welcome"
+        className="relative px-6 md:px-[6vw] py-28 md:py-40 overflow-hidden"
+        style={{ backgroundColor: '#F5F3EF' }}
+      >
+        {/* H2 centered */}
+        <div className="max-w-5xl mx-auto text-center relative z-10">
           <h2
-            className="headline-mixed"
-            style={{ fontSize: 'clamp(24px, 3.5vw, 44px)', lineHeight: 1.25 }}
+            className="welcome-h2 headline-mixed"
+            style={{ fontSize: 'clamp(26px, 3.6vw, 46px)', lineHeight: 1.25 }}
           >
-            Bienvenue chez <em>Metal360,</em> où notre métier de métallier est bien plus qu'une simple fabrication, c'est une <em>expérience complète</em> de bout en bout.
+            {welcomeWords.map((w, i) => (
+              <React.Fragment key={i}>
+                <span className="w inline-block">
+                  {w.em ? <em>{w.t}</em> : w.t}
+                </span>
+                {i < welcomeWords.length - 1 ? ' ' : ''}
+              </React.Fragment>
+            ))}
           </h2>
         </div>
 
-        {/* Photo grid */}
-        <div className="max-w-6xl mx-auto mt-20 grid grid-cols-2 md:grid-cols-4 gap-3">
-          {GRID_IMAGES.slice(0, 8).map((src, i) => (
-            <div
-              key={i}
-              className="grid-img overflow-hidden"
-              style={{
-                borderRadius: 4,
-                aspectRatio: i % 3 === 0 ? '3 / 4' : '4 / 5',
-              }}
-            >
-              <img
-                src={src}
-                alt=""
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-          ))}
+        {/* Scattered photo grid — asymmetric editorial layout */}
+        <div className="max-w-7xl mx-auto mt-20 grid grid-cols-12 gap-3 md:gap-4">
+          <div className="col-span-6 md:col-span-3 scatter-img overflow-hidden" style={{ borderRadius: 4, aspectRatio: '3 / 4' }}>
+            <img src={GRID_IMAGES[0]} alt="" className="w-full h-full object-cover" loading="lazy" />
+          </div>
+          <div className="col-span-6 md:col-span-4 scatter-img overflow-hidden md:mt-16" style={{ borderRadius: 4, aspectRatio: '4 / 3' }}>
+            <img src={GRID_IMAGES[1]} alt="" className="w-full h-full object-cover" loading="lazy" />
+          </div>
+          <div className="col-span-12 md:col-span-5 scatter-img overflow-hidden" style={{ borderRadius: 4, aspectRatio: '16 / 11' }}>
+            <img src={GRID_IMAGES[2]} alt="" className="w-full h-full object-cover" loading="lazy" />
+          </div>
+
+          <div className="col-span-6 md:col-span-4 scatter-img overflow-hidden md:-mt-10" style={{ borderRadius: 4, aspectRatio: '4 / 5' }}>
+            <img src={GRID_IMAGES[3]} alt="" className="w-full h-full object-cover" loading="lazy" />
+          </div>
+          <div className="col-span-6 md:col-span-3 scatter-img overflow-hidden md:mt-10" style={{ borderRadius: 4, aspectRatio: '3 / 4' }}>
+            <img src={GRID_IMAGES[4]} alt="" className="w-full h-full object-cover" loading="lazy" />
+          </div>
+          <div className="col-span-12 md:col-span-5 scatter-img overflow-hidden" style={{ borderRadius: 4, aspectRatio: '5 / 4' }}>
+            <img src={GRID_IMAGES[5]} alt="" className="w-full h-full object-cover" loading="lazy" />
+          </div>
+
+          <div className="col-span-6 md:col-span-5 scatter-img overflow-hidden md:mt-8" style={{ borderRadius: 4, aspectRatio: '5 / 3' }}>
+            <img src={GRID_IMAGES[6]} alt="" className="w-full h-full object-cover" loading="lazy" />
+          </div>
+          <div className="col-span-6 md:col-span-3 scatter-img overflow-hidden" style={{ borderRadius: 4, aspectRatio: '3 / 4' }}>
+            <img src={GRID_IMAGES[7]} alt="" className="w-full h-full object-cover" loading="lazy" />
+          </div>
+          <div className="col-span-12 md:col-span-4 scatter-img overflow-hidden md:mt-16" style={{ borderRadius: 4, aspectRatio: '4 / 3' }}>
+            <img src={GRID_IMAGES[8]} alt="" className="w-full h-full object-cover" loading="lazy" />
+          </div>
         </div>
       </section>
 
-      {/* REALISATIONS */}
-      <section className="px-6 md:px-[8vw] py-24" style={{ backgroundColor: '#F5F3EF' }}>
-        <div data-animate className="max-w-7xl mx-auto">
+      {/* REALISATIONS — horizontal carousel */}
+      <section className="py-24" style={{ backgroundColor: '#F5F3EF' }}>
+        <div data-animate className="px-6 md:px-[8vw]">
           <div className="eyebrow">Réalisations</div>
           <h2
             className="headline-mixed mt-4"
-            style={{ fontSize: 'clamp(32px, 5vw, 64px)' }}
+            style={{ fontSize: 'clamp(34px, 5.4vw, 68px)' }}
           >
             Nos dernières <em>créations</em>
           </h2>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-5">
-          {PROJECTS.slice(0, 4).map((p) => (
-            <ProjectCard key={p.id} project={p} height="60vh" />
-          ))}
+        <div className="mt-12">
+          <ProjectCarousel projects={PROJECTS} />
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center mt-10">
           <Link
             to="/realisations"
             className="inline-flex items-center gap-2 text-[14px] border-b pb-1 hover:opacity-60 transition-opacity"
@@ -175,12 +293,12 @@ export default function Home() {
       </section>
 
       {/* TEAM PREVIEW */}
-      <section className="px-6 md:px-[8vw] py-24" style={{ backgroundColor: '#F5F3EF' }}>
+      <section className="px-6 md:px-[8vw] py-28" style={{ backgroundColor: '#F5F3EF' }}>
         <div data-animate className="max-w-7xl mx-auto">
           <div className="eyebrow">Notre équipe</div>
           <h2
             className="headline-mixed mt-4"
-            style={{ fontSize: 'clamp(32px, 5vw, 64px)' }}
+            style={{ fontSize: 'clamp(34px, 5vw, 64px)' }}
           >
             Une équipe <em>dynamique, motivée &amp; qualifiée</em>
           </h2>
@@ -191,24 +309,32 @@ export default function Home() {
           className="block max-w-7xl mx-auto mt-12 overflow-hidden group"
           style={{ borderRadius: 6 }}
         >
-          <div className="relative" style={{ height: '60vh' }}>
+          <div className="relative" style={{ height: '64vh' }}>
             <img
               src={TEAM_PHOTO}
               alt="L'équipe Metal360"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500" />
-            <div className="absolute bottom-8 right-8 inline-flex items-center gap-2 bg-white text-[#1A1A1A] px-4 py-2 text-[12px]" style={{ letterSpacing: '0.08em', borderRadius: 2 }}>
+            <div
+              className="absolute bottom-8 right-8 inline-flex items-center gap-2 bg-white text-[#1A1A1A] px-5 py-3 text-[12px]"
+              style={{ letterSpacing: '0.1em', borderRadius: 2 }}
+            >
               Découvrir l'équipe <ArrowRight size={14} strokeWidth={1.5} />
             </div>
           </div>
         </Link>
         <p
-          className="max-w-2xl mt-10"
-          style={{ color: '#3D3D3D', fontSize: 18, lineHeight: 1.8 }}
+          className="max-w-2xl mt-12"
+          style={{ color: '#3D3D3D', fontSize: 18, lineHeight: 1.85 }}
           data-animate
         >
-          Passionnés par le travail du métal, nos artisans métalliers conjuguent expertise traditionnelle et savoir-faire contemporain. Chaque projet est pensé, dessiné et façonné dans notre atelier en Maine-et-Loire.
+          Passionnés par le travail du métal et du fer forgé, notre équipe vous
+          propose des prestations sur-mesure pour la création et la fabrication
+          sur mesure de vos ouvrages métalliques. L'équipe maîtrise le potentiel
+          de chaque alliage : acier, inox, aluminium, laiton, cuivre, fonte
+          … ainsi que l'ensemble des procédés de soudure : TIG, MIG, électrode
+          enrobé, brasage.
         </p>
       </section>
 

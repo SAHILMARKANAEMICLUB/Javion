@@ -106,6 +106,10 @@ html, body {
   color: #F5F3EF;
 }
 
+/* Hide horizontal scrollbar on carousel */
+.flex.gap-5.overflow-x-auto::-webkit-scrollbar { display: none; }
+*::-webkit-scrollbar { width: 0; height: 0; }
+
 /* Smooth scroll hint */
 html { scroll-behavior: auto; }
 
