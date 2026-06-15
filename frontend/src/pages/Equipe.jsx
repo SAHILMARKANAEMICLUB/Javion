@@ -29,18 +29,18 @@ export default function Equipe() {
       {/* Hero text */}
       <section className="px-6 md:px-[8vw] pt-36 md:pt-44 pb-20">
         <div className="max-w-5xl">
-          <div className="eyebrow">Notre équipe</div>
+          <div className="eyebrow">The Studio</div>
           <h1
             className="eq-h1 headline-mixed mt-5"
             style={{ fontSize: 'clamp(32px, 5vw, 64px)', lineHeight: 1.15 }}
           >
-            <span className="word inline-block">Nous sommes des&nbsp;</span>
+            <span className="word inline-block">We are&nbsp;</span>
             <em className="word inline-block">artisans</em>{' '}
-            <em className="word inline-block">passionnés</em>{' '}
-            <span className="word inline-block">par les métaux,&nbsp;</span>
-            <em className="word inline-block">dévoués à chaque projet</em>{' '}
-            <span className="word inline-block">comme une&nbsp;</span>
-            <em className="word inline-block">œuvre d'art.</em>
+            <em className="word inline-block">obsessed</em>{' '}
+            <span className="word inline-block">with metal —&nbsp;</span>
+            <em className="word inline-block">devoted to every project</em>{' '}
+            <span className="word inline-block">as if it were&nbsp;</span>
+            <em className="word inline-block">a work of art.</em>
           </h1>
         </div>
       </section>
@@ -48,21 +48,19 @@ export default function Equipe() {
       {/* Team photo */}
       <section className="px-6 md:px-[8vw] pb-24" data-animate>
         <div className="max-w-7xl mx-auto overflow-hidden" style={{ borderRadius: 6, height: '55vh' }}>
-          <img src={TEAM_PHOTO} alt="L'équipe Metal360" className="w-full h-full object-cover" />
+          <img src={TEAM_PHOTO} alt="The Metal360 studio" className="w-full h-full object-cover" />
         </div>
       </section>
 
       {/* History */}
       <section className="px-6 md:px-[8vw] py-20" data-animate>
         <div className="max-w-4xl">
-          <div className="eyebrow">Notre histoire</div>
+          <div className="eyebrow">Our story</div>
           <h2 className="headline-mixed mt-4" style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}>
-            Notre <em>histoire</em>
+            A studio built on <em>one stubborn idea.</em>
           </h2>
           <p className="mt-8" style={{ color: '#C9C4BC', fontSize: 18, lineHeight: 1.85, maxWidth: 680 }}>
-            Fondé sur une exigence simple — celle du geste juste — Metal360 réunit aujourd'hui une équipe d'artisans
-            métalliers formés aux techniques traditionnelles comme aux outils numériques les plus récents. De la
-            conception au montage, chaque étape est pensée comme un acte d'auteur.
+            Metal360 began with a refusal — to treat metalwork as a commodity. From the first weld, the studio has been guided by a single instinct: every commission deserves to feel inevitable. From sketch to install, our artisans move with the same patience whether the piece is a private staircase or a public sculpture. Slow when it matters. Fast where it doesn&apos;t. Never rushed where it shows.
           </p>
         </div>
       </section>
@@ -74,7 +72,7 @@ export default function Equipe() {
             <img src={FOUNDER.photo} alt={FOUNDER.name} className="w-full object-cover" style={{ height: 540 }} />
           </div>
           <div className="md:col-span-7">
-            <div className="eyebrow">Fondateur</div>
+            <div className="eyebrow">Founder</div>
             <h3 className="headline-mixed mt-3" style={{ fontSize: 'clamp(28px, 3.6vw, 44px)' }}>
               <em>{FOUNDER.name}</em>
             </h3>
@@ -88,7 +86,7 @@ export default function Equipe() {
 
       {/* Photo marquees */}
       <section className="py-20" data-animate>
-        <div className="eyebrow px-6 md:px-[8vw] mb-8">L'atelier en images</div>
+        <div className="eyebrow px-6 md:px-[8vw] mb-8">Inside the workshop</div>
         <div className="flex flex-col gap-3">
           <PhotoMarquee images={MARQUEE_IMAGES_ROW1} direction="left" height={240} />
           <PhotoMarquee images={MARQUEE_IMAGES_ROW2} direction="right" height={240} />

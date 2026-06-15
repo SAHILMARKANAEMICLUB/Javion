@@ -7,7 +7,6 @@ import Loader from './components/Loader';
 import Home from './pages/Home';
 import Realisations from './pages/Realisations';
 import Equipe from './pages/Equipe';
-import Saas from './pages/Saas';
 import Cinematic from './pages/Cinematic';
 import useLenisScroll from './hooks/useLenisScroll';
 
@@ -22,9 +21,8 @@ function ScrollToTop() {
 function Shell() {
   useLenisScroll();
   const { pathname } = useLocation();
-  const isSaas = pathname.startsWith('/saas');
   const isCinematic = pathname.startsWith('/cinamatic');
-  const hideChrome = isSaas || isCinematic;
+  const hideChrome = isCinematic;
   return (
     <>
       <ScrollToTop />
@@ -34,7 +32,6 @@ function Shell() {
         <Route path="/realisations" element={<Realisations />} />
         <Route path="/equipe-metal360" element={<Equipe />} />
         <Route path="/expertise" element={<Home />} />
-        <Route path="/saas" element={<Saas />} />
         <Route path="/cinamatic" element={<Cinematic />} />
       </Routes>
       {!hideChrome && <Footer />}

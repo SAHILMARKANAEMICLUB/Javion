@@ -103,28 +103,28 @@ export default function Home() {
 
   // Welcome H2 split into words for staggered reveal
   const welcomeWords = [
-    { t: 'Bienvenue', em: false },
-    { t: 'chez', em: false },
+    { t: 'Welcome', em: false },
+    { t: 'to', em: false },
     { t: 'Metal360,', em: true },
-    { t: 'où', em: false },
-    { t: 'notre', em: false },
-    { t: 'métier', em: false },
-    { t: 'de', em: false },
-    { t: 'métallier', em: false },
-    { t: 'est', em: false },
-    { t: 'bien', em: false },
-    { t: 'plus', em: false },
-    { t: "qu'une", em: false },
-    { t: 'simple', em: false },
-    { t: 'fabrication,', em: false },
-    { t: "c'est", em: false },
-    { t: 'une', em: false },
-    { t: 'expérience', em: true },
-    { t: 'complète', em: true },
-    { t: 'de', em: false },
-    { t: 'bout', em: false },
-    { t: 'en', em: false },
-    { t: 'bout.', em: false },
+    { t: 'where', em: false },
+    { t: 'a', em: false },
+    { t: "metalworker's", em: false },
+    { t: 'craft', em: false },
+    { t: 'is', em: false },
+    { t: 'never', em: false },
+    { t: 'just', em: false },
+    { t: 'fabrication', em: false },
+    { t: '—', em: false },
+    { t: "it's", em: false },
+    { t: 'a', em: false },
+    { t: 'whole', em: true },
+    { t: 'experience,', em: true },
+    { t: 'from', em: false },
+    { t: 'first', em: false },
+    { t: 'sketch', em: false },
+    { t: 'to', em: false },
+    { t: 'final', em: false },
+    { t: 'install.', em: false },
   ];
 
   return (
@@ -186,11 +186,9 @@ export default function Home() {
               className="font-display italic"
               style={{ fontWeight: 700 }}
             >
-              Passionnés et inspirés par les métaux
+              Forged by hand, drawn by intention
             </span>
-            , nous transformons l'acier, l'inox et l'aluminium &amp; concevons
-            des ouvrages métalliques uniques pour embellir vos intérieurs et
-            extérieurs.
+            — we shape steel, stainless, and aluminum into pieces that outlive trends and turn architecture into a memory.
           </p>
         </div>
         <a
@@ -202,7 +200,7 @@ export default function Home() {
             className="text-[11px] uppercase"
             style={{ letterSpacing: '0.2em' }}
           >
-            Défiler
+            Scroll
           </span>
           <ChevronDown size={22} strokeWidth={1.2} className="mt-2" />
         </a>
@@ -268,12 +266,12 @@ export default function Home() {
       {/* REALISATIONS — horizontal carousel */}
       <section className="py-24" style={{ backgroundColor: '#0A0A0A' }}>
         <div data-animate className="px-6 md:px-[8vw]">
-          <div className="eyebrow">Réalisations</div>
+          <div className="eyebrow">Selected Work</div>
           <h2
             className="headline-mixed mt-4"
             style={{ fontSize: 'clamp(34px, 5.4vw, 68px)' }}
           >
-            Nos dernières <em>créations</em>
+            Our latest <em>creations</em>
           </h2>
         </div>
 
@@ -287,7 +285,7 @@ export default function Home() {
             className="inline-flex items-center gap-2 text-[14px] border-b pb-1 hover:opacity-60 transition-opacity"
             style={{ color: '#F5F3EF', borderColor: '#F5F3EF' }}
           >
-            Découvrir toutes nos réalisations <ArrowRight size={14} strokeWidth={1.5} />
+            Explore the full portfolio <ArrowRight size={14} strokeWidth={1.5} />
           </Link>
         </div>
       </section>
@@ -295,12 +293,12 @@ export default function Home() {
       {/* TEAM PREVIEW */}
       <section className="px-6 md:px-[8vw] py-28" style={{ backgroundColor: '#0A0A0A' }}>
         <div data-animate className="max-w-7xl mx-auto">
-          <div className="eyebrow">Notre équipe</div>
+          <div className="eyebrow">The Studio</div>
           <h2
             className="headline-mixed mt-4"
             style={{ fontSize: 'clamp(34px, 5vw, 64px)' }}
           >
-            Une équipe <em>dynamique, motivée &amp; qualifiée</em>
+            A studio <em>obsessed with the well-made.</em>
           </h2>
         </div>
         <Link
@@ -312,7 +310,7 @@ export default function Home() {
           <div className="relative" style={{ height: '64vh' }}>
             <img
               src={TEAM_PHOTO}
-              alt="L'équipe Metal360"
+              alt="The Metal360 studio"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500" />
@@ -320,7 +318,7 @@ export default function Home() {
               className="absolute bottom-8 right-8 inline-flex items-center gap-2 bg-white text-[#F5F3EF] px-5 py-3 text-[12px]"
               style={{ letterSpacing: '0.1em', borderRadius: 2 }}
             >
-              Découvrir l'équipe <ArrowRight size={14} strokeWidth={1.5} />
+              Meet the studio <ArrowRight size={14} strokeWidth={1.5} />
             </div>
           </div>
         </Link>
@@ -329,12 +327,7 @@ export default function Home() {
           style={{ color: '#C9C4BC', fontSize: 18, lineHeight: 1.85 }}
           data-animate
         >
-          Passionnés par le travail du métal et du fer forgé, notre équipe vous
-          propose des prestations sur-mesure pour la création et la fabrication
-          sur mesure de vos ouvrages métalliques. L'équipe maîtrise le potentiel
-          de chaque alliage : acier, inox, aluminium, laiton, cuivre, fonte
-          … ainsi que l'ensemble des procédés de soudure : TIG, MIG, électrode
-          enrobé, brasage.
+          Twelve artisans. One workshop. A shared belief that metal is more than a material — it is a language. Every commission begins the same way: by listening. To the building, to the brief, to the way light will fall on the piece long after we are gone.
         </p>
       </section>
 

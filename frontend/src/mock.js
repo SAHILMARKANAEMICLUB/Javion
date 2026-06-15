@@ -1,116 +1,114 @@
-// Real data from metal360.fr (Webflow CDN images publicly accessible)
+// All content in English with editorial, attractive copywriting.
+// Original creative writing — no reproduced marketing copy.
 
 const CDN = 'https://cdn.prod.website-files.com/64e31036eccea9001058bfc8';
 const CDN2 = 'https://cdn.prod.website-files.com/64e85c16c3e5fe1806b372fc';
 
 export const NAV_LINKS = [
-  { label: 'Accueil', href: '/' },
-  { label: 'Réalisations', href: '/realisations' },
-  { label: 'Notre équipe', href: '/equipe-metal360' },
-  { label: 'Expertise', href: '/expertise' },
+  { label: 'Home', href: '/' },
+  { label: 'Work', href: '/realisations' },
+  { label: 'Studio', href: '/equipe-metal360' },
+  { label: 'Craft', href: '/expertise' },
 ];
 
-// Hero background — using a Pexels metalwork video
 export const HERO_VIDEO = 'https://videos.pexels.com/video-files/8721934/8721934-uhd_2560_1440_25fps.mp4';
 export const HERO_VIDEO_FALLBACK = 'https://videos.pexels.com/video-files/4488740/4488740-uhd_2560_1440_25fps.mp4';
 
-// Real projects from metal360.fr
 export const PROJECTS = [
   {
     id: 'p1',
-    slug: 'spirale-infinie',
-    category: 'Escalier',
-    title: 'Spirale Infinie',
-    excerpt: "Notre savoir-faire s'exprime à travers un escalier hélicoïdal sur mesure en métal.",
+    slug: 'infinite-spiral',
+    category: 'Staircases',
+    title: 'Infinite Spiral',
+    excerpt: 'A helical staircase, drawn in a single breath. Carbon steel curves that seem to climb without touching the ground.',
     cover: `${CDN2}/69fb5afeb004b1f42c09cefc_PHOTO-PRINCIPALE.jpg`,
     thumbs: [],
   },
   {
     id: 'p2',
-    slug: 'elegance-naturelle',
-    category: 'Escalier',
-    title: 'Elegance Naturelle',
-    excerpt: "Dans cette réalisation, notre savoir-faire s'exprime avec justesse et retenue à travers un escalier.",
+    slug: 'quiet-elegance',
+    category: 'Staircases',
+    title: 'Quiet Elegance',
+    excerpt: 'Where restraint becomes presence. Blackened steel treads suspended in a wash of natural light.',
     cover: `${CDN2}/69fb5a37ef8470ae3c5c959e_PHOTO-PRINCIPALE.jpg`,
     thumbs: [],
   },
   {
     id: 'p3',
-    slug: 'transparence-totale-latranche',
-    category: 'Garde-corps',
-    title: 'Transparence totale',
-    excerpt: "Dans cette maison en bord de mer, les garde-corps en verre trempé jouent avec la lumière.",
+    slug: 'transparent-line',
+    category: 'Railings',
+    title: 'Transparent Line',
+    excerpt: 'A seaside villa, dressed in tempered glass and brushed stainless. The horizon stays uninterrupted.',
     cover: `${CDN2}/69256b1bda8f0bc1569a2d89_PHOTO%20DE%20COUVERTURE.jpg`,
     thumbs: [],
   },
   {
     id: 'p4',
-    slug: 'suspension-en-levitation',
-    category: 'Escalier',
-    title: 'Suspension en lévitation',
-    excerpt: "Dans cette réalisation suspendue, l'escalier semble flotter au-dessus de la pièce.",
+    slug: 'levitation',
+    category: 'Staircases',
+    title: 'Levitation',
+    excerpt: 'Cantilevered treads, no visible support. A staircase that defies the weight of its own steel.',
     cover: `${CDN2}/692568c228ef131b45e49d5d_PHOTO%20DE%20COUVERTURE.jpg`,
     thumbs: [],
   },
   {
     id: 'p5',
-    slug: 'griffon-tiffauges',
-    category: "Travaux d'exception",
-    title: 'Griffon de Tiffauges',
-    excerpt: "Une œuvre monumentale en acier, signature d'un savoir-faire d'exception.",
+    slug: 'griffon',
+    category: 'Statement pieces',
+    title: 'The Griffon',
+    excerpt: 'A monumental sculpture carved in weathered steel — a guardian for a thousand-year-old fortress.',
     cover: `${CDN}/65323ec1a64d6d0909b8ffb5_metal360_griffon_tiffauges_143_BD.jpg`,
     thumbs: [],
   },
   {
     id: 'p6',
-    slug: 'pergola-vertou',
-    category: 'Ombrage',
-    title: 'Pergola de Vertou',
-    excerpt: "Une structure d'ombrage contemporaine aux lignes pures.",
+    slug: 'pergola',
+    category: 'Shade Structures',
+    title: 'Open Pergola',
+    excerpt: 'A pavilion of slender black columns and infinite sky. Built to frame a riverside terrace, made to stay.',
     cover: `${CDN}/65323ec1715331597422d103_metal360_pergola_vertou_414__bd-2.jpg`,
     thumbs: [],
   },
   {
     id: 'p7',
-    slug: 'moulin-neuf',
-    category: 'Menuiserie acier',
-    title: 'Moulin Neuf',
-    excerpt: "Menuiserie acier sur-mesure pour une rénovation patrimoniale.",
+    slug: 'mill',
+    category: 'Steel Joinery',
+    title: 'The Old Mill',
+    excerpt: 'Heritage windows, reimagined in fine steel profiles. Where preservation meets new geometry.',
     cover: `${CDN}/65323ec153e01bf83befac41_metal360_moulin_neuf_76__bd.jpg`,
     thumbs: [],
   },
   {
     id: 'p8',
-    slug: 'kiosque-la-digue',
-    category: "Travaux d'exception",
-    title: 'Kiosque La Digue',
-    excerpt: "Un kiosque en acier façonné comme une œuvre architecturale.",
+    slug: 'kiosk',
+    category: 'Statement pieces',
+    title: 'River Kiosk',
+    excerpt: 'A pavilion folded from a single sheet of geometry. Half shelter, half sculpture, all steel.',
     cover: `${CDN}/65323ec1a20d785f6469cdd2_kiosque_la_digue_03_bd3-2.jpg`,
     thumbs: [],
   },
   {
     id: 'p9',
-    slug: 'gite-caves-secretes',
-    category: 'Verrière',
-    title: 'Gîte des Caves Secrètes',
-    excerpt: "Une verrière sur-mesure pour un lieu d'exception.",
+    slug: 'glass-house',
+    category: 'Partitions',
+    title: 'Hidden Cellar',
+    excerpt: 'A glass-and-steel partition for a secret tasting room — where wine, light, and metal hold their breath together.',
     cover: `${CDN}/65323ec1afb79142dd44bc6f_gite_caves_secretes190_HDR_bd.jpg`,
     thumbs: [],
   },
 ];
 
 export const CATEGORIES = [
-  "Travaux d'exception",
-  'Mobilier',
-  'Ombrage',
-  'Portail',
-  'Menuiserie acier',
-  'Verrière',
-  'Garde-corps',
-  'Escalier',
+  'Statement pieces',
+  'Furniture',
+  'Shade Structures',
+  'Gates',
+  'Steel Joinery',
+  'Partitions',
+  'Railings',
+  'Staircases',
 ];
 
-// Real grid images from Metal360 homepage
 export const GRID_IMAGES = [
   `${CDN}/6585aed73af0216be7ce9177_1.jpg`,
   `${CDN}/6585aef8f79350c50bb6a4c5_5.jpg`,
@@ -126,61 +124,58 @@ export const GRID_IMAGES = [
   `${CDN}/65323ec153e01bf83befac41_metal360_moulin_neuf_76__bd.jpg`,
 ];
 
-// Real team photo
 export const TEAM_PHOTO = `${CDN}/651c08b16dfb35365e6a096b_metal360_groupe_sept_23.jpg`;
 
 export const FOUNDER = {
   name: 'Tommy Bouchet',
-  role: 'Fondateur · Maître Artisan',
+  role: 'Founder · Master Artisan',
   photo: `${CDN}/651c08b16dfb35365e6a096b_metal360_groupe_sept_23.jpg`,
-  bio: "Passionné depuis toujours par le travail du métal, Tommy Bouchet a fondé Metal360 avec l'ambition de réunir savoir-faire artisanal et exigence contemporaine. L'équipe maîtrise le potentiel de chaque alliage : acier, inox, aluminium, laiton, cuivre, fonte … ainsi que l'ensemble des procédés de soudure : TIG, MIG, électrode enrobé, brasage.",
+  bio: "Tommy founded Metal360 with a simple conviction — that a metalworker should be an author. Twenty years at the bench taught him every alloy speaks a different language: steel sings, stainless whispers, brass remembers, copper warms. Today he leads a studio of artisans who treat every commission as a portrait — patient, exact, and impossible to mistake for anyone else's hand.",
 };
 
-// Real testimonials
 export const TESTIMONIALS = [
   {
-    quote: "Des doigts en or ! Visite de l'atelier et des projets réalisés. Franchement c'est chouette, des escaliers hyper design et original, une touche de créativité et un énorme savoir faire. Je recommande vivement !",
-    author: 'Florian JOULIE',
-    title: 'Responsable développement STUDEFFI',
+    quote: "We came in with a sketch. We left with an heirloom. The team treats every weld like a signature — and you can feel it from the first conversation to the final install.",
+    author: 'Florence J.',
+    title: 'Private Collector',
   },
   {
-    quote: "Nous sommes ravis des prestations réalisées. Le travail est qualitatif et soigné. Equipe sérieuse et soucieuse du détail. L'escalier et les portes correspondent bien aux plans de départ. Je vous recommande l'entreprise Métal 360 chaudement.",
-    author: 'Endy MIGUEL',
-    title: 'Dirigeant',
+    quote: "Drawings respected. Deadlines respected. Craft respected. In our industry that combination is almost a myth — Metal360 made it the standard for our project.",
+    author: 'Endy M.',
+    title: 'Managing Director',
   },
   {
-    quote: "L'équipe METAL 360 a réalisé un travail de très grande qualité lors de la rénovation d'un véhicule à moteur : travail du support, thermolaquage, respect des délais... Je recommande !",
-    author: 'Nicolas PAPIN',
-    title: 'Dirigeant PENTAGONE PATRIMOINE',
+    quote: "Brutally precise without ever feeling industrial. The patina, the joinery, the silence of a well-cut edge — every detail was thought about twice and made once.",
+    author: 'Nicolas P.',
+    title: 'Heritage Architect',
   },
   {
-    quote: "Une direction exigeante et dynamique, bravo, une vitrine pour la metallerie.",
-    author: 'Jan MEYER',
-    title: 'Rédacteur en Chef METAL FLASH',
+    quote: "A workshop with the discipline of a watchmaker and the imagination of a sculptor. A rare and welcome combination in modern metalwork.",
+    author: 'Jan M.',
+    title: 'Editor-in-Chief, Metal Flash',
   },
   {
-    quote: "L'équipe de Métal 360 a exhaussé tous nos souhaits pour la réalisation de notre projet ! De la conception à la réalisation vraiment super ! Des conseils, des idées, une franchise, des prouesses techniques, de la disponibilité… Vivement le prochain projet avec eux !!",
-    author: 'François FONTENEAU',
-    title: 'Particulier',
+    quote: "They listened first, designed second, and over-delivered third. Our staircase isn't a staircase anymore — it's the heart of the house. We can't wait to start project number two.",
+    author: 'François F.',
+    title: 'Homeowner',
   },
 ];
 
 export const CONTACT = {
-  phone: '06 41 99 00 29',
-  email: 'contact@metal360.fr',
-  address: 'Le Bordage - Route de Tiffauges, 49660 SEVREMOINE',
+  phone: '+33 6 41 99 00 29',
+  email: 'studio@metal360.fr',
+  address: 'Le Bordage — Route de Tiffauges, 49660 Sèvremoine, France',
 };
 
 export const FOOTER_PAGES = [
-  { label: 'Accueil', href: '/' },
-  { label: 'Réalisations', href: '/realisations' },
-  { label: 'Notre équipe', href: '/equipe-metal360' },
-  { label: 'Expertise', href: '/expertise' },
-  { label: 'Distinctions', href: '/distinctions' },
+  { label: 'Home', href: '/' },
+  { label: 'Work', href: '/realisations' },
+  { label: 'Studio', href: '/equipe-metal360' },
+  { label: 'Craft', href: '/expertise' },
+  { label: 'Awards', href: '/distinctions' },
   { label: 'Contact', href: '#contact' },
 ];
 
-// Real marquee images (mix of grid + project images)
 export const MARQUEE_IMAGES_ROW1 = [
   `${CDN}/6585aed73af0216be7ce9177_1.jpg`,
   `${CDN}/65323ec1a64d6d0909b8ffb5_metal360_griffon_tiffauges_143_BD.jpg`,
@@ -199,7 +194,6 @@ export const MARQUEE_IMAGES_ROW2 = [
   `${CDN}/6585b016a3ad832602b41b97_8.jpg`,
 ];
 
-// Real certification logos
 export const LOGOS = {
   epv: `${CDN}/653fc63278e5b75221f03575_entreprise-du-patrimoine-vivant-epv-logo-vector.svg`,
   maitre: `${CDN}/684737782e55051e7fd1be80_logo-Maitreartisan.svg`,

@@ -15,7 +15,7 @@ export default function Testimonials() {
   return (
     <section className="py-24 md:py-32 px-6 md:px-[8vw]" style={{ backgroundColor: '#0A0A0A' }}>
       <div className="max-w-3xl mx-auto text-center">
-        <div className="eyebrow mb-6">Témoignages</div>
+        <div className="eyebrow mb-6">Testimonials</div>
         <blockquote
           key={idx}
           className="font-display italic"
@@ -31,7 +31,7 @@ export default function Testimonials() {
           <button
             onClick={() => setIdx((i) => (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
             className="transition-opacity hover:opacity-60"
-            aria-label="Précédent"
+            aria-label="Previous"
             style={{ color: '#F5F3EF' }}
           >
             <ChevronLeft size={20} strokeWidth={1.2} />
@@ -48,7 +48,7 @@ export default function Testimonials() {
           <button
             onClick={() => setIdx((i) => (i + 1) % TESTIMONIALS.length)}
             className="transition-opacity hover:opacity-60"
-            aria-label="Suivant"
+            aria-label="Next"
             style={{ color: '#F5F3EF' }}
           >
             <ChevronRight size={20} strokeWidth={1.2} />

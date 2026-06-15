@@ -203,49 +203,168 @@ function Overture() {
   );
 }
 
-/* ============== SCENE 2: BIG HERO IMAGE WITH PARALLAX ============== */
-function ActOne() {
-  const imgRef = useRef(null);
+/* ============== SCENE 2: SCATTER COLLAGE — pinned scroll reveal ============== */
+function ScatterCollage() {
+  const sectionRef = useRef(null);
+
+  // 8 photos with their target scattered positions (percentages of viewport)
+  const tiles = [
+    { src: IMG.steel,     l: 6,  t: 5,   w: 13, h: 62 },  // top-left tall
+    { src: IMG.moulin,    l: 24, t: -1,  w: 19, h: 50 },  // top center-left
+    { src: IMG.kiosque,   l: 57, t: 8,   w: 16, h: 55 },  // top center-right
+    { src: IMG.elegance,  l: 80, t: 3,   w: 14, h: 66 },  // top-right very tall
+    { src: IMG.spirale,   l: 9,  t: 60,  w: 14, h: 36 },  // bottom-left
+    { src: IMG.pergola,   l: 27, t: 56,  w: 25, h: 42 },  // bottom center wide
+    { src: IMG.griffon,   l: 62, t: 62,  w: 13, h: 34 },  // bottom center-right
+    { src: IMG.caves,     l: 80, t: 56,  w: 14, h: 42 },  // bottom-right
+  ];
+
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.to(imgRef.current, {
-        yPercent: 25, scale: 1.15, ease: 'none',
-        scrollTrigger: { trigger: '.act1', start: 'top top', end: 'bottom top', scrub: true },
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: '+=300%',
+          pin: true,
+          scrub: 0.5,
+          anticipatePin: 1,
+        },
       });
-      gsap.from('.act1-eyebrow', { opacity: 0, y: 30, duration: 1, ease: 'power3.out',
-        scrollTrigger: { trigger: '.act1', start: 'top 60%' } });
-      gsap.from('.act1-title .w', { opacity: 0, y: 50, duration: 1, stagger: 0.06, ease: 'power3.out',
-        scrollTrigger: { trigger: '.act1-title', start: 'top 80%' } });
-      gsap.from('.act1-meta', { opacity: 0, y: 20, duration: 1, delay: 0.6,
-        scrollTrigger: { trigger: '.act1', start: 'top 50%' } });
+
+      // Phase 1 (0 → 0.55): images scatter from center to grid positions
+      tl.fromTo('.tile',
+        {
+          xPercent: -50,
+          yPercent: -50,
+          left: '50%',
+          top: '50%',
+          width: '8%',
+          height: '8%',
+          scale: 0.35,
+          opacity: 0,
+          filter: 'blur(8px)',
+          rotate: (i) => (i % 2 === 0 ? -6 : 6),
+        },
+        {
+          xPercent: 0,
+          yPercent: 0,
+          left:   (i) => `${tiles[i].l}%`,
+          top:    (i) => `${tiles[i].t}%`,
+          width:  (i) => `${tiles[i].w}%`,
+          height: (i) => `${tiles[i].h}%`,
+          scale: 1,
+          opacity: 1,
+          filter: 'blur(0px)',
+          rotate: 0,
+          ease: 'power3.out',
+          stagger: 0.04,
+          duration: 1.2,
+        },
+        0
+      );
+
+      // Phase 2 (0.55 → 1): center text scales massively & blurs out
+      tl.to('.scatter-text',
+        {
+          scale: 4.2,
+          opacity: 0,
+          filter: 'blur(28px)',
+          ease: 'power2.in',
+          duration: 0.9,
+        },
+        0.7
+      );
+      // tiles drift outward + fade slightly as text takes over
+      tl.to('.tile',
+        {
+          scale: 1.15,
+          opacity: 0.35,
+          filter: 'blur(3px)',
+          ease: 'power2.in',
+          duration: 0.9,
+        },
+        0.7
+      );
+
+      // ornament bobs subtly during phase 1
+      tl.from('.ornament',
+        { y: -20, opacity: 0, duration: 0.5, ease: 'power2.out' },
+        0.2
+      );
     });
     return () => ctx.revert();
   }, []);
-  const t = 'Acte I — Le feu'.split(' ');
+
   return (
-    <section className="act1 relative h-screen w-full overflow-hidden">
-      <img
-        ref={imgRef}
-        src={IMG.forge}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ filter: 'brightness(0.6) contrast(1.1) saturate(0.85)' }}
-      />
-      <div className="absolute inset-0" style={{
-        background: 'linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.75) 100%)',
-      }} />
-      <div className="relative h-full flex flex-col justify-end px-8 md:px-16 pb-20">
-        <div className="act1-eyebrow text-[11px]" style={{ color: '#F9A03F', letterSpacing: '0.3em' }}>
-          ACT I · THE FORGE
-        </div>
-        <h2 className="act1-title font-display italic mt-4" style={{
-          fontSize: 'clamp(44px, 7vw, 110px)',
-          color: '#F5F3EF', fontWeight: 400, lineHeight: 0.95, letterSpacing: '-0.025em',
-        }}>
-          {t.map((w, i) => <span key={i} className="w inline-block mr-[0.25em]">{w}</span>)}
-        </h2>
-        <div className="act1-meta mt-6 text-[15px]" style={{ color: 'rgba(245,243,239,0.7)', maxWidth: 540, lineHeight: 1.6 }}>
-          1538 °C — the moment steel surrenders. Where every piece begins, in the breath between solid and liquid.
+    <section
+      ref={sectionRef}
+      className="relative w-full overflow-hidden"
+      style={{ height: '100vh', background: '#050505' }}
+    >
+      {/* Image tiles (positions animated via GSAP) */}
+      <div className="absolute inset-0">
+        {tiles.map((tile, i) => (
+          <div
+            key={i}
+            className="tile absolute overflow-hidden"
+            style={{
+              borderRadius: 4,
+              willChange: 'transform, left, top, width, height, filter, opacity',
+              boxShadow: '0 30px 60px -30px rgba(0,0,0,0.6)',
+            }}
+          >
+            <img
+              src={tile.src}
+              alt=""
+              className="w-full h-full object-cover"
+              style={{ filter: 'brightness(0.92) contrast(1.04)' }}
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Center text + ornament */}
+      <div className="relative h-full w-full flex flex-col items-center justify-center px-6 pointer-events-none">
+        <svg
+          className="ornament"
+          width="86" height="44" viewBox="0 0 86 44" fill="none"
+          style={{ marginBottom: 18, opacity: 0.9 }}
+        >
+          <path d="M2 42 C 2 22, 22 4, 43 4 C 64 4, 84 22, 84 42" stroke="#F5F3EF" strokeWidth="1" strokeLinecap="round" />
+          <path d="M12 42 C 12 28, 26 14, 43 14 C 60 14, 74 28, 74 42" stroke="#F5F3EF" strokeWidth="0.8" strokeLinecap="round" opacity="0.55" />
+          <circle cx="43" cy="42" r="2" fill="#F9A03F" />
+        </svg>
+        <div
+          className="scatter-text text-center"
+          style={{
+            color: '#F5F3EF',
+            maxWidth: 560,
+            willChange: 'transform, opacity, filter',
+            transformOrigin: '50% 50%',
+          }}
+        >
+          <h2
+            className="font-display"
+            style={{
+              fontSize: 'clamp(20px, 2.2vw, 30px)',
+              fontWeight: 400,
+              lineHeight: 1.45,
+              letterSpacing: '-0.005em',
+            }}
+          >
+            Welcome to{' '}
+            <em style={{
+              fontWeight: 700, fontStyle: 'italic',
+              background: 'linear-gradient(135deg, #FF6B35, #F9A03F)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+            }}>Metal360</em>
+            {' '}— where metalwork is never just manufacturing.
+            It&apos;s a complete{' '}
+            <em style={{ fontWeight: 700, fontStyle: 'italic' }}>experience</em>,
+            from the first sketch to the final install.
+          </h2>
         </div>
       </div>
     </section>
@@ -280,20 +399,20 @@ function PinnedChapters() {
   const slides = [
     {
       eyebrow: 'CHAPTER II',
-      title: 'Le métal',
-      sub: 'Acier, inox, aluminium, laiton, cuivre. Each alloy whispers a different story. Listen to them.',
+      title: 'The Metal',
+      sub: 'Steel, stainless, aluminum, brass, copper. Each alloy whispers a different story. Lean in and listen.',
       img: IMG.steel,
     },
     {
       eyebrow: 'CHAPTER III',
-      title: 'La main',
+      title: 'The Hand',
       sub: 'Tradition meets precision. The hand that has shaped a thousand pieces knows where to bend, where to break, where to hold.',
       img: IMG.hand,
     },
     {
       eyebrow: 'CHAPTER IV',
-      title: "L'étincelle",
-      sub: 'A million sparks. Each one a choice. Each one another step toward the form that wants to exist.',
+      title: 'The Spark',
+      sub: 'A million sparks. Each one a choice. Each one another step toward the form that wanted to exist all along.',
       img: IMG.spark,
     },
   ];
@@ -359,11 +478,11 @@ function HorizontalAct() {
   }, []);
 
   const panels = [
-    { n: '01', t: 'Conception', d: 'Le crayon avant le métal. The drawing before the steel — every curve, every joint, every shadow imagined.', img: IMG.spirale },
-    { n: '02', t: 'Découpe', d: 'Précision au dixième. CNC plasma & laser, where mathematics becomes movement.', img: IMG.elegance },
-    { n: '03', t: 'Soudure', d: 'TIG, MIG, brasage. The invisible art of joining, where two become one without a trace.', img: IMG.kiosque },
-    { n: '04', t: 'Finition', d: 'Brossé, patiné, thermolaqué. The skin of the piece — what your hand will feel, what the light will love.', img: IMG.moulin },
-    { n: '05', t: 'Installation', d: 'Le moment de vérité. Months of work meet the building, the room, the eye that finally sees.', img: IMG.pergola },
+    { n: '01', t: 'Drawing', d: 'The pencil before the metal. Every curve, every joint, every shadow imagined long before a single spark.', img: IMG.spirale },
+    { n: '02', t: 'Cutting', d: 'Tenth-of-a-millimetre precision. CNC plasma and laser, where mathematics becomes motion.', img: IMG.elegance },
+    { n: '03', t: 'Welding', d: 'TIG, MIG, brazing. The quiet art of joining — where two pieces become one without leaving a trace.', img: IMG.kiosque },
+    { n: '04', t: 'Finishing', d: 'Brushed, patinated, powder-coated. The skin of the piece — what the hand will feel, what the light will love.', img: IMG.moulin },
+    { n: '05', t: 'Install', d: 'The moment of truth. Months of workshop time meet the building, the room, the eye that finally sees it.', img: IMG.pergola },
   ];
 
   return (
@@ -527,10 +646,10 @@ function CreditsMarquee() {
           <span key={i} className="font-display italic shrink-0 pr-12" style={{
             fontSize: 'clamp(80px, 13vw, 220px)', fontWeight: 400, color: '#F5F3EF', lineHeight: 1, letterSpacing: '-0.04em',
           }}>
-            Forgé · Façonné · Forgé · <span style={{
+            Forged · Shaped · Forged · <span style={{
               background: 'linear-gradient(135deg, #FF6B35, #F9A03F)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            }}>Vivant</span> ·&nbsp;
+            }}>Alive</span> ·&nbsp;
           </span>
         ))}
       </div>
@@ -585,7 +704,7 @@ function Ending() {
               boxShadow: '0 10px 40px -10px rgba(255,107,53,0.55)',
             }}
           >
-            VOIR LES RÉALISATIONS <ArrowRight size={16} />
+            VIEW THE WORK <ArrowRight size={16} />
           </Link>
           <Link to="/" data-cursor
             className="inline-flex items-center gap-2 px-7 py-4 transition-colors"
@@ -595,7 +714,7 @@ function Ending() {
             onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(245,243,239,0.06)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
           >
-            RETOUR À L'ATELIER
+            BACK TO THE STUDIO
           </Link>
         </div>
         <div className="mt-24 text-[10px]" style={{ color: 'rgba(245,243,239,0.35)', letterSpacing: '0.3em' }}>
@@ -626,7 +745,7 @@ export default function Cinematic() {
         }}
       />
       <Overture />
-      <ActOne />
+      <ScatterCollage />
       <PinnedChapters />
       <HorizontalAct />
       <Counters />

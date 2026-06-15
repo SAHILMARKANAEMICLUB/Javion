@@ -38,17 +38,17 @@ export default function Realisations() {
       {/* Hero text */}
       <section className="px-6 md:px-[8vw] pt-36 md:pt-44 pb-16">
         <div className="max-w-5xl">
-          <div className="eyebrow">Réalisations</div>
+          <div className="eyebrow">The Portfolio</div>
           <h1
             className="r-h1 headline-mixed mt-5"
             style={{ fontSize: 'clamp(40px, 6vw, 80px)', lineHeight: 1.1 }}
           >
-            <span className="word inline-block">Nos&nbsp;</span>
-            <span className="word inline-block">dernières&nbsp;</span>
-            <em className="word inline-block">créations</em>
+            <span className="word inline-block">Pieces&nbsp;</span>
+            <span className="word inline-block">that&nbsp;</span>
+            <em className="word inline-block">outlive trends.</em>
           </h1>
           <p className="mt-6 max-w-xl" style={{ color: '#C9C4BC', fontSize: 18, lineHeight: 1.7 }}>
-            Une sélection de pièces uniques, façonnées dans notre atelier — escaliers, garde-corps, portails, mobilier et travaux d'exception.
+            A selection of commissions from our workshop — staircases, railings, gates, partitions, furniture, and statement pieces shaped by hand and signed by the studio.
           </p>
         </div>
       </section>
@@ -79,7 +79,7 @@ export default function Realisations() {
               className="ml-auto inline-flex items-center gap-1 text-[12px]"
               style={{ color: '#F5F3EF' }}
             >
-              <X size={14} strokeWidth={1.5} /> Effacer le filtre
+              <X size={14} strokeWidth={1.5} /> Clear filter
             </button>
           )}
         </div>
@@ -139,7 +139,7 @@ export default function Realisations() {
                   </div>
                 )}
                 <span className="inline-flex items-center gap-2 bg-white text-[#F5F3EF] px-4 py-2 text-[12px] w-fit" style={{ letterSpacing: '0.08em', borderRadius: 2 }}>
-                  Voir la réalisation <ArrowRight size={14} strokeWidth={1.5} />
+                  View project <ArrowRight size={14} strokeWidth={1.5} />
                 </span>
               </div>
             </article>
@@ -153,7 +153,7 @@ export default function Realisations() {
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#F5F3EF'; e.currentTarget.style.color = '#FFFFFF'; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#F5F3EF'; }}
           >
-            Voir plus de créations
+            Load more work
           </button>
         </div>
       </section>

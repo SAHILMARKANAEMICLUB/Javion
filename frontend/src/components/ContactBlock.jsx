@@ -14,7 +14,7 @@ export default function ContactBlock() {
               <Phone size={18} strokeWidth={1.5} />
             </span>
             <div>
-              <div className="eyebrow">Téléphone</div>
+              <div className="eyebrow">Phone</div>
               <div className="text-[16px] mt-2 group-hover:opacity-60 transition-opacity" style={{ color: '#F5F3EF' }}>
                 {CONTACT.phone}
               </div>
@@ -36,7 +36,7 @@ export default function ContactBlock() {
               <MapPin size={18} strokeWidth={1.5} />
             </span>
             <div>
-              <div className="eyebrow">Atelier</div>
+              <div className="eyebrow">Workshop</div>
               <div className="text-[16px] mt-2 group-hover:opacity-60 transition-opacity" style={{ color: '#F5F3EF' }}>
                 {CONTACT.address}
               </div>

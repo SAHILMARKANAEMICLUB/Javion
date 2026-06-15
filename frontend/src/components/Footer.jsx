@@ -16,7 +16,7 @@ export default function Footer() {
             </div>
             <p className="mt-6 text-[12px]" style={{ color: 'rgba(255,255,255,0.4)', lineHeight: 1.7 }}>
               Copyright © {new Date().getFullYear()} Metal360.<br />
-              Tous droits réservés.
+              All rights reserved.
             </p>
           </div>
 
@@ -59,7 +59,7 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <div className="eyebrow" style={{ color: 'rgba(255,255,255,0.45)' }}>Suivez-nous</div>
+            <div className="eyebrow" style={{ color: 'rgba(255,255,255,0.45)' }}>Follow us</div>
             <div className="flex items-center gap-5 mt-5">
               {[Facebook, Instagram, Linkedin, Youtube].map((Icon, i) => (
                 <a key={i} href="#" className="transition-opacity hover:opacity-60" style={{ color: '#FFFFFF' }}>
@@ -72,10 +72,10 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mt-16 pt-8" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
           <p className="text-[11px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
-            Mentions légales · Politique de confidentialité
+            Legal · Privacy Policy
           </p>
           <p className="text-[11px] mt-3 md:mt-0" style={{ color: 'rgba(255,255,255,0.3)' }}>
-            EPV · Maître Artisan
+            EPV · Master Artisan
           </p>
         </div>
       </div>

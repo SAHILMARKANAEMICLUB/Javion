@@ -4,7 +4,7 @@ import { ArrowDown } from 'lucide-react';
 export default function MarqueeCTA() {
   const phrase = (
     <span className="flex items-center gap-10 pr-10">
-      <span className="font-display italic" style={{ fontWeight: 700 }}>Parlons de votre projet</span>
+      <span className="font-display italic" style={{ fontWeight: 700 }}>Let&apos;s talk about your project</span>
       <ArrowDown size={48} strokeWidth={1.2} />
     </span>
   );
