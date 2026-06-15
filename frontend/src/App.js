@@ -7,6 +7,7 @@ import Loader from './components/Loader';
 import Home from './pages/Home';
 import Realisations from './pages/Realisations';
 import Equipe from './pages/Equipe';
+import Saas from './pages/Saas';
 import useLenisScroll from './hooks/useLenisScroll';
 
 function ScrollToTop() {
@@ -19,17 +20,20 @@ function ScrollToTop() {
 
 function Shell() {
   useLenisScroll();
+  const { pathname } = useLocation();
+  const isSaas = pathname.startsWith('/saas');
   return (
     <>
       <ScrollToTop />
-      <Navbar />
+      {!isSaas && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/realisations" element={<Realisations />} />
         <Route path="/equipe-metal360" element={<Equipe />} />
         <Route path="/expertise" element={<Home />} />
+        <Route path="/saas" element={<Saas />} />
       </Routes>
-      <Footer />
+      {!isSaas && <Footer />}
     </>
   );
 }
