@@ -1,4 +1,7 @@
-// Mock data for Metal360 clone
+// Real data from metal360.fr (Webflow CDN images publicly accessible)
+
+const CDN = 'https://cdn.prod.website-files.com/64e31036eccea9001058bfc8';
+const CDN2 = 'https://cdn.prod.website-files.com/64e85c16c3e5fe1806b372fc';
 
 export const NAV_LINKS = [
   { label: 'Accueil', href: '/' },
@@ -7,93 +10,91 @@ export const NAV_LINKS = [
   { label: 'Expertise', href: '/expertise' },
 ];
 
+// Hero background — using a Pexels metalwork video
 export const HERO_VIDEO = 'https://videos.pexels.com/video-files/8721934/8721934-uhd_2560_1440_25fps.mp4';
 export const HERO_VIDEO_FALLBACK = 'https://videos.pexels.com/video-files/4488740/4488740-uhd_2560_1440_25fps.mp4';
 
+// Real projects from metal360.fr
 export const PROJECTS = [
   {
     id: 'p1',
-    slug: 'escalier-design',
+    slug: 'spirale-infinie',
     category: 'Escalier',
-    title: "Escalier hélicoïdal d'exception",
-    excerpt: "Un escalier sur-mesure en acier brossé, alliant prouesse technique et élégance contemporaine.",
-    cover: 'https://images.unsplash.com/photo-1599307169204-4176df0cdfe4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA4Mzl8MHwxfHNlYXJjaHwxfHxtZXRhbCUyMHN0YWlyY2FzZXxlbnwwfHx8fDE3ODE1MjUyNjZ8MA&ixlib=rb-4.1.0&q=85&w=1600',
-    thumbs: [
-      'https://images.unsplash.com/photo-1526573059328-179b147e1b42?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA4Mzl8MHwxfHNlYXJjaHwzfHxtZXRhbCUyMHN0YWlyY2FzZXxlbnwwfHx8fDE3ODE1MjUyNjZ8MA&ixlib=rb-4.1.0&q=85&w=400',
-      'https://images.unsplash.com/photo-1635348180022-2f7715fdecfa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHw0fHxzdGVlbCUyMHJhaWxpbmd8ZW58MHx8fHwxNzgxNTI1MjY2fDA&ixlib=rb-4.1.0&q=85&w=400',
-      'https://images.unsplash.com/photo-1630705547639-0906d30fc2db?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHwzfHxzdGVlbCUyMHJhaWxpbmd8ZW58MHx8fHwxNzgxNTI1MjY2fDA&ixlib=rb-4.1.0&q=85&w=400',
-    ],
+    title: 'Spirale Infinie',
+    excerpt: "Notre savoir-faire s'exprime à travers un escalier hélicoïdal sur mesure en métal.",
+    cover: `${CDN2}/69fb5afeb004b1f42c09cefc_PHOTO-PRINCIPALE.jpg`,
+    thumbs: [],
   },
   {
     id: 'p2',
-    slug: 'garde-corps-villa',
-    category: 'Garde-corps',
-    title: 'Garde-corps verre & acier',
-    excerpt: "Un garde-corps minimaliste en verre trempé et acier inoxydable, posé sur une villa contemporaine.",
-    cover: 'https://images.unsplash.com/photo-1630705547639-0906d30fc2db?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHwzfHxzdGVlbCUyMHJhaWxpbmd8ZW58MHx8fHwxNzgxNTI1MjY2fDA&ixlib=rb-4.1.0&q=85&w=1600',
-    thumbs: [
-      'https://images.unsplash.com/photo-1635348180022-2f7715fdecfa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHw0fHxzdGVlbCUyMHJhaWxpbmd8ZW58MHx8fHwxNzgxNTI1MjY2fDA&ixlib=rb-4.1.0&q=85&w=400',
-    ],
+    slug: 'elegance-naturelle',
+    category: 'Escalier',
+    title: 'Elegance Naturelle',
+    excerpt: "Dans cette réalisation, notre savoir-faire s'exprime avec justesse et retenue à travers un escalier.",
+    cover: `${CDN2}/69fb5a37ef8470ae3c5c959e_PHOTO-PRINCIPALE.jpg`,
+    thumbs: [],
   },
   {
     id: 'p3',
-    slug: 'portail-domaine',
-    category: 'Portail',
-    title: "Portail d'entrée sur-mesure",
-    excerpt: "Un portail coulissant en acier corten, signature d'un domaine privé.",
-    cover: 'https://images.unsplash.com/photo-1590869942905-a4ada45d5a8a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODh8MHwxfHNlYXJjaHwxfHxtZXRhbCUyMGdhdGV8ZW58MHx8fHwxNzgxNTI1MjY2fDA&ixlib=rb-4.1.0&q=85&w=1600',
-    thumbs: [
-      'https://images.unsplash.com/photo-1580047750144-2c7790adf461?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODh8MHwxfHNlYXJjaHwyfHxtZXRhbCUyMGdhdGV8ZW58MHx8fHwxNzgxNTI1MjY2fDA&ixlib=rb-4.1.0&q=85&w=400',
-      'https://images.unsplash.com/photo-1576169510450-fd0392650023?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODh8MHwxfHNlYXJjaHwzfHxtZXRhbCUyMGdhdGV8ZW58MHx8fHwxNzgxNTI1MjY2fDA&ixlib=rb-4.1.0&q=85&w=400',
-    ],
+    slug: 'transparence-totale-latranche',
+    category: 'Garde-corps',
+    title: 'Transparence totale',
+    excerpt: "Dans cette maison en bord de mer, les garde-corps en verre trempé jouent avec la lumière.",
+    cover: `${CDN2}/69256b1bda8f0bc1569a2d89_PHOTO%20DE%20COUVERTURE.jpg`,
+    thumbs: [],
   },
   {
     id: 'p4',
-    slug: 'verriere-atelier',
-    category: 'Verrière',
-    title: "Verrière d'atelier",
-    excerpt: "Une verrière d'atelier en acier noir mat, séparant cuisine et salon dans un loft parisien.",
-    cover: 'https://images.unsplash.com/photo-1692263130342-bf6a77457526?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzR8MHwxfHNlYXJjaHwxfHxnbGFzcyUyMGNhbm9weXxlbnwwfHx8fDE3ODE1MjUyNzN8MA&ixlib=rb-4.1.0&q=85&w=1600',
-    thumbs: [
-      'https://images.unsplash.com/photo-1692263130378-f708d81155de?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzR8MHwxfHNlYXJjaHw0fHxnbGFzcyUyMGNhbm9weXxlbnwwfHx8fDE3ODE1MjUyNzN8MA&ixlib=rb-4.1.0&q=85&w=400',
-    ],
+    slug: 'suspension-en-levitation',
+    category: 'Escalier',
+    title: 'Suspension en lévitation',
+    excerpt: "Dans cette réalisation suspendue, l'escalier semble flotter au-dessus de la pièce.",
+    cover: `${CDN2}/692568c228ef131b45e49d5d_PHOTO%20DE%20COUVERTURE.jpg`,
+    thumbs: [],
   },
   {
     id: 'p5',
-    slug: 'mobilier-edition',
-    category: 'Mobilier',
-    title: 'Mobilier d\'édition limitée',
-    excerpt: "Une table basse en acier patiné, conçue comme une œuvre sculpturale.",
-    cover: 'https://images.unsplash.com/photo-1736593318040-1e81e1f065c2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHwxfHxtZXRhbCUyMGZ1cm5pdHVyZXxlbnwwfHx8fDE3ODE1MjUyNjZ8MA&ixlib=rb-4.1.0&q=85&w=1600',
-    thumbs: [
-      'https://images.unsplash.com/photo-1776766788531-c7b2da09ebaf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHw0fHxtZXRhbCUyMGZ1cm5pdHVyZXxlbnwwfHx8fDE3ODE1MjUyNjZ8MA&ixlib=rb-4.1.0&q=85&w=400',
-    ],
+    slug: 'griffon-tiffauges',
+    category: "Travaux d'exception",
+    title: 'Griffon de Tiffauges',
+    excerpt: "Une œuvre monumentale en acier, signature d'un savoir-faire d'exception.",
+    cover: `${CDN}/65323ec1a64d6d0909b8ffb5_metal360_griffon_tiffauges_143_BD.jpg`,
+    thumbs: [],
   },
   {
     id: 'p6',
-    slug: 'ombrage-terrasse',
+    slug: 'pergola-vertou',
     category: 'Ombrage',
-    title: 'Pergola contemporaine',
-    excerpt: "Une structure d'ombrage en acier aux lignes pures pour une terrasse en bord de mer.",
-    cover: 'https://images.unsplash.com/photo-1692263130378-f708d81155de?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzR8MHwxfHNlYXJjaHw0fHxnbGFzcyUyMGNhbm9weXxlbnwwfHx8fDE3ODE1MjUyNzN8MA&ixlib=rb-4.1.0&q=85&w=1600',
+    title: 'Pergola de Vertou',
+    excerpt: "Une structure d'ombrage contemporaine aux lignes pures.",
+    cover: `${CDN}/65323ec1715331597422d103_metal360_pergola_vertou_414__bd-2.jpg`,
     thumbs: [],
   },
   {
     id: 'p7',
-    slug: 'menuiserie-acier',
+    slug: 'moulin-neuf',
     category: 'Menuiserie acier',
-    title: "Menuiserie acier sur-mesure",
-    excerpt: "Portes et fenêtres en acier laqué noir pour une maison d'architecte.",
-    cover: 'https://images.unsplash.com/photo-1645434866122-b458f9829981?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHw0fHxtZXRhbCUyMGZhY2FkZXxlbnwwfHx8fDE3ODE1MjUyNzN8MA&ixlib=rb-4.1.0&q=85&w=1600',
+    title: 'Moulin Neuf',
+    excerpt: "Menuiserie acier sur-mesure pour une rénovation patrimoniale.",
+    cover: `${CDN}/65323ec153e01bf83befac41_metal360_moulin_neuf_76__bd.jpg`,
     thumbs: [],
   },
   {
     id: 'p8',
-    slug: 'travail-exception',
+    slug: 'kiosque-la-digue',
     category: "Travaux d'exception",
-    title: "Sculpture monumentale",
-    excerpt: "Une installation artistique monumentale en acier patiné pour un espace public.",
-    cover: 'https://images.unsplash.com/photo-1587031277999-c51ad2862269?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHwyfHxtZXRhbCUyMGZhY2FkZXxlbnwwfHx8fDE3ODE1MjUyNzN8MA&ixlib=rb-4.1.0&q=85&w=1600',
+    title: 'Kiosque La Digue',
+    excerpt: "Un kiosque en acier façonné comme une œuvre architecturale.",
+    cover: `${CDN}/65323ec1a20d785f6469cdd2_kiosque_la_digue_03_bd3-2.jpg`,
+    thumbs: [],
+  },
+  {
+    id: 'p9',
+    slug: 'gite-caves-secretes',
+    category: 'Verrière',
+    title: 'Gîte des Caves Secrètes',
+    excerpt: "Une verrière sur-mesure pour un lieu d'exception.",
+    cover: `${CDN}/65323ec1afb79142dd44bc6f_gite_caves_secretes190_HDR_bd.jpg`,
     thumbs: [],
   },
 ];
@@ -109,52 +110,65 @@ export const CATEGORIES = [
   'Escalier',
 ];
 
+// Real grid images from Metal360 homepage
 export const GRID_IMAGES = [
-  'https://images.unsplash.com/photo-1599307169204-4176df0cdfe4?crop=entropy&cs=srgb&fm=jpg&w=800&q=85',
-  'https://images.unsplash.com/photo-1635348180022-2f7715fdecfa?crop=entropy&cs=srgb&fm=jpg&w=800&q=85',
-  'https://images.unsplash.com/photo-1590869942905-a4ada45d5a8a?crop=entropy&cs=srgb&fm=jpg&w=800&q=85',
-  'https://images.unsplash.com/photo-1692263130342-bf6a77457526?crop=entropy&cs=srgb&fm=jpg&w=800&q=85',
-  'https://images.unsplash.com/photo-1645434866122-b458f9829981?crop=entropy&cs=srgb&fm=jpg&w=800&q=85',
-  'https://images.unsplash.com/photo-1736593318040-1e81e1f065c2?crop=entropy&cs=srgb&fm=jpg&w=800&q=85',
-  'https://images.unsplash.com/photo-1716469801932-3b1b5494615c?crop=entropy&cs=srgb&fm=jpg&w=800&q=85',
-  'https://images.unsplash.com/photo-1711829799900-42470ee55689?crop=entropy&cs=srgb&fm=jpg&w=800&q=85',
-  'https://images.unsplash.com/photo-1683470157212-cd4005549fce?crop=entropy&cs=srgb&fm=jpg&w=800&q=85',
-  'https://images.unsplash.com/photo-1714504904786-b6732390b206?crop=entropy&cs=srgb&fm=jpg&w=800&q=85',
-  'https://images.unsplash.com/photo-1511306162219-1c5a469ab86c?crop=entropy&cs=srgb&fm=jpg&w=800&q=85',
-  'https://images.unsplash.com/photo-1531053326607-9d349096d887?crop=entropy&cs=srgb&fm=jpg&w=800&q=85',
+  `${CDN}/6585aed73af0216be7ce9177_1.jpg`,
+  `${CDN}/6585aef8f79350c50bb6a4c5_5.jpg`,
+  `${CDN}/65323ec1a64d6d0909b8ffb5_metal360_griffon_tiffauges_143_BD.jpg`,
+  `${CDN}/6585af116a5f8901ef16e075_2.jpg`,
+  `${CDN}/6585af51275240840e6b4482_6.jpg`,
+  `${CDN}/65323ec1afb79142dd44bc6f_gite_caves_secretes190_HDR_bd.jpg`,
+  `${CDN}/65323ec1a20d785f6469cdd2_kiosque_la_digue_03_bd3-2.jpg`,
+  `${CDN}/6585af7111a1f512361e9407_3.jpg`,
+  `${CDN}/6585af83ce95d990878cdc4c_7.jpg`,
+  `${CDN}/6585af991f383a677de56f25_4.jpg`,
+  `${CDN}/6585b016a3ad832602b41b97_8.jpg`,
+  `${CDN}/65323ec153e01bf83befac41_metal360_moulin_neuf_76__bd.jpg`,
 ];
 
-export const TEAM_PHOTO = 'https://images.unsplash.com/photo-1683470157212-cd4005549fce?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODh8MHwxfHNlYXJjaHwxfHx3ZWxkaW5nJTIwd29ya3Nob3B8ZW58MHx8fHwxNzgxNTI1MjY2fDA&ixlib=rb-4.1.0&q=85&w=2000';
+// Real team photo
+export const TEAM_PHOTO = `${CDN}/651c08b16dfb35365e6a096b_metal360_groupe_sept_23.jpg`;
 
 export const FOUNDER = {
   name: 'Tommy Bouchet',
   role: 'Fondateur · Maître Artisan',
-  photo: 'https://images.unsplash.com/photo-1531053326607-9d349096d887?crop=entropy&cs=srgb&fm=jpg&w=1000&q=85',
-  bio: "Passionné depuis toujours par le travail du métal, Tommy Bouchet a fondé Metal360 avec l'ambition de réunir savoir-faire artisanal et exigence contemporaine. Formé auprès des meilleurs compagnons, il défend une vision éditoriale du métier de métallier — chaque projet est une œuvre, chaque pièce raconte une histoire.",
+  photo: `${CDN}/651c08b16dfb35365e6a096b_metal360_groupe_sept_23.jpg`,
+  bio: "Passionné depuis toujours par le travail du métal, Tommy Bouchet a fondé Metal360 avec l'ambition de réunir savoir-faire artisanal et exigence contemporaine. L'équipe maîtrise le potentiel de chaque alliage : acier, inox, aluminium, laiton, cuivre, fonte … ainsi que l'ensemble des procédés de soudure : TIG, MIG, électrode enrobé, brasage.",
 };
 
+// Real testimonials
 export const TESTIMONIALS = [
   {
-    quote: "Un travail d'une précision rare. L'équipe de Metal360 a su transformer nos idées en pièces d'exception qui structurent désormais l'identité de notre maison.",
-    author: 'Sophie & Antoine Lambert',
-    title: 'Particuliers · Maine-et-Loire',
+    quote: "Des doigts en or ! Visite de l'atelier et des projets réalisés. Franchement c'est chouette, des escaliers hyper design et original, une touche de créativité et un énorme savoir faire. Je recommande vivement !",
+    author: 'Florian JOULIE',
+    title: 'Responsable développement STUDEFFI',
   },
   {
-    quote: "Une collaboration fluide, du dessin à la pose. La qualité d'exécution est irréprochable et le sens du détail, remarquable.",
-    author: 'Camille Roussel',
-    title: 'Architecte DPLG · Nantes',
+    quote: "Nous sommes ravis des prestations réalisées. Le travail est qualitatif et soigné. Equipe sérieuse et soucieuse du détail. L'escalier et les portes correspondent bien aux plans de départ. Je vous recommande l'entreprise Métal 360 chaudement.",
+    author: 'Endy MIGUEL',
+    title: 'Dirigeant',
   },
   {
-    quote: "Le projet le plus exigeant que nous ayons confié à un métallier. Le résultat dépasse nos attentes — c'est une véritable œuvre d'art.",
-    author: 'Hugo Mercier',
-    title: 'Maître d\'ouvrage',
+    quote: "L'équipe METAL 360 a réalisé un travail de très grande qualité lors de la rénovation d'un véhicule à moteur : travail du support, thermolaquage, respect des délais... Je recommande !",
+    author: 'Nicolas PAPIN',
+    title: 'Dirigeant PENTAGONE PATRIMOINE',
+  },
+  {
+    quote: "Une direction exigeante et dynamique, bravo, une vitrine pour la metallerie.",
+    author: 'Jan MEYER',
+    title: 'Rédacteur en Chef METAL FLASH',
+  },
+  {
+    quote: "L'équipe de Métal 360 a exhaussé tous nos souhaits pour la réalisation de notre projet ! De la conception à la réalisation vraiment super ! Des conseils, des idées, une franchise, des prouesses techniques, de la disponibilité… Vivement le prochain projet avec eux !!",
+    author: 'François FONTENEAU',
+    title: 'Particulier',
   },
 ];
 
 export const CONTACT = {
   phone: '06 41 99 00 29',
   email: 'contact@metal360.fr',
-  address: 'Le Bordage, 49660 Torfou, France',
+  address: 'Le Bordage - Route de Tiffauges, 49660 SEVREMOINE',
 };
 
 export const FOOTER_PAGES = [
@@ -166,20 +180,27 @@ export const FOOTER_PAGES = [
   { label: 'Contact', href: '#contact' },
 ];
 
+// Real marquee images (mix of grid + project images)
 export const MARQUEE_IMAGES_ROW1 = [
-  'https://images.unsplash.com/photo-1716469801932-3b1b5494615c?crop=entropy&cs=srgb&fm=jpg&w=600&q=85',
-  'https://images.unsplash.com/photo-1711829799900-42470ee55689?crop=entropy&cs=srgb&fm=jpg&w=600&q=85',
-  'https://images.unsplash.com/photo-1683470157212-cd4005549fce?crop=entropy&cs=srgb&fm=jpg&w=600&q=85',
-  'https://images.unsplash.com/photo-1714504904786-b6732390b206?crop=entropy&cs=srgb&fm=jpg&w=600&q=85',
-  'https://images.unsplash.com/photo-1511306162219-1c5a469ab86c?crop=entropy&cs=srgb&fm=jpg&w=600&q=85',
-  'https://images.unsplash.com/photo-1716469801991-bda2e7e0adee?crop=entropy&cs=srgb&fm=jpg&w=600&q=85',
+  `${CDN}/6585aed73af0216be7ce9177_1.jpg`,
+  `${CDN}/65323ec1a64d6d0909b8ffb5_metal360_griffon_tiffauges_143_BD.jpg`,
+  `${CDN}/6585af116a5f8901ef16e075_2.jpg`,
+  `${CDN}/65323ec1a20d785f6469cdd2_kiosque_la_digue_03_bd3-2.jpg`,
+  `${CDN}/6585af7111a1f512361e9407_3.jpg`,
+  `${CDN}/6585af991f383a677de56f25_4.jpg`,
 ];
 
 export const MARQUEE_IMAGES_ROW2 = [
-  'https://images.unsplash.com/photo-1599307169204-4176df0cdfe4?crop=entropy&cs=srgb&fm=jpg&w=600&q=85',
-  'https://images.unsplash.com/photo-1526573059328-179b147e1b42?crop=entropy&cs=srgb&fm=jpg&w=600&q=85',
-  'https://images.unsplash.com/photo-1630705547639-0906d30fc2db?crop=entropy&cs=srgb&fm=jpg&w=600&q=85',
-  'https://images.unsplash.com/photo-1590869942905-a4ada45d5a8a?crop=entropy&cs=srgb&fm=jpg&w=600&q=85',
-  'https://images.unsplash.com/photo-1692263130342-bf6a77457526?crop=entropy&cs=srgb&fm=jpg&w=600&q=85',
-  'https://images.unsplash.com/photo-1736593318040-1e81e1f065c2?crop=entropy&cs=srgb&fm=jpg&w=600&q=85',
+  `${CDN}/6585aef8f79350c50bb6a4c5_5.jpg`,
+  `${CDN}/65323ec1afb79142dd44bc6f_gite_caves_secretes190_HDR_bd.jpg`,
+  `${CDN}/6585af51275240840e6b4482_6.jpg`,
+  `${CDN}/65323ec153e01bf83befac41_metal360_moulin_neuf_76__bd.jpg`,
+  `${CDN}/6585af83ce95d990878cdc4c_7.jpg`,
+  `${CDN}/6585b016a3ad832602b41b97_8.jpg`,
 ];
+
+// Real certification logos
+export const LOGOS = {
+  epv: `${CDN}/653fc63278e5b75221f03575_entreprise-du-patrimoine-vivant-epv-logo-vector.svg`,
+  maitre: `${CDN}/684737782e55051e7fd1be80_logo-Maitreartisan.svg`,
+};

@@ -10,8 +10,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand */}
           <div>
-            <div className="font-display text-3xl" style={{ fontWeight: 700 }}>
-              Metal<em>360</em>
+            <div className="text-3xl">
+              <span className="font-display italic" style={{ fontWeight: 700 }}>Metal</span>
+              <span className="font-body" style={{ fontWeight: 300, marginLeft: 2 }}>360</span>
             </div>
             <p className="mt-6 text-[12px]" style={{ color: 'rgba(255,255,255,0.4)', lineHeight: 1.7 }}>
               Copyright © {new Date().getFullYear()} Metal360.<br />

@@ -29,10 +29,11 @@ export default function Navbar() {
         <div className="flex items-center justify-between px-5 md:px-10 py-5">
           <Link to="/" className="flex items-center gap-2">
             <span
-              className="font-display text-2xl tracking-tight"
-              style={{ color: isLight ? '#FFFFFF' : '#1A1A1A', fontWeight: 700 }}
+              className="text-2xl tracking-tight"
+              style={{ color: isLight ? '#FFFFFF' : '#1A1A1A' }}
             >
-              Metal<em className="not-italic" style={{ fontStyle: 'italic' }}>360</em>
+              <span className="font-display italic" style={{ fontWeight: 700 }}>Metal</span>
+              <span className="font-body" style={{ fontWeight: 300, marginLeft: 2 }}>360</span>
             </span>
           </Link>
 
@@ -80,8 +81,9 @@ export default function Navbar() {
       {open && (
         <div className="fixed inset-0 z-[1100]" style={{ backgroundColor: '#F5F3EF' }}>
           <div className="flex items-center justify-between px-5 py-5">
-            <span className="font-display text-2xl" style={{ color: '#1A1A1A', fontWeight: 700 }}>
-              Metal<em>360</em>
+            <span className="text-2xl" style={{ color: '#1A1A1A' }}>
+              <span className="font-display italic" style={{ fontWeight: 700 }}>Metal</span>
+              <span className="font-body" style={{ fontWeight: 300, marginLeft: 2 }}>360</span>
             </span>
             <button onClick={() => setOpen(false)} aria-label="Close menu" style={{ color: '#1A1A1A' }}>
               <X size={26} strokeWidth={1.5} />

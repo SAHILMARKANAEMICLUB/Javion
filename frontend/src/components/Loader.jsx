@@ -30,11 +30,11 @@ export default function Loader({ onFinish }) {
       className="fixed inset-0 z-[2000] flex items-center justify-center"
       style={{ backgroundColor: '#0A0A0A' }}
     >
-      <div className="flex items-baseline gap-4">
-        <span className="font-display text-white" style={{ fontSize: 'clamp(40px, 7vw, 80px)', fontWeight: 300 }}>
+      <div className="flex items-baseline gap-3">
+        <span className="font-display italic text-white" style={{ fontSize: 'clamp(40px, 7vw, 80px)', fontWeight: 700 }}>
           Metal
         </span>
-        <span className="font-display italic text-white" style={{ fontSize: 'clamp(40px, 7vw, 80px)', fontWeight: 700 }}>
+        <span className="font-body text-white" style={{ fontSize: 'clamp(40px, 7vw, 80px)', fontWeight: 300 }}>
           360
         </span>
       </div>

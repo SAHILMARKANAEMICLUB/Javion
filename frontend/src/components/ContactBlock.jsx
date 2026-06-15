@@ -1,6 +1,6 @@
 import React from 'react';
 import { Phone, Mail, MapPin } from 'lucide-react';
-import { CONTACT } from '../mock';
+import { CONTACT, LOGOS } from '../mock';
 import MarqueeCTA from './MarqueeCTA';
 
 export default function ContactBlock() {
@@ -45,15 +45,17 @@ export default function ContactBlock() {
         </div>
 
         {/* Certification labels */}
-        <div className="max-w-5xl mx-auto mt-16 flex flex-wrap items-center justify-center gap-10">
-          <div className="flex items-center gap-3 px-5 py-3" style={{ border: '1px solid #1A1A1A', borderRadius: 2 }}>
-            <span className="font-display italic" style={{ fontWeight: 700, color: '#1A1A1A' }}>EPV</span>
-            <span className="text-[12px]" style={{ color: '#3D3D3D' }}>Entreprise du Patrimoine Vivant</span>
-          </div>
-          <div className="flex items-center gap-3 px-5 py-3" style={{ border: '1px solid #1A1A1A', borderRadius: 2 }}>
-            <span className="font-display italic" style={{ fontWeight: 700, color: '#1A1A1A' }}>Maître</span>
-            <span className="text-[12px]" style={{ color: '#3D3D3D' }}>Artisan certifié</span>
-          </div>
+        <div className="max-w-5xl mx-auto mt-16 flex flex-wrap items-center justify-center gap-12">
+          <img
+            src={LOGOS.epv}
+            alt="Entreprise du Patrimoine Vivant"
+            style={{ height: 70, filter: 'brightness(0) saturate(100%)' }}
+          />
+          <img
+            src={LOGOS.maitre}
+            alt="Maître Artisan"
+            style={{ height: 70, filter: 'brightness(0) saturate(100%)' }}
+          />
         </div>
       </section>
     </>

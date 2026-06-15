@@ -87,20 +87,20 @@ export default function Home() {
               letterSpacing: '-0.02em',
             }}
           >
-            <span className="word inline-block font-body" style={{ fontWeight: 300 }}>Metal</span>{' '}
-            <span className="word inline-block font-display italic" style={{ fontWeight: 700 }}>360</span>
+            <span className="word inline-block font-display italic" style={{ fontWeight: 700 }}>Metal</span>{' '}
+            <span className="word inline-block font-body" style={{ fontWeight: 300 }}>360</span>
           </h1>
           <p
-            className="hero-sub mt-8 text-white"
+            className="hero-sub mt-8 text-white mx-auto"
             style={{
-              maxWidth: 640,
+              maxWidth: 720,
               fontWeight: 300,
               fontSize: 18,
               lineHeight: 1.7,
-              color: 'rgba(255,255,255,0.85)',
+              color: 'rgba(255,255,255,0.88)',
             }}
           >
-            Passionnés et inspirés par les métaux, nous transformons l'acier, l'inox et l'aluminium &amp; concevons des ouvrages métalliques uniques.
+            <em className="font-display not-italic" style={{ fontStyle: 'italic', fontWeight: 700 }}>Passionnés et inspirés par les métaux</em>, nous transformons l'acier, l'inox et l'aluminium &amp; concevons des ouvrages métalliques uniques pour embellir vos intérieurs et extérieurs.
           </p>
         </div>
         <div
@@ -182,7 +182,7 @@ export default function Home() {
             className="headline-mixed mt-4"
             style={{ fontSize: 'clamp(32px, 5vw, 64px)' }}
           >
-            Une équipe <em>dynamique, motivée</em> &amp; qualifiée
+            Une équipe <em>dynamique, motivée &amp; qualifiée</em>
           </h2>
         </div>
         <Link
