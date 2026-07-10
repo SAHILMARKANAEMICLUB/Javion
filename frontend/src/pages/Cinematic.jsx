@@ -1,16 +1,41 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, Volume2, VolumeX, Play } from 'lucide-react';
+import { ArrowRight, Volume2, VolumeX } from 'lucide-react';
+import { HERO_VIDEO, JAVION_LOGO, NEWSLETTER, CINEMATIC_IMG, onCinematicImgError } from '../mock';
+import useReducedMotion from '../hooks/useReducedMotion';
+import useCinematicScroll from '../hooks/useCinematicScroll';
+import CertificationsQuality from '../components/cinematic/CertificationsQuality';
+import IndustriesWeServe from '../components/cinematic/IndustriesWeServe';
+import GlobalFeatures from '../components/GlobalFeatures';
+import { headlineBlurIn } from '../utils/cinematicAnimations';
+import './Cinematic.css';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const THEME = {
+  bg: '#f4f6f8',
+  bgWhite: '#ffffff',
+  bgAlt: '#e8ecf0',
+  text: '#0A1D37',
+  textMuted: 'rgba(10,29,55,0.65)',
+  textLight: 'rgba(10,29,55,0.45)',
+  navy: '#0A1D37',
+  navyMid: '#1e4976',
+  accent: '#38B6FF',
+  accentDark: '#0095D9',
+};
+
+const TEXT_3D = {
+  textShadow: '0 1px 0 rgba(255,255,255,0.9), 0 2px 16px rgba(15,23,42,0.08)',
+};
 
 const CDN = 'https://cdn.prod.website-files.com/64e31036eccea9001058bfc8';
 const CDN2 = 'https://cdn.prod.website-files.com/64e85c16c3e5fe1806b372fc';
 
 const IMG = {
-  forge: 'https://images.unsplash.com/photo-1531053326607-9d349096d887?crop=entropy&cs=srgb&fm=jpg&w=2400&q=85',
+  ...CINEMATIC_IMG,
   hand: 'https://images.unsplash.com/photo-1683470157212-cd4005549fce?crop=entropy&cs=srgb&fm=jpg&w=2400&q=85',
   spark: 'https://images.unsplash.com/photo-1716469801932-3b1b5494615c?crop=entropy&cs=srgb&fm=jpg&w=2400&q=85',
   steel: 'https://images.unsplash.com/photo-1599307169204-4176df0cdfe4?crop=entropy&cs=srgb&fm=jpg&w=2400&q=85',
@@ -21,21 +46,71 @@ const IMG = {
   caves: `${CDN}/65323ec1afb79142dd44bc6f_gite_caves_secretes190_HDR_bd.jpg`,
   spirale: `${CDN2}/69fb5afeb004b1f42c09cefc_PHOTO-PRINCIPALE.jpg`,
   elegance: `${CDN2}/69fb5a37ef8470ae3c5c959e_PHOTO-PRINCIPALE.jpg`,
-  team: `${CDN}/651c08b16dfb35365e6a096b_metal360_groupe_sept_23.jpg`,
 };
+
+const TEXT_3D_ON_MEDIA = {
+  textShadow: '0 2px 8px rgba(0,0,0,0.4), 0 4px 24px rgba(0,0,0,0.25)',
+};
+
+function useTilt(max = 8, glow = false) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      el.style.transform = `perspective(900px) rotateY(${x * max}deg) rotateX(${-y * max}deg) translateZ(24px)`;
+      if (glow) {
+        el.style.boxShadow = `${-x * 24}px ${y * 24}px 40px rgba(56,182,255,0.35), inset ${x * 8}px ${-y * 8}px 20px rgba(56,182,255,0.1)`;
+      }
+    };
+    const onLeave = () => {
+      el.style.transform = 'perspective(900px) rotateY(0deg) rotateX(0deg) translateZ(0)';
+      if (glow) el.style.boxShadow = '';
+    };
+    el.addEventListener('mousemove', onMove);
+    el.addEventListener('mouseleave', onLeave);
+    return () => {
+      el.removeEventListener('mousemove', onMove);
+      el.removeEventListener('mouseleave', onLeave);
+    };
+  }, [max, glow]);
+  return ref;
+}
+
+function updateCoverflow(track) {
+  if (!track) return;
+  const panels = track.querySelectorAll('.h-panel');
+  const center = window.innerWidth / 2;
+  panels.forEach((panel) => {
+    const rect = panel.getBoundingClientRect();
+    const panelCenter = rect.left + rect.width / 2;
+    const dist = (panelCenter - center) / window.innerWidth;
+    const rotY = dist * -38;
+    const z = 80 - Math.abs(dist) * 120;
+    const opacity = 1 - Math.min(Math.abs(dist) * 0.9, 0.55);
+    const scale = 1 - Math.min(Math.abs(dist) * 0.12, 0.1);
+    panel.style.transform = `rotateY(${rotY}deg) translateZ(${z}px) scale(${scale})`;
+    panel.style.opacity = String(opacity);
+  });
+}
 
 /* ============== CUSTOM CURSOR ============== */
 function Cursor() {
   const dotRef = useRef(null);
   const ringRef = useRef(null);
   const [hover, setHover] = useState(false);
+
   useEffect(() => {
     const dot = dotRef.current;
     const ring = ringRef.current;
     if (!dot || !ring) return;
     let x = window.innerWidth / 2;
     let y = window.innerHeight / 2;
-    let rx = x; let ry = y;
+    let rx = x;
+    let ry = y;
     const onMove = (e) => { x = e.clientX; y = e.clientY; };
     window.addEventListener('mousemove', onMove);
     const raf = () => {
@@ -46,7 +121,6 @@ function Cursor() {
       requestAnimationFrame(raf);
     };
     const id = requestAnimationFrame(raf);
-    // hover triggers
     const enter = () => setHover(true);
     const leave = () => setHover(false);
     document.querySelectorAll('[data-cursor]').forEach((el) => {
@@ -58,21 +132,20 @@ function Cursor() {
       cancelAnimationFrame(id);
     };
   }, []);
+
   return (
     <>
       <div
         ref={dotRef}
-        className="hidden md:block pointer-events-none fixed top-0 left-0 z-[9999] rounded-full"
-        style={{ width: 6, height: 6, background: '#FF6B35', mixBlendMode: 'difference' }}
+        className="cin-cursor-dot hidden md:block pointer-events-none fixed top-0 left-0 z-[9999] rounded-full"
+        style={{ width: 6, height: 6 }}
       />
       <div
         ref={ringRef}
-        className="hidden md:block pointer-events-none fixed top-0 left-0 z-[9998] rounded-full transition-[width,height,border] duration-200"
+        className="cin-cursor-ring hidden md:block pointer-events-none fixed top-0 left-0 z-[9998] rounded-full transition-[width,height,border] duration-200"
         style={{
           width: hover ? 70 : 36,
           height: hover ? 70 : 36,
-          border: '1px solid rgba(255,107,53,0.6)',
-          mixBlendMode: 'difference',
         }}
       />
     </>
@@ -80,11 +153,17 @@ function Cursor() {
 }
 
 /* ============== TOP HUD ============== */
-function TopHUD({ muted, setMuted }) {
+function NavDivider({ className = '' }) {
+  return <span className={`cin-nav-divider ${className}`.trim()} aria-hidden />;
+}
+
+function TopHUD({ muted, setMuted, chapter }) {
   const barRef = useRef(null);
+
   useEffect(() => {
     const update = () => {
-      const sc = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) || 0;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const sc = max > 0 ? window.scrollY / max : 0;
       if (barRef.current) barRef.current.style.transform = `scaleX(${sc})`;
     };
     update();
@@ -95,144 +174,127 @@ function TopHUD({ muted, setMuted }) {
       window.removeEventListener('resize', update);
     };
   }, []);
+
+  const islandClass = 'cin-glass-island--solid';
+
   return (
     <>
-      {/* Top progress */}
-      <div className="fixed top-0 left-0 right-0 h-[2px] z-[1000]" style={{ background: 'rgba(255,255,255,0.08)' }}>
-        <div
-          ref={barRef}
-          className="origin-left h-full"
-          style={{
-            background: 'linear-gradient(90deg, #FF6B35, #F9A03F)',
-            transform: 'scaleX(0)',
-            transition: 'transform 0.05s linear',
-          }}
-        />
+      <div className="cin-progress-track">
+        <div ref={barRef} className="cin-progress-fill" style={{ transform: 'scaleX(0)' }} />
       </div>
-      {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-[999] flex items-center justify-between px-6 md:px-10 py-5 mix-blend-difference">
-        <Link to="/" className="flex items-center gap-2" data-cursor>
-          <span className="text-[12px]" style={{ color: '#FFF', letterSpacing: '0.2em', fontWeight: 500 }}>
-            METAL360 — A FILM
-          </span>
-        </Link>
-        <div className="flex items-center gap-5">
-          <span className="hidden md:inline text-[11px]" style={{ color: '#FFF', letterSpacing: '0.22em' }}>
-            CHAPTER 01 / 04
-          </span>
-          <button
-            onClick={() => setMuted((m) => !m)}
-            className="w-9 h-9 inline-flex items-center justify-center rounded-full"
-            style={{ border: '1px solid rgba(255,255,255,0.35)', color: '#FFF' }}
-            data-cursor
+      <header className="cin-nav-shell fixed top-0 left-0 right-0 z-[999] pointer-events-none">
+        <div className="cin-nav-shell-inner flex items-start justify-between gap-2 sm:gap-3 md:gap-4 px-3 sm:px-4 md:px-6 pt-3 md:pt-4">
+          {/* Island 1 — logo only */}
+          <div className={`cin-glass-island cin-glass-island--logo pointer-events-auto ${islandClass}`}>
+            <Link to="/" className="cin-nav-logo-wrap" data-cursor aria-label="Javion Fasteners home">
+              <img
+                src={JAVION_LOGO}
+                alt="Javion Fasteners"
+                className="cin-nav-logo h-7 md:h-8 w-auto object-contain"
+                draggable={false}
+              />
+            </Link>
+          </div>
+
+          {/* Island 2 — menu (center, separate glass blob) */}
+          <nav
+            className={`cin-glass-island cin-glass-island--menu hidden md:flex items-center pointer-events-auto ${islandClass}`}
+            aria-label="Primary"
           >
-            {muted ? <VolumeX size={14} strokeWidth={1.5} /> : <Volume2 size={14} strokeWidth={1.5} />}
-          </button>
+            <a href="#scatter" className="cin-nav-link font-body font-medium" data-cursor>Products</a>
+            <NavDivider />
+            <a href="#industries" className="cin-nav-link font-body font-medium" data-cursor>Industries</a>
+            <NavDivider />
+            <a href="#quality" className="cin-nav-link font-body font-medium" data-cursor>Quality</a>
+            <NavDivider />
+            <a href="#quote" className="cin-nav-link font-body font-medium" data-cursor>Quote</a>
+          </nav>
+
+          {/* Island 3 — chapter + audio */}
+          <div className={`cin-glass-island cin-glass-island--meta flex items-center pointer-events-auto ${islandClass}`}>
+            <span className="hidden sm:inline cin-nav-chapter text-[10px] font-body tracking-[0.16em] whitespace-nowrap">
+              CHAPTER {chapter.current} / {chapter.total}
+            </span>
+            <NavDivider className="hidden sm:block" />
+            <button
+              onClick={() => setMuted((m) => !m)}
+              className="cin-nav-btn w-9 h-9 inline-flex items-center justify-center rounded-full shrink-0"
+              data-cursor
+              aria-label={muted ? 'Unmute ambient audio' : 'Mute ambient audio'}
+            >
+              {muted ? <VolumeX size={14} strokeWidth={1.5} /> : <Volume2 size={14} strokeWidth={1.5} />}
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
     </>
   );
 }
 
-/* ============== SCENE 1: OVERTURE ============== */
-function Overture() {
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from('.ov-eyebrow', { opacity: 0, y: 20, duration: 1.2, delay: 0.6, ease: 'power3.out' });
-      gsap.from('.ov-line .ow', {
-        opacity: 0, y: 60, duration: 1.4, ease: 'power3.out', stagger: 0.08, delay: 1.0,
-      });
-      gsap.from('.ov-foot', { opacity: 0, duration: 1, delay: 2.4 });
-      gsap.to('.ov-section', {
-        opacity: 0, scale: 1.05,
-        ease: 'none',
-        scrollTrigger: { trigger: '.ov-section', start: 'top top', end: 'bottom top', scrub: true },
-      });
-    });
-    return () => ctx.revert();
-  }, []);
-  const line1 = 'From the fire,'.split(' ');
-  const line2 = 'something is born.'.split(' ');
-  return (
-    <section className="ov-section relative h-screen w-full flex items-center justify-center overflow-hidden" style={{ background: '#050505' }}>
-      {/* radial vignette */}
-      <div className="absolute inset-0" style={{
-        background: 'radial-gradient(circle at 50% 60%, rgba(255,107,53,0.12), rgba(0,0,0,0) 60%)',
-      }} />
-      <div className="relative text-center px-6">
-        <div className="ov-eyebrow text-[11px]" style={{ color: 'rgba(255,255,255,0.5)', letterSpacing: '0.35em' }}>
-          PROLOGUE · 2026
-        </div>
-        <h1
-          className="ov-line mt-8 font-display italic"
-          style={{
-            fontSize: 'clamp(48px, 8vw, 130px)',
-            color: '#F5F3EF',
-            fontWeight: 400,
-            lineHeight: 1.0,
-            letterSpacing: '-0.03em',
-          }}
-        >
-          {line1.map((w, i) => <span key={i} className="ow inline-block mr-[0.3em]">{w}</span>)}
-        </h1>
-        <h1
-          className="ov-line mt-2 font-display italic"
-          style={{
-            fontSize: 'clamp(48px, 8vw, 130px)',
-            color: '#F5F3EF',
-            fontWeight: 400,
-            lineHeight: 1.0,
-            letterSpacing: '-0.03em',
-          }}
-        >
-          {line2.map((w, i) => (
-            <span key={i} className="ow inline-block mr-[0.3em]" style={i === 1 ? {
-              background: 'linear-gradient(135deg, #FF6B35, #F9A03F)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            } : {}}>
-              {w}
-            </span>
-          ))}
-        </h1>
-        <div className="ov-foot mt-14 inline-flex flex-col items-center" style={{ color: 'rgba(255,255,255,0.6)' }}>
-          <div className="text-[10px]" style={{ letterSpacing: '0.3em' }}>SCROLL TO BEGIN</div>
-          <div className="mt-3 h-10 w-[1px]" style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.6), transparent)' }} />
-        </div>
-      </div>
-    </section>
-  );
+/* ============== SCENE 1: FACTORY SHOWCASE COLLAGE (HERO) ============== */
+const SCATTER_TILES = [
+  { src: IMG.factoryFloor,   alt: 'Javion Fasteners production floor',           l: 6,  t: 5,   w: 13, h: 62, z: -200, rotY: 12,  rotX: -4,  curve: -18 },
+  { src: IMG.cncMachine,     alt: 'CNC machining centre',                        l: 24, t: -1,  w: 19, h: 50, z: -120, rotY: -8,  rotX: 3,   curve: -10 },
+  { src: IMG.fasteners,      alt: 'Precision bolts and fasteners',               l: 57, t: 8,   w: 16, h: 55, z: -60,  rotY: 6,   rotX: -2,  curve: 0 },
+  { src: IMG.threading,      alt: 'Thread rolling and lathe work',               l: 80, t: 3,   w: 14, h: 66, z: 80,   rotY: -14, rotX: 5,   curve: 10 },
+  { src: IMG.warehouse,      alt: 'Finished goods warehouse',                    l: 9,  t: 60,  w: 14, h: 36, z: 40,   rotY: 10,  rotX: -6,  curve: -14 },
+  { src: IMG.qualityCheck,   alt: 'Quality inspection on the line',              l: 27, t: 56,  w: 25, h: 42, z: -150, rotY: -5,  rotX: 4,   curve: -6 },
+  { src: IMG.assemblyLine,   alt: 'Assembly and packaging area',                 l: 62, t: 62,  w: 13, h: 34, z: 100,  rotY: 8,   rotX: -3,  curve: 14 },
+  { src: IMG.industrialPlant, alt: 'Manufacturing facility overview',            l: 80, t: 56,  w: 14, h: 42, z: 150,  rotY: -10, rotX: 2,   curve: 18 },
+];
+
+function applyTileParallax(section, mouse) {
+  if (!section) return;
+  section.querySelectorAll('[data-tile-index]').forEach((el) => {
+    const i = Number(el.dataset.tileIndex);
+    const tile = SCATTER_TILES[i];
+    if (!tile) return;
+    const px = -mouse.x * (Math.abs(tile.z) / 50);
+    const py = -mouse.y * (Math.abs(tile.z) / 50);
+    el.style.transform = `translate3d(${px}px, ${py}px, 0)`;
+  });
 }
 
-/* ============== SCENE 2: SCATTER COLLAGE — pinned scroll reveal ============== */
-function ScatterCollage() {
+function ScatterCollage({ reduced }) {
   const sectionRef = useRef(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
 
-  // 8 photos with their target scattered positions (percentages of viewport)
-  const tiles = [
-    { src: IMG.steel,     l: 6,  t: 5,   w: 13, h: 62 },  // top-left tall
-    { src: IMG.moulin,    l: 24, t: -1,  w: 19, h: 50 },  // top center-left
-    { src: IMG.kiosque,   l: 57, t: 8,   w: 16, h: 55 },  // top center-right
-    { src: IMG.elegance,  l: 80, t: 3,   w: 14, h: 66 },  // top-right very tall
-    { src: IMG.spirale,   l: 9,  t: 60,  w: 14, h: 36 },  // bottom-left
-    { src: IMG.pergola,   l: 27, t: 56,  w: 25, h: 42 },  // bottom center wide
-    { src: IMG.griffon,   l: 62, t: 62,  w: 13, h: 34 },  // bottom center-right
-    { src: IMG.caves,     l: 80, t: 56,  w: 14, h: 42 },  // bottom-right
-  ];
+  const onMouseMove = useCallback((e) => {
+    const rect = sectionRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    mouseRef.current = {
+      x: ((e.clientX - rect.left) / rect.width - 0.5) * 2,
+      y: ((e.clientY - rect.top) / rect.height - 0.5) * 2,
+    };
+    applyTileParallax(sectionRef.current, mouseRef.current);
+  }, []);
 
   useEffect(() => {
+    const scatter = sectionRef.current;
+    if (!scatter) return undefined;
+
     const ctx = gsap.context(() => {
+      if (reduced) {
+        gsap.from('.tile', {
+          opacity: 0, y: 40, stagger: 0.06, duration: 0.8, ease: 'power2.out',
+          scrollTrigger: { trigger: scatter, start: 'top 75%' },
+        });
+        return;
+      }
+
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: scatter,
           start: 'top top',
-          end: '+=300%',
+          end: '+=480%',
           pin: true,
-          scrub: 0.5,
+          pinSpacing: true,
+          scrub: 1.15,
           anticipatePin: 1,
+          invalidateOnRefresh: true,
         },
       });
 
-      // Phase 1 (0 → 0.55): images scatter from center to grid positions
       tl.fromTo('.tile',
         {
           xPercent: -50,
@@ -243,391 +305,441 @@ function ScatterCollage() {
           height: '8%',
           scale: 0.35,
           opacity: 0,
-          filter: 'blur(8px)',
-          rotate: (i) => (i % 2 === 0 ? -6 : 6),
         },
         {
           xPercent: 0,
           yPercent: 0,
-          left:   (i) => `${tiles[i].l}%`,
-          top:    (i) => `${tiles[i].t}%`,
-          width:  (i) => `${tiles[i].w}%`,
-          height: (i) => `${tiles[i].h}%`,
+          left:   (i) => `${SCATTER_TILES[i].l}%`,
+          top:    (i) => `${SCATTER_TILES[i].t}%`,
+          width:  (i) => `${SCATTER_TILES[i].w}%`,
+          height: (i) => `${SCATTER_TILES[i].h}%`,
           scale: 1,
           opacity: 1,
-          filter: 'blur(0px)',
-          rotate: 0,
           ease: 'power3.out',
           stagger: 0.04,
-          duration: 1.2,
+          duration: 0.85,
         },
         0
       );
 
-      // Phase 2 (0.55 → 1): center text scales massively & blurs out
-      tl.to('.scatter-text',
+      tl.fromTo('.tile-3d',
+        { rotateY: 0, rotateX: 0, z: -300 },
         {
-          scale: 4.2,
-          opacity: 0,
-          filter: 'blur(28px)',
-          ease: 'power2.in',
-          duration: 0.9,
+          rotateY: (i) => SCATTER_TILES[i].rotY,
+          rotateX: (i) => SCATTER_TILES[i].rotX,
+          z: (i) => SCATTER_TILES[i].z,
+          ease: 'power3.out',
+          stagger: 0.04,
+          duration: 0.85,
         },
-        0.7
-      );
-      // tiles drift outward + fade slightly as text takes over
-      tl.to('.tile',
-        {
-          scale: 1.15,
-          opacity: 0.35,
-          filter: 'blur(3px)',
-          ease: 'power2.in',
-          duration: 0.9,
-        },
-        0.7
+        0
       );
 
-      // ornament bobs subtly during phase 1
-      tl.from('.ornament',
-        { y: -20, opacity: 0, duration: 0.5, ease: 'power2.out' },
-        0.2
-      );
-    });
+      tl.from('.ornament', { y: -20, opacity: 0, duration: 0.45, ease: 'power2.out' }, 0.15);
+
+      /* Long zoom-out — keeps running through scroll into section 3 handoff */
+      const zoomStart = 0.42;
+      const zoomDuration = 1.75;
+
+      tl.to('.tunnel-wrap', {
+        rotateY: 34,
+        scale: 2.35,
+        z: 180,
+        ease: 'power1.in',
+        duration: zoomDuration,
+      }, zoomStart);
+
+      tl.to('.scatter-text', {
+        scale: 5.5,
+        opacity: 0,
+        y: -40,
+        ease: 'power1.in',
+        duration: zoomDuration,
+      }, zoomStart);
+
+      tl.to('.tile', {
+        scale: 1.45,
+        opacity: 0,
+        ease: 'power1.in',
+        duration: zoomDuration,
+      }, zoomStart);
+
+      tl.to('.tile-3d', {
+        rotateY: (i) => SCATTER_TILES[i].rotY + SCATTER_TILES[i].curve * 2.2,
+        rotateX: (i) => SCATTER_TILES[i].rotX * 1.4,
+        z: (i) => SCATTER_TILES[i].z + 320,
+        ease: 'power1.in',
+        duration: zoomDuration,
+      }, zoomStart);
+    }, scatter);
+
     return () => ctx.revert();
-  }, []);
+  }, [reduced]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative w-full overflow-hidden"
-      style={{ height: '100vh', background: '#050505' }}
+      id="scatter"
+      className="ov-section relative w-full overflow-hidden cin-section-flow"
+      style={{ height: '100vh', perspective: '1200px' }}
+      onMouseMove={onMouseMove}
+      data-chapter="01"
     >
-      {/* Image tiles (positions animated via GSAP) */}
-      <div className="absolute inset-0">
-        {tiles.map((tile, i) => (
+      <div
+        className="scatter-bg pointer-events-none absolute inset-0 z-0"
+        style={{ background: THEME.bg }}
+      />
+      <div className="tunnel-wrap absolute inset-0 z-[1]" style={{ transformStyle: 'preserve-3d', transformOrigin: '50% 50%' }}>
+        {SCATTER_TILES.map((tile, i) => (
           <div
             key={i}
-            className="tile absolute overflow-hidden"
+            className="tile absolute"
             style={{
               borderRadius: 4,
-              willChange: 'transform, left, top, width, height, filter, opacity',
-              boxShadow: '0 30px 60px -30px rgba(0,0,0,0.6)',
+              willChange: 'left, top, width, height, filter, opacity',
+              boxShadow: `${tile.z > 0 ? '0 20px 50px -12px' : '0 12px 32px -16px'} rgba(15,23,42,${0.12 + Math.abs(tile.z) / 800})`,
+              transformStyle: 'preserve-3d',
             }}
           >
-            <img
-              src={tile.src}
-              alt=""
-              className="w-full h-full object-cover"
-              style={{ filter: 'brightness(0.92) contrast(1.04)' }}
-              loading="lazy"
-            />
+            <div className="tile-3d w-full h-full overflow-hidden" style={{ transformStyle: 'preserve-3d', borderRadius: 4 }}>
+              <div className="tile-parallax relative w-full h-full" data-tile-index={i}>
+                <img
+                  src={tile.src}
+                  alt={tile.alt || 'Manufacturing'}
+                  className="w-full h-full object-cover"
+                  style={{ filter: 'brightness(1.02) contrast(1.06) saturate(0.95)' }}
+                  loading="eager"
+                  decoding="async"
+                  onError={onCinematicImgError}
+                />
+                <div className="absolute inset-0 pointer-events-none" style={{
+                  background: `linear-gradient(${135 + tile.rotY}deg, transparent 0%, transparent 50%, rgba(15,29,55,0.06) 100%)`,
+                }} />
+              </div>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Center text + ornament */}
-      <div className="relative h-full w-full flex flex-col items-center justify-center px-6 pointer-events-none">
-        <svg
-          className="ornament"
-          width="86" height="44" viewBox="0 0 86 44" fill="none"
-          style={{ marginBottom: 18, opacity: 0.9 }}
-        >
-          <path d="M2 42 C 2 22, 22 4, 43 4 C 64 4, 84 22, 84 42" stroke="#F5F3EF" strokeWidth="1" strokeLinecap="round" />
-          <path d="M12 42 C 12 28, 26 14, 43 14 C 60 14, 74 28, 74 42" stroke="#F5F3EF" strokeWidth="0.8" strokeLinecap="round" opacity="0.55" />
-          <circle cx="43" cy="42" r="2" fill="#F9A03F" />
-        </svg>
+      <div className="relative h-full w-full flex flex-col items-center justify-center px-6 pointer-events-none z-[2]" style={{ transformStyle: 'preserve-3d' }}>
         <div
           className="scatter-text text-center"
           style={{
-            color: '#F5F3EF',
+            color: THEME.text,
             maxWidth: 560,
             willChange: 'transform, opacity, filter',
             transformOrigin: '50% 50%',
           }}
         >
-          <h2
-            className="font-display"
-            style={{
-              fontSize: 'clamp(20px, 2.2vw, 30px)',
-              fontWeight: 400,
-              lineHeight: 1.45,
-              letterSpacing: '-0.005em',
-            }}
-          >
-            Welcome to{' '}
-            <em style={{
-              fontWeight: 700, fontStyle: 'italic',
-              background: 'linear-gradient(135deg, #FF6B35, #F9A03F)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            }}>Metal360</em>
-            {' '}— where metalwork is never just manufacturing.
-            It&apos;s a complete{' '}
-            <em style={{ fontWeight: 700, fontStyle: 'italic' }}>experience</em>,
-            from the first sketch to the final install.
+          <div className="cin-eyebrow mb-4">Inside the factory</div>
+          <h2 className="font-body" style={{
+            fontSize: 'clamp(20px, 2.2vw, 30px)',
+            fontWeight: 500,
+            lineHeight: 1.45,
+            letterSpacing: '-0.005em',
+          }}>
+            A visual showcase of{' '}
+            <em className="cin-gradient-text italic" style={{ fontWeight: 700 }}>Javion Fasteners</em>
+            {' '}— our factory floor, precision machinery, and the manufacturing environment where every bolt is engineered to spec.
           </h2>
         </div>
       </div>
+
+      <div className="scatter-blend-bottom absolute inset-x-0 bottom-0 z-[3] pointer-events-none" aria-hidden />
     </section>
   );
 }
 
-/* ============== SCENE 3: PINNED CHAPTER WITH SCRUBBED TEXT/IMG CROSSFADES ============== */
-function PinnedChapters() {
-  const sectionRef = useRef(null);
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const slides = gsap.utils.toArray('.pin-slide');
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          pin: true,
-          start: 'top top',
-          end: () => '+=' + (slides.length * window.innerHeight * 0.85),
-          scrub: 0.6,
-        },
-      });
-      slides.forEach((s, i) => {
-        if (i > 0) {
-          tl.to(slides[i - 1], { opacity: 0, scale: 1.06, duration: 1 }, i)
-            .fromTo(s, { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 1 }, i);
-        }
-      });
-    });
-    return () => ctx.revert();
-  }, []);
+/* ============== SCENE 4: 3D HORIZONTAL CAROUSEL ============== */
+const PROCESS_PANELS = [
+  { n: '01', t: 'Design & Spec', d: 'Drawings, tolerances, and material grades locked before a single bar hits the line.', img: IMG.designSpec },
+  { n: '02', t: 'Cold Forming', d: 'Headers, threads, and shanks shaped on multi-stage cold headers and thread rollers.', img: IMG.threading },
+  { n: '03', t: 'Heat Treat', d: 'Quench, temper, and case hardening to Grade 8.8, 10.9, and customer spec.', img: IMG.forge },
+  { n: '04', t: 'QC & Testing', d: 'Dimensional checks, tensile tests, and coating verification on every batch.', img: IMG.qualityCheck },
+  { n: '05', t: 'Pack & Ship', d: 'Bagged, labelled, and dispatched — traceable from furnace to your site.', img: IMG.warehouse },
+];
 
-  const slides = [
-    {
-      eyebrow: 'CHAPTER II',
-      title: 'The Metal',
-      sub: 'Steel, stainless, aluminum, brass, copper. Each alloy whispers a different story. Lean in and listen.',
-      img: IMG.steel,
-    },
-    {
-      eyebrow: 'CHAPTER III',
-      title: 'The Hand',
-      sub: 'Tradition meets precision. The hand that has shaped a thousand pieces knows where to bend, where to break, where to hold.',
-      img: IMG.hand,
-    },
-    {
-      eyebrow: 'CHAPTER IV',
-      title: 'The Spark',
-      sub: 'A million sparks. Each one a choice. Each one another step toward the form that wanted to exist all along.',
-      img: IMG.spark,
-    },
-  ];
-
-  return (
-    <section ref={sectionRef} className="relative h-screen w-full overflow-hidden" style={{ background: '#050505' }}>
-      {slides.map((s, i) => (
-        <div
-          key={i}
-          className="pin-slide absolute inset-0"
-          style={{ opacity: i === 0 ? 1 : 0 }}
-        >
-          <img src={s.img} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ filter: 'brightness(0.55) contrast(1.05)' }} />
-          <div className="absolute inset-0" style={{
-            background: 'linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.7) 100%)',
-          }} />
-          <div className="relative h-full grid grid-cols-12 gap-6 items-center px-8 md:px-16">
-            <div className="col-span-12 md:col-span-6">
-              <div className="text-[11px]" style={{ color: '#F9A03F', letterSpacing: '0.32em' }}>
-                {s.eyebrow}
-              </div>
-              <h3 className="font-display italic mt-4" style={{
-                fontSize: 'clamp(56px, 9vw, 140px)',
-                color: '#F5F3EF', fontWeight: 400, lineHeight: 0.95, letterSpacing: '-0.03em',
-              }}>
-                {s.title}
-              </h3>
-              <p className="mt-6 text-[16px]" style={{ color: 'rgba(245,243,239,0.78)', maxWidth: 460, lineHeight: 1.65 }}>
-                {s.sub}
-              </p>
-            </div>
-          </div>
-        </div>
-      ))}
-    </section>
-  );
-}
-
-/* ============== SCENE 4: HORIZONTAL SCROLL — THE PROCESS ============== */
-function HorizontalAct() {
+function HorizontalAct({ reduced }) {
   const wrapRef = useRef(null);
   const trackRef = useRef(null);
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       const track = trackRef.current;
       const wrap = wrapRef.current;
       if (!track || !wrap) return;
+
+      const scroller = document.documentElement;
+
+      if (reduced) {
+        headlineBlurIn('.process-headline', {
+          reduced,
+          scrollTrigger: { trigger: wrap, scroller, start: 'top 75%' },
+        });
+        return;
+      }
+
+      headlineBlurIn('.process-headline', {
+        reduced,
+        scrollTrigger: { trigger: wrap, scroller, start: 'top top', end: 'top 70%' },
+        y: 28,
+        blur: 14,
+      });
+
       const distance = () => track.scrollWidth - window.innerWidth;
+
       gsap.to(track, {
         x: () => -distance(),
         ease: 'none',
         scrollTrigger: {
           trigger: wrap,
+          scroller,
           start: 'top top',
           end: () => '+=' + distance(),
           pin: true,
-          scrub: 0.6,
+          pinSpacing: true,
+          scrub: 1,
+          anticipatePin: 0,
           invalidateOnRefresh: true,
+          onUpdate: () => updateCoverflow(track),
         },
       });
-    });
-    return () => ctx.revert();
-  }, []);
 
-  const panels = [
-    { n: '01', t: 'Drawing', d: 'The pencil before the metal. Every curve, every joint, every shadow imagined long before a single spark.', img: IMG.spirale },
-    { n: '02', t: 'Cutting', d: 'Tenth-of-a-millimetre precision. CNC plasma and laser, where mathematics becomes motion.', img: IMG.elegance },
-    { n: '03', t: 'Welding', d: 'TIG, MIG, brazing. The quiet art of joining — where two pieces become one without leaving a trace.', img: IMG.kiosque },
-    { n: '04', t: 'Finishing', d: 'Brushed, patinated, powder-coated. The skin of the piece — what the hand will feel, what the light will love.', img: IMG.moulin },
-    { n: '05', t: 'Install', d: 'The moment of truth. Months of workshop time meet the building, the room, the eye that finally sees it.', img: IMG.pergola },
-  ];
+      requestAnimationFrame(() => updateCoverflow(track));
+    }, wrapRef);
+    return () => ctx.revert();
+  }, [reduced]);
 
   return (
-    <section ref={wrapRef} className="relative h-screen w-full overflow-hidden" style={{ background: '#0A0A0A' }}>
-      {/* Top label */}
-      <div className="absolute top-0 left-0 right-0 z-10 px-8 md:px-16 pt-28 pointer-events-none">
-        <div className="text-[11px]" style={{ color: '#F9A03F', letterSpacing: '0.3em' }}>ACT II — THE PROCESS</div>
-        <div className="font-display italic mt-2" style={{ color: '#F5F3EF', fontSize: 'clamp(28px, 4vw, 56px)', fontWeight: 400, letterSpacing: '-0.02em' }}>
-          Five hands, one piece.
+    <section
+      ref={wrapRef}
+      id="process-act"
+      className="process-act relative h-screen w-full overflow-hidden cin-section-flow"
+      style={{ background: THEME.bg }}
+      data-chapter="03"
+    >
+      <div className="process-act-header px-8 md:px-16">
+        <div className="cin-eyebrow">ACT II — THE PROCESS</div>
+        <h2
+          className="process-headline font-display italic mt-2 cin-heading cin-text-shadow"
+          style={{ fontSize: 'clamp(28px, 4vw, 56px)', letterSpacing: '-0.02em', ...TEXT_3D }}
+        >
+          From bar stock to bolt — five controlled steps.
+        </h2>
+      </div>
+
+      <div className="process-act-stage">
+        <div
+          ref={trackRef}
+          className="process-act-track h-full flex items-center pl-[6vw] md:pl-[8vw]"
+          style={{ willChange: 'transform', perspective: '1200px', transformStyle: 'preserve-3d' }}
+        >
+          {PROCESS_PANELS.map((p) => (
+            <Panel3D key={p.n} panel={p} />
+          ))}
+          <div className="shrink-0" style={{ minWidth: '18vw' }} aria-hidden />
         </div>
       </div>
 
-      <div ref={trackRef} className="absolute top-0 left-0 h-full flex items-center pl-[8vw]" style={{ willChange: 'transform' }}>
-        {panels.map((p, i) => (
-          <div
-            key={p.n}
-            className="shrink-0 mr-12 md:mr-16 flex flex-col justify-center"
-            style={{ width: 'clamp(360px, 60vw, 720px)', height: '70vh', marginTop: '6vh' }}
-          >
-            <div className="relative overflow-hidden flex-1" style={{ borderRadius: 4 }}>
-              <img src={p.img} alt={p.t} className="w-full h-full object-cover" style={{ filter: 'brightness(0.88) contrast(1.05)' }} />
-              <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,0.7) 100%)' }} />
-              <div className="absolute top-5 left-5 font-display italic" style={{ color: '#F9A03F', fontSize: 64, fontWeight: 400, lineHeight: 1, letterSpacing: '-0.02em' }}>
-                {p.n}
-              </div>
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="font-display italic" style={{ color: '#F5F3EF', fontSize: 'clamp(28px, 3.5vw, 48px)', fontWeight: 400, lineHeight: 1.05, letterSpacing: '-0.02em' }}>
-                  {p.t}
-                </div>
-                <div className="mt-3 text-[13px]" style={{ color: 'rgba(245,243,239,0.78)', maxWidth: 400, lineHeight: 1.55 }}>
-                  {p.d}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-        <div style={{ minWidth: '20vw' }} />
-      </div>
-
-      {/* Hint */}
-      <div className="absolute bottom-8 right-8 text-[11px] flex items-center gap-3" style={{ color: 'rgba(245,243,239,0.5)', letterSpacing: '0.2em' }}>
-        SCROLL <span className="inline-block h-[1px] w-10" style={{ background: 'linear-gradient(90deg, transparent, #F9A03F)' }} />
+      <div className="process-act-scroll-hint absolute bottom-8 right-8 z-20 text-[11px] flex items-center gap-3" style={{ color: THEME.textMuted, letterSpacing: '0.2em' }}>
+        SCROLL <span className="inline-block h-[1px] w-10" style={{ background: `linear-gradient(90deg, transparent, ${THEME.accent})` }} />
       </div>
     </section>
   );
 }
 
-/* ============== SCENE 5: ANIMATED COUNTERS ============== */
-function Counters() {
+function Panel3D({ panel: p }) {
+  const tiltRef = useTilt(8, true);
+
+  return (
+    <div className="h-panel shrink-0 mr-8 md:mr-14 flex flex-col justify-center" style={{ transformStyle: 'preserve-3d', opacity: 0.7 }}>
+      <div
+        ref={tiltRef}
+        className="h-panel-inner relative overflow-hidden w-full h-full"
+        style={{ borderRadius: 8, transformStyle: 'preserve-3d', boxShadow: '0 24px 60px -16px rgba(15,23,42,0.18), 0 0 0 1px rgba(15,23,42,0.06)' }}
+      >
+        <img src={p.img} alt={p.t} className="w-full h-full object-cover" style={{ filter: 'brightness(0.88) contrast(1.05)' }} loading="eager" decoding="async" onError={onCinematicImgError} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(10,29,55,0.15) 0%, rgba(10,29,55,0) 35%, rgba(10,29,55,0.75) 100%)' }} />
+        <div className="absolute top-5 left-5 font-display italic cin-gradient-text" style={{ fontSize: 'clamp(40px, 5vw, 64px)', fontWeight: 400, lineHeight: 1, letterSpacing: '-0.02em' }}>
+          {p.n}
+        </div>
+        <div className="absolute bottom-6 left-6 right-6">
+          <div className="font-display italic cin-on-media" style={{ fontSize: 'clamp(24px, 3vw, 44px)', fontWeight: 400, lineHeight: 1.05, letterSpacing: '-0.02em', ...TEXT_3D_ON_MEDIA }}>
+            {p.t}
+          </div>
+          <div className="mt-3 text-[13px] font-body" style={{ color: 'rgba(255,255,255,0.82)', maxWidth: 400, lineHeight: 1.55 }}>
+            {p.d}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============== SCENE 5: COUNTERS ============== */
+function Counters({ reduced }) {
   const ref = useRef(null);
+
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const nums = gsap.utils.toArray('.count');
-      nums.forEach((el) => {
+      const strip = ref.current?.querySelector('.cnt-stats-strip');
+      if (!strip) return;
+
+      headlineBlurIn('.cnt-title .cin-word', {
+        reduced,
+        scrollTrigger: { trigger: ref.current, start: 'top 75%' },
+        rotateX: -18,
+        stagger: 0.05,
+        y: 36,
+        blur: 14,
+      });
+
+      const nums = gsap.utils.toArray('.count', ref.current);
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: strip,
+          start: 'top 82%',
+          once: true,
+          toggleActions: 'play none none none',
+        },
+      });
+
+      nums.forEach((el, i) => {
         const target = parseFloat(el.dataset.target);
         const decimals = parseInt(el.dataset.decimals || '0', 10);
         const obj = { v: 0 };
-        gsap.to(obj, {
-          v: target,
-          duration: 2.2,
-          ease: 'power3.out',
-          onUpdate: () => { el.textContent = obj.v.toFixed(decimals); },
-          scrollTrigger: { trigger: el, start: 'top 85%' },
-        });
+        el.textContent = decimals > 0 ? '0.0' : '0';
+        tl.to(
+          obj,
+          {
+            v: target,
+            duration: reduced ? 0.55 : 2.2,
+            ease: 'power2.out',
+            onUpdate: () => {
+              el.textContent = obj.v.toFixed(decimals);
+            },
+          },
+          i * 0.18
+        );
       });
-      gsap.from('.cnt-title .w', { opacity: 0, y: 40, stagger: 0.05, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: ref.current, start: 'top 75%' } });
-    });
+    }, ref);
+
     return () => ctx.revert();
-  }, []);
+  }, [reduced]);
+
   const items = [
-    { v: 24, suf: 'ans', l: 'years in the trade' },
-    { v: 1538, suf: '°C', l: 'where steel surrenders' },
-    { v: 12, suf: 'k+', l: 'pieces shaped by hand' },
-    { v: 99.7, dec: 1, suf: '%', l: 'precision tolerance' },
+    { v: 24, suf: '+', l: 'years manufacturing' },
+    { v: 1538, suf: '°C', l: 'heat treatment peak' },
+    { v: 12, suf: 'M+', l: 'fasteners shipped yearly' },
+    { v: 99.7, dec: 1, suf: '%', l: 'dimensional accuracy' },
   ];
   const t = 'Numbers that mean nothing without the hand.'.split(' ');
+
   return (
-    <section ref={ref} className="relative py-32 md:py-44 px-8 md:px-16 overflow-hidden" style={{ background: '#050505' }}>
-      <div className="max-w-6xl mx-auto">
-        <div className="text-[11px]" style={{ color: '#F9A03F', letterSpacing: '0.32em' }}>INTERLUDE</div>
-        <h2 className="cnt-title font-display italic mt-4" style={{
-          color: '#F5F3EF', fontSize: 'clamp(36px, 5.2vw, 72px)', fontWeight: 400, lineHeight: 1.05, letterSpacing: '-0.025em', maxWidth: 900,
-        }}>
-          {t.map((w, i) => <span key={i} className="w inline-block mr-[0.25em]">{w}</span>)}
-        </h2>
-        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-10">
-          {items.map((it) => (
-            <div key={it.l}>
-              <div className="font-display italic" style={{
-                fontSize: 'clamp(48px, 7vw, 96px)', color: '#F5F3EF', fontWeight: 400, lineHeight: 1, letterSpacing: '-0.03em',
-              }}>
-                <span className="count" data-target={it.v} data-decimals={it.dec || 0}>0</span>
-                <span style={{
-                  background: 'linear-gradient(135deg, #FF6B35, #F9A03F)',
-                  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                }}>{it.suf}</span>
-              </div>
-              <div className="mt-3 text-[12px]" style={{ color: 'rgba(245,243,239,0.55)', letterSpacing: '0.16em', textTransform: 'uppercase' }}>
-                {it.l}
-              </div>
-            </div>
+    <section ref={ref} className="cnt-interlude relative w-full overflow-hidden py-16 md:py-24 cin-section-soft-light cin-section-blend-top cin-section-blend-bottom">
+      <div className="relative z-[1] px-8 md:px-16 pb-10 md:pb-14">
+        <div className="cin-eyebrow">INTERLUDE</div>
+        <h2
+          className="cnt-title font-display italic mt-4 cin-heading max-w-5xl"
+          style={{
+            fontSize: 'clamp(2rem, 5vw, 4.5rem)',
+            fontWeight: 400,
+            lineHeight: 1.08,
+            letterSpacing: '-0.025em',
+            ...TEXT_3D,
+          }}
+        >
+          {t.map((word, i) => (
+            <span key={i} className="cin-word inline-block mr-[0.28em]">
+              {word}
+            </span>
           ))}
-        </div>
+        </h2>
+      </div>
+
+      <div className="cnt-stats-strip grid grid-cols-2 md:grid-cols-4 w-full">
+        {items.map((it) => (
+          <div key={it.l} className="cnt-stat-col px-6 md:px-10 lg:px-12 py-10 md:py-14">
+            <div
+              className="font-display italic"
+              style={{
+                fontSize: 'clamp(2.5rem, 6vw, 5.5rem)',
+                color: THEME.text,
+                fontWeight: 400,
+                lineHeight: 1,
+                letterSpacing: '-0.03em',
+              }}
+            >
+              <span className="count" style={TEXT_3D} data-target={it.v} data-decimals={it.dec || 0}>0</span>
+              <span className="cin-gradient-text">{it.suf}</span>
+            </div>
+            <div
+              className="mt-3 text-[11px] md:text-[12px] font-body"
+              style={{ color: THEME.textMuted, letterSpacing: '0.16em', textTransform: 'uppercase' }}
+            >
+              {it.l}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
 }
 
 /* ============== SCENE 6: CLIP-PATH REVEAL ============== */
-function ClipReveal() {
+function ClipReveal({ reduced }) {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo('.clip-img',
-        { clipPath: 'inset(40% 20% 40% 20% round 0px)' },
+        { clipPath: 'inset(40% 20% 40% 20% round 0px)', scale: reduced ? 1 : 1.15, rotateZ: reduced ? 0 : -1.5 },
         {
           clipPath: 'inset(0% 0% 0% 0% round 0px)',
+          scale: 1,
+          rotateZ: 0,
           ease: 'power3.out',
-          scrollTrigger: { trigger: '.clip-wrap', start: 'top 75%', end: 'top 10%', scrub: 1 },
+          scrollTrigger: { trigger: '.clip-wrap', start: 'top 75%', end: 'top 10%', scrub: reduced ? false : 1.2 },
         }
       );
-      gsap.from('.clip-eyebrow', { opacity: 0, y: 20, duration: 1,
-        scrollTrigger: { trigger: '.clip-wrap', start: 'top 75%' } });
-      gsap.from('.clip-title .w', { opacity: 0, y: 30, duration: 0.9, stagger: 0.05, ease: 'power3.out',
-        scrollTrigger: { trigger: '.clip-wrap', start: 'top 70%' } });
+      gsap.from('.clip-eyebrow', { opacity: 0, y: 20, filter: reduced ? 'blur(0px)' : 'blur(8px)', duration: 1, scrollTrigger: { trigger: '.clip-wrap', start: 'top 75%', once: true } });
+      headlineBlurIn('.clip-title .cin-word', {
+        reduced,
+        scrollTrigger: { trigger: '.clip-wrap', start: 'top 70%' },
+        rotateX: -15,
+        stagger: 0.05,
+        y: 30,
+        blur: 14,
+      });
+      headlineBlurIn('.clip-media-line', {
+        reduced,
+        scrollTrigger: { trigger: '.clip-wrap', start: 'top 55%' },
+        y: 24,
+        blur: 12,
+        delay: 0.2,
+      });
     });
     return () => ctx.revert();
-  }, []);
+  }, [reduced]);
+
   const t = 'And then —'.split(' ');
+
   return (
-    <section className="clip-wrap relative overflow-hidden pt-24 pb-32 px-6" style={{ background: '#050505' }}>
+    <section className="clip-wrap relative overflow-hidden pt-24 pb-8 md:pb-12 px-6 cin-section-flow cin-section-blend-top">
       <div className="max-w-6xl mx-auto text-center mb-10">
-        <div className="clip-eyebrow text-[11px]" style={{ color: '#F9A03F', letterSpacing: '0.3em' }}>FINALE</div>
-        <h2 className="clip-title font-display italic mt-4" style={{
-          color: '#F5F3EF', fontSize: 'clamp(40px, 6vw, 88px)', fontWeight: 400, lineHeight: 1, letterSpacing: '-0.025em',
+        <div className="clip-eyebrow cin-eyebrow">FINALE</div>
+        <h2 className="clip-title font-display italic mt-4 cin-heading" style={{
+          fontSize: 'clamp(40px, 6vw, 88px)', fontWeight: 400, lineHeight: 1, letterSpacing: '-0.025em',
         }}>
-          {t.map((w, i) => <span key={i} className="w inline-block mr-[0.25em]">{w}</span>)}
+          {t.map((word, i) => (
+            <span key={i} className="cin-word inline-block mr-[0.25em]" style={TEXT_3D}>{word}</span>
+          ))}
         </h2>
       </div>
       <div className="max-w-7xl mx-auto px-2">
-        <div className="clip-img relative overflow-hidden" style={{ height: '70vh', borderRadius: 4 }}>
+        <div className="clip-img relative overflow-hidden cin-card" style={{ height: '70vh', borderRadius: 8, willChange: 'clip-path, transform' }}>
           <img src={IMG.griffon} alt="" className="w-full h-full object-cover" style={{ filter: 'brightness(0.92) contrast(1.05)' }} />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.6) 100%)' }} />
           <div className="absolute bottom-8 left-8 right-8 text-center">
-            <div className="font-display italic" style={{ color: '#F5F3EF', fontSize: 'clamp(28px, 4vw, 56px)', fontWeight: 400, letterSpacing: '-0.02em' }}>
+            <div className="clip-media-line font-display italic cin-on-media" style={{ fontSize: 'clamp(28px, 4vw, 56px)', fontWeight: 400, letterSpacing: '-0.02em', ...TEXT_3D_ON_MEDIA }}>
               the metal remembers.
             </div>
           </div>
@@ -637,121 +749,275 @@ function ClipReveal() {
   );
 }
 
-/* ============== SCENE 7: VERTICAL MARQUEE WORD ============== */
-function CreditsMarquee() {
+/* ============== FINALE — page footer ============== */
+function FinaleOutro({ reduced }) {
+  const sectionRef = useRef(null);
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      headlineBlurIn('.end-line .cin-word', {
+        reduced,
+        scrollTrigger: { trigger: '.end-line', start: 'top 80%' },
+        rotateX: -18,
+        stagger: 0.06,
+        y: 40,
+        blur: 16,
+      });
+      gsap.from('.finale-footer-meta', {
+        opacity: 0,
+        y: reduced ? 0 : 20,
+        duration: 0.7,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.finale-brand-stage', start: 'top 92%', once: true },
+      });
+
+      if (reduced) {
+        gsap.set('.finale-brand-word', { y: 0, filter: 'none', opacity: 1 });
+        return;
+      }
+
+      gsap.fromTo(
+        '.finale-brand-word',
+        { y: 90, filter: 'blur(22px)', opacity: 0.2 },
+        {
+          y: 0,
+          filter: 'blur(0px)',
+          opacity: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.finale-brand-stage',
+            start: 'top 98%',
+            end: 'bottom bottom',
+            scrub: 1.1,
+          },
+        }
+      );
+    }, sectionRef);
+    return () => ctx.revert();
+  }, [reduced]);
+
+  const t = 'You bring the vision. We bring the fire.'.split(' ');
+  const year = new Date().getFullYear();
+
+  const onNewsletter = (e) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setSubscribed(true);
+    setEmail('');
+  };
+
   return (
-    <section className="relative overflow-hidden py-24" style={{ background: '#050505' }}>
-      <div className="flex" style={{ animation: 'cinema-marquee 24s linear infinite', willChange: 'transform' }}>
-        {Array.from({ length: 4 }).map((_, i) => (
-          <span key={i} className="font-display italic shrink-0 pr-12" style={{
-            fontSize: 'clamp(80px, 13vw, 220px)', fontWeight: 400, color: '#F5F3EF', lineHeight: 1, letterSpacing: '-0.04em',
-          }}>
-            Forged · Shaped · Forged · <span style={{
-              background: 'linear-gradient(135deg, #FF6B35, #F9A03F)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            }}>Alive</span> ·&nbsp;
-          </span>
-        ))}
+    <footer
+      ref={sectionRef}
+      id="quote"
+      className="finale-outro cin-page-footer relative w-full overflow-hidden text-center cin-section-soft-light cin-section-blend-top"
+    >
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: `linear-gradient(180deg, ${THEME.bg} 0%, ${THEME.bgWhite} 18%, ${THEME.bg} 100%)`,
+        }}
+      />
+
+      <div className="relative z-[2]">
+        <div className="overflow-hidden pt-16 md:pt-24 pb-0">
+          <div className="finale-marquee flex" style={{ animation: 'cinema-marquee 24s linear infinite', willChange: 'transform' }}>
+            {Array.from({ length: 4 }).map((_, i) => (
+              <span key={i} className="font-display italic shrink-0 pr-12" style={{
+                fontSize: 'clamp(80px, 13vw, 220px)', fontWeight: 400, color: 'rgba(26,35,50,0.06)', lineHeight: 1, letterSpacing: '-0.04em',
+              }}>
+                Precision · Torque · Precision · <span className="cin-gradient-text">Trusted</span> ·&nbsp;
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="px-8 md:px-16 pb-0 md:pb-2 pt-10 md:pt-14">
+          <div className="cin-eyebrow">END CREDITS</div>
+          <h2
+            className="end-line font-display italic mt-6 cin-heading mx-auto max-w-5xl"
+            style={{
+              fontSize: 'clamp(2.5rem, 7vw, 6.5rem)',
+              fontWeight: 400,
+              lineHeight: 0.98,
+              letterSpacing: '-0.03em',
+            }}
+          >
+            {t.map((word, i) => (
+              <span
+                key={i}
+                className="cin-word inline-block mr-[0.25em]"
+                style={i !== t.length - 1 ? TEXT_3D : undefined}
+              >
+                {i === t.length - 1 ? <span className="cin-gradient-text">{word}</span> : word}
+              </span>
+            ))}
+          </h2>
+
+          <div id="newsletter" className="finale-newsletter-block relative z-[3] mt-12 md:mt-16 max-w-5xl mx-auto">
+            <div className="cin-eyebrow mb-4">Newsletter</div>
+            {subscribed ? (
+              <div className="finale-newsletter-form flex flex-col md:flex-row items-center justify-center gap-3">
+                <p className="text-[13px] font-body cin-gradient-text font-medium shrink-0">{NEWSLETTER.success}</p>
+                <a
+                  href="#scatter"
+                  data-cursor
+                  className="finale-action-btn cin-btn-primary inline-flex items-center gap-2 px-6 py-3.5 text-[11px] tracking-[0.1em] font-semibold whitespace-nowrap rounded-full"
+                >
+                  EXPLORE PRODUCTS <ArrowRight size={14} />
+                </a>
+              </div>
+            ) : (
+              <form
+                onSubmit={onNewsletter}
+                className="finale-newsletter-form flex flex-col md:flex-row items-stretch md:items-center gap-2 md:gap-3 justify-center"
+              >
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={NEWSLETTER.placeholder}
+                  className="finale-newsletter-input w-full md:flex-1 md:min-w-[200px] md:max-w-[280px] px-5 py-3.5 rounded-full text-[13px] font-body outline-none text-left"
+                  aria-label="Email for newsletter"
+                />
+                <button
+                  type="submit"
+                  className="finale-action-btn cin-btn-primary shrink-0 px-6 py-3.5 text-[11px] font-semibold tracking-[0.12em] whitespace-nowrap rounded-full"
+                >
+                  {NEWSLETTER.button}
+                </button>
+                <a
+                  href="#scatter"
+                  data-cursor
+                  className="finale-action-btn cin-btn-ghost inline-flex items-center justify-center gap-2 px-6 py-3.5 text-[11px] tracking-[0.1em] font-semibold whitespace-nowrap rounded-full"
+                >
+                  EXPLORE PRODUCTS <ArrowRight size={14} />
+                </a>
+              </form>
+            )}
+          </div>
+
+          <div className="finale-footer-brand relative z-[3] mt-12 md:mt-16">
+            <div className="finale-footer-meta relative z-10 px-4 pb-6 md:pb-8">
+              <p className="text-[10px] font-body uppercase tracking-[0.28em]" style={{ color: THEME.textLight }}>
+                Javion Fasteners · Precision Manufacturing · ISO-Grade
+              </p>
+            </div>
+
+            <div className="finale-brand-stage relative w-full overflow-hidden">
+              <Link
+                to="/"
+                className="finale-brand-word block w-full text-center font-body uppercase will-change-transform"
+                aria-label="Javion home"
+                data-cursor
+              >
+                JAVION
+              </Link>
+              <p
+                className="finale-footer-copy absolute left-0 right-0 z-10 text-center text-[11px] font-body pointer-events-none"
+                style={{ color: THEME.textLight, bottom: 'clamp(0px, 2.5vh, 0px)' }}
+              >
+                © {year} Javion Fasteners. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
+
       <style>{`
         @keyframes cinema-marquee {
           from { transform: translateX(0); }
           to { transform: translateX(-25%); }
         }
       `}</style>
-    </section>
-  );
-}
-
-/* ============== SCENE 8: ENDING + CTA ============== */
-function Ending() {
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from('.end-line .w', { opacity: 0, y: 40, stagger: 0.06, duration: 1, ease: 'power3.out',
-        scrollTrigger: { trigger: '.end-line', start: 'top 80%' } });
-      gsap.from('.end-cta', { opacity: 0, y: 20, duration: 1, delay: 0.5,
-        scrollTrigger: { trigger: '.end-line', start: 'top 70%' } });
-    });
-    return () => ctx.revert();
-  }, []);
-  const t = 'You bring the vision. We bring the fire.'.split(' ');
-  return (
-    <section className="relative py-40 px-6 text-center overflow-hidden" style={{ background: '#050505' }}>
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle at 50% 30%, rgba(255,107,53,0.18), transparent 55%)',
-        }}
-      />
-      <div className="relative max-w-5xl mx-auto">
-        <div className="text-[11px]" style={{ color: '#F9A03F', letterSpacing: '0.32em' }}>END CREDITS</div>
-        <h2 className="end-line font-display italic mt-6" style={{
-          fontSize: 'clamp(40px, 7vw, 110px)', color: '#F5F3EF', fontWeight: 400, lineHeight: 0.98, letterSpacing: '-0.03em',
-        }}>
-          {t.map((w, i) => (
-            <span key={i} className="w inline-block mr-[0.25em]" style={i === t.length - 1 ? {
-              background: 'linear-gradient(135deg, #FF6B35, #F9A03F)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            } : {}}>{w}</span>
-          ))}
-        </h2>
-        <div className="end-cta mt-14 flex flex-wrap items-center justify-center gap-4">
-          <Link to="/realisations" data-cursor
-            className="inline-flex items-center gap-2 px-7 py-4 transition-all hover:translate-y-[-2px]"
-            style={{
-              background: 'linear-gradient(135deg, #FF6B35, #F9A03F)',
-              color: '#FFF', borderRadius: 999, fontSize: 14, letterSpacing: '0.08em', fontWeight: 500,
-              boxShadow: '0 10px 40px -10px rgba(255,107,53,0.55)',
-            }}
-          >
-            VIEW THE WORK <ArrowRight size={16} />
-          </Link>
-          <Link to="/" data-cursor
-            className="inline-flex items-center gap-2 px-7 py-4 transition-colors"
-            style={{
-              border: '1px solid rgba(245,243,239,0.3)', color: '#F5F3EF', borderRadius: 999, fontSize: 14, letterSpacing: '0.08em', fontWeight: 500,
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(245,243,239,0.06)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-          >
-            BACK TO THE STUDIO
-          </Link>
-        </div>
-        <div className="mt-24 text-[10px]" style={{ color: 'rgba(245,243,239,0.35)', letterSpacing: '0.3em' }}>
-          A METAL360 FILM · DIRECTED BY THE HAND · SCORED BY THE FIRE · 2026
-        </div>
-      </div>
-    </section>
+    </footer>
   );
 }
 
 /* ============== ROOT ============== */
+const CHAPTER_VOLUME = { '01': 0.35, '02': 0.45, '03': 0.3 };
+
 export default function Cinematic() {
   const [muted, setMuted] = useState(true);
+  const [chapter, setChapter] = useState({ current: '01', total: '03' });
+  const audioRef = useRef(null);
+  const reduced = useReducedMotion();
+  useCinematicScroll(!reduced);
+
   useEffect(() => {
-    document.body.style.background = '#050505';
-    return () => { document.body.style.background = ''; };
+    document.body.style.background = THEME.bg;
+    document.documentElement.style.scrollBehavior = 'auto';
+    const refreshTimer = setTimeout(() => ScrollTrigger.refresh(true), 1200);
+    return () => {
+      document.body.style.background = '';
+      document.documentElement.style.scrollBehavior = '';
+      clearTimeout(refreshTimer);
+    };
   }, []);
+
+  useEffect(() => {
+    const video = audioRef.current;
+    if (!video) return;
+    video.muted = muted;
+    if (!muted) {
+      gsap.to(video, {
+        volume: CHAPTER_VOLUME[chapter.current] || 0.4,
+        duration: 0.8,
+        ease: 'power2.out',
+      });
+      video.play().catch(() => {});
+    }
+  }, [muted, chapter]);
+
+  useEffect(() => {
+    const triggers = [];
+    const sections = [
+      { sel: '.ov-section', ch: '01' },
+      { sel: '[data-chapter="02"]', ch: '02' },
+      { sel: '[data-chapter="03"]', ch: '03' },
+    ];
+
+    sections.forEach(({ sel, ch }) => {
+      const el = document.querySelector(sel);
+      if (!el) return;
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top center',
+          end: 'bottom center',
+          onEnter: () => setChapter({ current: ch, total: '03' }),
+          onEnterBack: () => setChapter({ current: ch, total: '03' }),
+        })
+      );
+    });
+
+    return () => triggers.forEach((t) => t.kill());
+  }, []);
+
   return (
-    <div style={{ background: '#050505', color: '#F5F3EF', cursor: 'auto' }}>
-      <Cursor />
-      <TopHUD muted={muted} setMuted={setMuted} />
-      {/* Film grain overlay */}
-      <div
-        className="pointer-events-none fixed inset-0 z-[500] opacity-[0.08] mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>\")",
-        }}
+    <div className="cinematic-page" style={{ background: THEME.bg, color: THEME.text, cursor: 'auto' }}>
+      <video
+        ref={audioRef}
+        src={HERO_VIDEO}
+        loop
+        playsInline
+        muted
+        className="hidden"
+        aria-hidden
       />
-      <Overture />
-      <ScatterCollage />
-      <PinnedChapters />
-      <HorizontalAct />
-      <Counters />
-      <ClipReveal />
-      <CreditsMarquee />
-      <Ending />
+      <Cursor />
+      <TopHUD muted={muted} setMuted={setMuted} chapter={chapter} />
+      <ScatterCollage reduced={reduced} />
+      <IndustriesWeServe reduced={reduced} />
+      <HorizontalAct reduced={reduced} />
+      <Counters reduced={reduced} />
+      <ClipReveal reduced={reduced} />
+      <CertificationsQuality reduced={reduced} />
+      <FinaleOutro reduced={reduced} />
+      <GlobalFeatures variant="cinematic" />
     </div>
   );
 }

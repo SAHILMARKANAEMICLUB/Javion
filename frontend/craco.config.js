@@ -38,6 +38,25 @@ let webpackConfig = {
     },
     configure: (webpackConfig) => {
 
+      webpackConfig.ignoreWarnings = [
+        ...(webpackConfig.ignoreWarnings || []),
+        /Failed to parse source map/,
+      ];
+
+      webpackConfig.module.rules.forEach((rule) => {
+        if (rule.enforce === 'pre' && rule.use) {
+          const uses = Array.isArray(rule.use) ? rule.use : [rule.use];
+          if (uses.some((u) => u?.loader?.includes?.('source-map-loader'))) {
+            rule.exclude = [
+              ...(Array.isArray(rule.exclude) ? rule.exclude : rule.exclude ? [rule.exclude] : []),
+              /@mediapipe/,
+              /three/,
+              /@react-three/,
+            ];
+          }
+        }
+      });
+
       // Add ignored patterns to reduce watched directories
         webpackConfig.watchOptions = {
           ...webpackConfig.watchOptions,

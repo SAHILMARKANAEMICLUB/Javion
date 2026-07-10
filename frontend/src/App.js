@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Loader from './components/Loader';
@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Realisations from './pages/Realisations';
 import Equipe from './pages/Equipe';
 import Cinematic from './pages/Cinematic';
+import New from './pages/New';
 import useLenisScroll from './hooks/useLenisScroll';
 
 function ScrollToTop() {
@@ -19,10 +20,10 @@ function ScrollToTop() {
 }
 
 function Shell() {
-  useLenisScroll();
   const { pathname } = useLocation();
-  const isCinematic = pathname.startsWith('/cinamatic');
-  const hideChrome = isCinematic;
+  const isImmersive = pathname.startsWith('/cinamatic') || pathname.startsWith('/cinematic') || pathname.startsWith('/new');
+  const hideChrome = isImmersive;
+  useLenisScroll(!isImmersive);
   return (
     <>
       <ScrollToTop />
@@ -32,7 +33,9 @@ function Shell() {
         <Route path="/realisations" element={<Realisations />} />
         <Route path="/equipe-metal360" element={<Equipe />} />
         <Route path="/expertise" element={<Home />} />
-        <Route path="/cinamatic" element={<Cinematic />} />
+        <Route path="/cinamatic" element={<Navigate to="/cinematic" replace />} />
+        <Route path="/cinematic" element={<Cinematic />} />
+        <Route path="/new" element={<New />} />
       </Routes>
       {!hideChrome && <Footer />}
     </>
@@ -40,10 +43,13 @@ function Shell() {
 }
 
 function App() {
-  const [loaded, setLoaded] = useState(false);
+  const [ready, setReady] = useState(() =>
+    typeof window !== 'undefined' && Boolean(window.__javionReady)
+  );
+
   return (
     <div className="App">
-      {!loaded && <Loader onFinish={() => setLoaded(true)} />}
+      {!ready && <Loader onFinish={() => setReady(true)} />}
       <BrowserRouter>
         <Shell />
       </BrowserRouter>
