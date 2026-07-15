@@ -23,6 +23,7 @@ function ScrollToTop() {
 function Shell() {
   const { pathname } = useLocation();
   const isImmersive =
+    pathname === '/' ||
     pathname.startsWith('/cinamatic') ||
     pathname.startsWith('/cinematic') ||
     pathname.startsWith('/coming-soon') ||
@@ -35,14 +36,15 @@ function Shell() {
       <ScrollToTop />
       {!hideChrome && <Navbar />}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<ComingSoon />} />
+        <Route path="/old" element={<Home />} />
         <Route path="/realisations" element={<Realisations />} />
         <Route path="/equipe-metal360" element={<Equipe />} />
         <Route path="/expertise" element={<Home />} />
         <Route path="/cinamatic" element={<Navigate to="/cinematic" replace />} />
         <Route path="/cinematic" element={<Cinematic />} />
-        <Route path="/comming-soon" element={<Navigate to="/coming-soon" replace />} />
-        <Route path="/coming-soon" element={<ComingSoon />} />
+        <Route path="/comming-soon" element={<Navigate to="/" replace />} />
+        <Route path="/coming-soon" element={<Navigate to="/" replace />} />
         <Route path="/new" element={<New />} />
       </Routes>
       {!hideChrome && <Footer />}
