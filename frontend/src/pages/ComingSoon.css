@@ -1,0 +1,175 @@
+/* Coming Soon — cinematic theme surface */
+.coming-soon-page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.coming-soon-page .cs-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.coming-soon-page .cs-bg-base {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 90% 70% at 18% 22%, rgba(56, 182, 255, 0.14) 0%, transparent 58%),
+    radial-gradient(ellipse 75% 55% at 82% 78%, rgba(10, 29, 55, 0.1) 0%, transparent 62%),
+    linear-gradient(168deg, #eef2f7 0%, var(--cin-bg) 42%, #e8edf2 100%);
+}
+
+.coming-soon-page .cs-patch {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.coming-soon-page .cs-patch--cyan {
+  width: min(62vw, 680px);
+  height: min(62vw, 680px);
+  top: -14%;
+  right: -10%;
+  background: radial-gradient(circle, rgba(56, 182, 255, 0.42) 0%, rgba(56, 182, 255, 0.12) 42%, transparent 72%);
+  filter: blur(48px);
+  opacity: 0.85;
+}
+
+.coming-soon-page .cs-patch--navy {
+  width: min(54vw, 560px);
+  height: min(54vw, 560px);
+  bottom: -16%;
+  left: -12%;
+  background: radial-gradient(circle, rgba(10, 29, 55, 0.28) 0%, rgba(30, 73, 118, 0.1) 45%, transparent 72%);
+  filter: blur(56px);
+  opacity: 0.75;
+}
+
+.coming-soon-page .cs-patch--steel {
+  width: min(38vw, 420px);
+  height: min(38vw, 420px);
+  top: 42%;
+  left: 12%;
+  background: radial-gradient(circle, rgba(71, 85, 105, 0.2) 0%, transparent 68%);
+  filter: blur(40px);
+  opacity: 0.55;
+}
+
+.coming-soon-page .cs-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 85% 75% at 50% 45%, transparent 35%, rgba(10, 29, 55, 0.06) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, transparent 28%, transparent 72%, rgba(10, 29, 55, 0.04) 100%);
+}
+
+.coming-soon-page .cs-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: multiply;
+}
+
+.coming-soon-page .cs-top {
+  position: relative;
+  z-index: 2;
+  padding: clamp(1.25rem, 3vw, 2rem) clamp(1.25rem, 4vw, 3rem);
+}
+
+.coming-soon-page .cs-logo-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.coming-soon-page .cs-logo {
+  height: clamp(28px, 4vw, 36px);
+  width: auto;
+  object-fit: contain;
+}
+
+.coming-soon-page .cs-main {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2rem, 6vh, 4rem) clamp(1.25rem, 5vw, 4rem);
+}
+
+.coming-soon-page .cs-stack {
+  width: min(720px, 100%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.coming-soon-page .cs-line {
+  width: min(72px, 18vw);
+  height: 2px;
+  margin: 1.1rem 0 1.35rem;
+  border-radius: 999px;
+  transform: scaleX(0);
+  transform-origin: center;
+  background: linear-gradient(90deg, var(--cin-cyan), var(--cin-cyan-dark));
+}
+
+.coming-soon-page .cs-headline {
+  margin: 0;
+  font-size: clamp(2.4rem, 7vw, 4.75rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--cin-text);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9), 0 2px 16px rgba(15, 23, 42, 0.08);
+}
+
+.coming-soon-page .cs-copy {
+  margin: 1.35rem 0 0;
+  max-width: 34rem;
+  font-size: clamp(0.98rem, 1.5vw, 1.125rem);
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+  color: var(--cin-text-muted);
+}
+
+.coming-soon-page .cs-footer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 1.25rem clamp(1.25rem, 4vw, 3rem) 1.75rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cin-text-light);
+}
+
+.coming-soon-page .cs-footer-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--cin-cyan);
+  opacity: 0.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coming-soon-page .cs-line {
+    transform: scaleX(1);
+  }
+
+  .coming-soon-page .cs-patch {
+    will-change: auto;
+  }
+}

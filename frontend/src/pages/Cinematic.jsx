@@ -385,10 +385,15 @@ function ScatterCollage({ reduced }) {
       onMouseMove={onMouseMove}
       data-chapter="01"
     >
-      <div
-        className="scatter-bg pointer-events-none absolute inset-0 z-0"
-        style={{ background: THEME.bg }}
-      />
+      <div className="scatter-bg pointer-events-none absolute inset-0 z-0" aria-hidden>
+        <div className="scatter-bg-base" />
+        <div className="scatter-bg-patch scatter-bg-patch--cyan" />
+        <div className="scatter-bg-patch scatter-bg-patch--navy" />
+        <div className="scatter-bg-patch scatter-bg-patch--steel" />
+        <div className="scatter-bg-patch scatter-bg-patch--warm" />
+        <div className="scatter-bg-vignette" />
+        <div className="scatter-bg-grain" />
+      </div>
       <div className="tunnel-wrap absolute inset-0 z-[1]" style={{ transformStyle: 'preserve-3d', transformOrigin: '50% 50%' }}>
         {SCATTER_TILES.map((tile, i) => (
           <div

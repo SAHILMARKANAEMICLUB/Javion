@@ -2,7 +2,7 @@ export const LIVE_IMAGE_FRAME_COUNT = 51;
 /** vh of scroll per frame transition inside the sequence track */
 export const SEQUENCE_SCROLL_VH_PER_FRAME = 3.25;
 
-const LIVE_IMAGE_BASE = '/images/live_image/ezgif-frame-';
+const LIVE_IMAGE_BASE = '/images/live_image_new/ezgif-frame-';
 
 export function liveImageSrc(index) {
   return `${LIVE_IMAGE_BASE}${String(index + 1).padStart(3, '0')}.jpg`;

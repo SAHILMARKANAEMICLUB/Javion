@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Realisations from './pages/Realisations';
 import Equipe from './pages/Equipe';
 import Cinematic from './pages/Cinematic';
+import ComingSoon from './pages/ComingSoon';
 import New from './pages/New';
 import useLenisScroll from './hooks/useLenisScroll';
 
@@ -21,7 +22,12 @@ function ScrollToTop() {
 
 function Shell() {
   const { pathname } = useLocation();
-  const isImmersive = pathname.startsWith('/cinamatic') || pathname.startsWith('/cinematic') || pathname.startsWith('/new');
+  const isImmersive =
+    pathname.startsWith('/cinamatic') ||
+    pathname.startsWith('/cinematic') ||
+    pathname.startsWith('/coming-soon') ||
+    pathname.startsWith('/comming-soon') ||
+    pathname.startsWith('/new');
   const hideChrome = isImmersive;
   useLenisScroll(!isImmersive);
   return (
@@ -35,6 +41,8 @@ function Shell() {
         <Route path="/expertise" element={<Home />} />
         <Route path="/cinamatic" element={<Navigate to="/cinematic" replace />} />
         <Route path="/cinematic" element={<Cinematic />} />
+        <Route path="/comming-soon" element={<Navigate to="/coming-soon" replace />} />
+        <Route path="/coming-soon" element={<ComingSoon />} />
         <Route path="/new" element={<New />} />
       </Routes>
       {!hideChrome && <Footer />}
