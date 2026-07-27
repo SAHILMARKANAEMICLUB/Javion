@@ -332,14 +332,6 @@ export const LAB_IMAGES = [
   },
 ];
 
-export const CERTIFICATE_DOWNLOADS = ISO_CERTIFICATIONS.map(({ id, name, title, pdf }) => ({
-  id,
-  name,
-  title,
-  pdf,
-  size: '1.2 MB',
-}));
-
 export const CERT_ISSUER_LOGOS = [
   { id: 'bv', name: 'Bureau Veritas', abbr: 'BV' },
   { id: 'tuv', name: 'TÜV SÜD', abbr: 'TÜV' },
@@ -348,7 +340,242 @@ export const CERT_ISSUER_LOGOS = [
   { id: 'intertek', name: 'Intertek', abbr: 'INT' },
 ];
 
-/* Page 4 — Industries We Cater */
+/* Products page */
+export const PRODUCT_CATEGORIES = [
+  'All',
+  'Bolts',
+  'Nuts',
+  'Screws',
+  'Studs',
+  'Anchors',
+  'Washers',
+];
+
+export const PRODUCTS = [
+  {
+    id: 'hex-bolts',
+    name: 'Hex Head Bolts',
+    category: 'Bolts',
+    grades: '8.8 · 10.9 · 12.9',
+    sizes: 'M6 – M36',
+    finish: 'Black oxide, Zinc, HDG',
+    description: 'Precision cold-formed hex bolts for structural and OEM assemblies — consistent torque and full traceability.',
+    overview: 'Our hex head bolts are cold-formed on multi-stage headers, rolled for precise threads, and heat-treated to target property classes. Every batch is dimensionally verified and traceable from wire rod to dispatch — ready for structural frames, OEM lines, and heavy assemblies.',
+    applications: ['Structural steel & fabrication', 'OEM machinery assemblies', 'Construction frameworks', 'Industrial equipment'],
+    standards: ['ISO 4014 / 4017', 'DIN 931 / 933', 'ASME B18.2.1'],
+    features: ['Controlled thread pitch & runout', 'Full heat-treat lot traceability', 'Multiple coating options', 'Custom lengths on request'],
+    image: CINEMATIC_IMG.fasteners,
+    gallery: [CINEMATIC_IMG.fasteners, CINEMATIC_IMG.threading, CINEMATIC_IMG.qualityCheck],
+  },
+  {
+    id: 'flange-bolts',
+    name: 'Flange Bolts',
+    category: 'Bolts',
+    grades: '8.8 · 10.9',
+    sizes: 'M8 – M24',
+    finish: 'Zinc flake, Geomet',
+    description: 'Integrated washer face for vibration-prone joints in automotive and heavy equipment.',
+    overview: 'Flange bolts combine fastener and washer in one piece — distributing clamp load and resisting loosening under vibration. Ideal for chassis, powertrain, and equipment joints where secondary washers slow the line.',
+    applications: ['Automotive chassis & powertrain', 'Heavy equipment joints', 'Agricultural machinery', 'Compressor & pump assemblies'],
+    standards: ['ISO 4162', 'DIN 6921', 'OEM prints'],
+    features: ['Integral flange bearing face', 'Optional serrations under head', 'High corrosion coatings', 'Consistent under-head fillet'],
+    image: CINEMATIC_IMG.assemblyLine,
+    gallery: [CINEMATIC_IMG.assemblyLine, CINEMATIC_IMG.automotive, CINEMATIC_IMG.fasteners],
+  },
+  {
+    id: 'u-bolts',
+    name: 'U-Bolts',
+    category: 'Bolts',
+    grades: '8.8 · Custom',
+    sizes: 'M8 – M30',
+    finish: 'HDG, Zinc',
+    description: 'Chassis and pipe clamp U-bolts formed to drawing — bent, threaded, and coated in-house.',
+    overview: 'U-bolts are formed from wire or bar, threaded on both legs, and finished to your bend radius and length. Used for exhaust, leaf-spring, and pipe clamp applications where geometry must match the assembly exactly.',
+    applications: ['Leaf-spring & axle clamps', 'Exhaust and muffler mounts', 'Pipe & conduit supports', 'Trailer and chassis hardware'],
+    standards: ['Customer drawings', 'SAE J429 (grade options)', 'ISO metric threads'],
+    features: ['Custom bend radius & leg length', 'Equal or unequal leg options', 'Hot-dip galvanizing available', 'Prototype-to-volume capability'],
+    image: CINEMATIC_IMG.automotive,
+    gallery: [CINEMATIC_IMG.automotive, CINEMATIC_IMG.forge, CINEMATIC_IMG.warehouse],
+  },
+  {
+    id: 'hex-nuts',
+    name: 'Hex Nuts',
+    category: 'Nuts',
+    grades: '8 · 10 · 12',
+    sizes: 'M6 – M36',
+    finish: 'Plain, Zinc, HDG',
+    description: 'Matched-class hex nuts with controlled proof load for reliable clamp force.',
+    overview: 'Hex nuts are manufactured to property classes that pair with your bolt grade — ensuring proof load, hardness, and thread fit stay within specification across every lot.',
+    applications: ['General structural fastening', 'Machinery assembly', 'Infrastructure hardware', 'Maintenance & MRO kits'],
+    standards: ['ISO 4032', 'DIN 934', 'ASME B18.2.2'],
+    features: ['Property class matched to bolts', 'Clean thread gauging', 'Wide finish range', 'Bulk & kit packaging'],
+    image: CINEMATIC_IMG.cncMachine,
+    gallery: [CINEMATIC_IMG.cncMachine, CINEMATIC_IMG.fasteners, CINEMATIC_IMG.qualityCheck],
+  },
+  {
+    id: 'flange-nuts',
+    name: 'Flange Nuts',
+    category: 'Nuts',
+    grades: '8 · 10',
+    sizes: 'M6 – M20',
+    finish: 'Zinc, Zinc flake',
+    description: 'Serrated and non-serrated flange nuts for high-vibration assemblies.',
+    overview: 'Flange nuts increase bearing area and can add prevailing-torque performance with serrations. Designed for assemblies that see road vibration, shock, or thermal cycling.',
+    applications: ['Automotive body & chassis', 'Appliance assemblies', 'HVAC equipment', 'Vibration-prone joints'],
+    standards: ['ISO 4161', 'DIN 6923', 'OEM specs'],
+    features: ['Serrated or smooth flange', 'Improved load distribution', 'Reduced washer count', 'Corrosion-resistant coatings'],
+    image: CINEMATIC_IMG.qualityCheck,
+    gallery: [CINEMATIC_IMG.qualityCheck, CINEMATIC_IMG.assemblyLine, CINEMATIC_IMG.cncMachine],
+  },
+  {
+    id: 'nyloc-nuts',
+    name: 'Nyloc Lock Nuts',
+    category: 'Nuts',
+    grades: '8 · 10',
+    sizes: 'M5 – M24',
+    finish: 'Zinc',
+    description: 'Prevailing-torque nylon insert nuts for secure locking without secondary adhesives.',
+    overview: 'Nylon-insert lock nuts provide prevailing torque that resists loosening under vibration. Suitable where chemical threadlockers are undesirable or reusability within rated cycles is needed.',
+    applications: ['Automotive interiors & chassis', 'Electronics enclosures', 'Consumer equipment', 'General vibration locking'],
+    standards: ['ISO 7040 / 10511', 'DIN 982 / 985'],
+    features: ['Nylon prevailing-torque insert', 'Reusable within rated limits', 'Metric fine & coarse options', 'Temperature-rated inserts available'],
+    image: CINEMATIC_IMG.warehouse,
+    gallery: [CINEMATIC_IMG.warehouse, CINEMATIC_IMG.electronics, CINEMATIC_IMG.qualityCheck],
+  },
+  {
+    id: 'machine-screws',
+    name: 'Machine Screws',
+    category: 'Screws',
+    grades: '4.8 · 8.8',
+    sizes: 'M3 – M12',
+    finish: 'Zinc, Black',
+    description: 'Pan, countersunk, and button-head machine screws for enclosures and precision assemblies.',
+    overview: 'Machine screws are produced for clean thread engagement in tapped holes and nuts — with head styles chosen for flush, low-profile, or drive-accessible assemblies in electronics and light industrial builds.',
+    applications: ['Electronics enclosures', 'Control panels', 'Appliance assembly', 'Precision fixtures'],
+    standards: ['ISO 7045 / 2009', 'DIN 7985 / 965', 'ASME B18.6.3'],
+    features: ['Multiple head & drive styles', 'Fine pitch options', 'Consistent recess depth', 'Small-lot & volume runs'],
+    image: CINEMATIC_IMG.electronics,
+    gallery: [CINEMATIC_IMG.electronics, CINEMATIC_IMG.designSpec, CINEMATIC_IMG.cncMachine],
+  },
+  {
+    id: 'self-tapping',
+    name: 'Self-Tapping Screws',
+    category: 'Screws',
+    grades: 'C1022 · SS',
+    sizes: '#6 – #14 / M4 – M8',
+    finish: 'Zinc, Ruspert',
+    description: 'Thread-forming screws for sheet metal and light structural fastening.',
+    overview: 'Self-tapping screws form or cut their own mating thread in sheet metal and light materials — speeding assembly where pre-tapped holes are impractical.',
+    applications: ['Sheet metal fabrication', 'HVAC ducting', 'Roofing & cladding', 'Appliance frames'],
+    standards: ['ISO 1478 / 1479', 'DIN 7976', 'JIS B 1122'],
+    features: ['Thread-forming & thread-cutting types', 'Point styles AB / B / BT', 'High-corrosion coatings', 'Pilot-friendly packaging'],
+    image: CINEMATIC_IMG.construction,
+    gallery: [CINEMATIC_IMG.construction, CINEMATIC_IMG.industrialPlant, CINEMATIC_IMG.fasteners],
+  },
+  {
+    id: 'stud-bolts',
+    name: 'Stud Bolts',
+    category: 'Studs',
+    grades: 'B7 · B7M · B16',
+    sizes: '1/2" – 2-1/2" / M12 – M64',
+    finish: 'Plain, PTFE, HDG',
+    description: 'Double-end and continuous-thread studs for flanges, pressure vessels, and high-temp service.',
+    overview: 'Stud bolts for flanged joints are manufactured to ASTM grades for pressure and temperature service — with full material certificates and optional PTFE or hot-dip finishes for corrosive environments.',
+    applications: ['Pipeline flanges', 'Pressure vessels & heat exchangers', 'Refinery & petrochemical', 'Power generation'],
+    standards: ['ASTM A193 / A194', 'ASME B16.5 companion', 'ISO metric equivalents'],
+    features: ['Double-end & continuous thread', 'Mill test certificates', 'PTFE / Xylan coating options', 'Matched nut sets available'],
+    image: CINEMATIC_IMG.oilGas,
+    gallery: [CINEMATIC_IMG.oilGas, CINEMATIC_IMG.forge, CINEMATIC_IMG.warehouse],
+  },
+  {
+    id: 'engine-studs',
+    name: 'Engine & Chassis Studs',
+    category: 'Studs',
+    grades: '10.9 · 12.9',
+    sizes: 'M8 – M16',
+    finish: 'Phosphate, Zinc flake',
+    description: 'High-tensile studs for powertrain and suspension joints with controlled stretch.',
+    overview: 'Engine and chassis studs are heat-treated for high tensile performance with controlled elongation — supporting torque-to-yield and critical clamp joints in powertrain assemblies.',
+    applications: ['Cylinder head & exhaust manifolds', 'Suspension links', 'Transmission mounts', 'Performance aftermarket'],
+    standards: ['ISO 898-1', 'OEM torque specs', 'Customer drawings'],
+    features: ['High tensile property classes', 'Rolled threads for fatigue life', 'Phosphate for assembly oils', 'Lot-level hardness reports'],
+    image: CINEMATIC_IMG.forge,
+    gallery: [CINEMATIC_IMG.forge, CINEMATIC_IMG.automotive, CINEMATIC_IMG.qualityCheck],
+  },
+  {
+    id: 'anchor-bolts',
+    name: 'Anchor Bolts',
+    category: 'Anchors',
+    grades: '4.6 · 8.8 · Custom',
+    sizes: 'M12 – M48',
+    finish: 'HDG, Epoxy',
+    description: 'Foundation and base-plate anchors for structural steel and equipment mounting.',
+    overview: 'Anchor bolts are produced as L-bolts, J-bolts, or straight rods with templates for foundation pours — galvanized or epoxy-coated for long service in structural and industrial plants.',
+    applications: ['Column base plates', 'Equipment skids', 'Light poles & towers', 'Industrial foundations'],
+    standards: ['ASTM F1554', 'ISO / DIN equivalents', 'Project specifications'],
+    features: ['L / J / straight configurations', 'Template & cage assemblies', 'HDG & epoxy coatings', 'Project-specific lengths'],
+    image: CINEMATIC_IMG.construction,
+    gallery: [CINEMATIC_IMG.construction, CINEMATIC_IMG.industrialPlant, CINEMATIC_IMG.warehouse],
+  },
+  {
+    id: 'expansion-anchors',
+    name: 'Expansion Anchors',
+    category: 'Anchors',
+    grades: 'Carbon · SS A4',
+    sizes: 'M8 – M24',
+    finish: 'Zinc, Stainless',
+    description: 'Wedge and sleeve anchors for concrete — reliable hold in industrial installations.',
+    overview: 'Expansion anchors deliver mechanical hold in cracked and non-cracked concrete for racks, machinery, and building services — available in carbon steel and A4 stainless for corrosive sites.',
+    applications: ['Machinery base fixing', 'Racking & mezzanines', 'Facade & services supports', 'Retrofit installations'],
+    standards: ['ETA / ETAG options', 'ISO metric threads', 'Site engineer specs'],
+    features: ['Wedge & sleeve designs', 'Stainless options for marine sites', 'Through-bolt styles', 'Installation torque guidance'],
+    image: CINEMATIC_IMG.industrialPlant,
+    gallery: [CINEMATIC_IMG.industrialPlant, CINEMATIC_IMG.construction, CINEMATIC_IMG.qualityCheck],
+  },
+  {
+    id: 'flat-washers',
+    name: 'Flat & Spring Washers',
+    category: 'Washers',
+    grades: 'HV · Spring steel',
+    sizes: 'M6 – M36',
+    finish: 'Plain, Zinc, HDG',
+    description: 'Load-distribution and locking washers matched to bolt classes and finishes.',
+    overview: 'Flat washers spread clamp load; spring and lock washers help resist loosening. Supplied as matched sets with bolts and nuts for consistent coating and dimensional fit.',
+    applications: ['Structural bolted joints', 'Machinery mounting', 'Electrical panels', 'General assembly'],
+    standards: ['ISO 7089 / 7090', 'DIN 125 / 127', 'ASME B18.21.1'],
+    features: ['HV structural washers', 'Spring & lock variants', 'Matched finish to fasteners', 'Bulk carton or kit packs'],
+    image: CINEMATIC_IMG.threading,
+    gallery: [CINEMATIC_IMG.threading, CINEMATIC_IMG.fasteners, CINEMATIC_IMG.cncMachine],
+  },
+  {
+    id: 'special-washers',
+    name: 'Special & Custom Washers',
+    category: 'Washers',
+    grades: 'Per drawing',
+    sizes: 'Custom',
+    finish: 'As specified',
+    description: 'Spherical, conical, and tab washers engineered to your assembly requirements.',
+    overview: 'When standard washers cannot meet geometry or function, we produce special washers from drawing — spherical seats, conical seats, tab locks, and multi-hole plates for unique assemblies.',
+    applications: ['Spherical seat joints', 'Safety tab-lock assemblies', 'Custom OEM fixtures', 'Retrofit packages'],
+    standards: ['Customer drawings', 'Material certs on request', 'PPAP / FAIR when required'],
+    features: ['Prototype & production tooling', 'Wide material range', 'Tight flatness control', 'Coating to print'],
+    image: CINEMATIC_IMG.designSpec,
+    gallery: [CINEMATIC_IMG.designSpec, CINEMATIC_IMG.cncMachine, CINEMATIC_IMG.qualityCheck],
+  },
+];
+
+export function getProductById(id) {
+  return PRODUCTS.find((p) => p.id === id) || null;
+}
+
+export function getRelatedProducts(id, limit = 3) {
+  const current = getProductById(id);
+  if (!current) return [];
+  const same = PRODUCTS.filter((p) => p.id !== id && p.category === current.category);
+  const others = PRODUCTS.filter((p) => p.id !== id && p.category !== current.category);
+  return [...same, ...others].slice(0, limit);
+}
+
 export const INDUSTRIES = [
   {
     id: 'automotive',
@@ -439,18 +666,97 @@ export const JAVION_CONTACT = {
   whatsapp: '919876543210',
 };
 
+export const ABOUT_STORY = {
+  eyebrow: 'Our story',
+  headline: 'Forged in precision.',
+  headlineAccent: 'Built on trust.',
+  intro:
+    'Javion Fasteners began with a simple belief: every joint in a machine, structure, or vehicle deserves hardware that holds — batch after batch, year after year.',
+  mission:
+    'We design, form, heat-treat, and finish fasteners for OEMs and industrial buyers who need traceable quality, reliable lead times, and partners who speak the language of drawings and tolerances.',
+  location: 'Rajkot, Gujarat, India',
+  stats: [
+    { value: '25+', label: 'Years of craft' },
+    { value: '3', label: 'ISO systems' },
+    { value: '8+', label: 'Industries served' },
+    { value: '100%', label: 'Lot traceability' },
+  ],
+  timeline: [
+    {
+      year: 'Beginnings',
+      title: 'A workshop with a standard',
+      text: 'We started with cold forming and thread rolling — small runs, tight checks, and a refusal to ship anything we would not put on our own assemblies.',
+    },
+    {
+      year: 'Scale',
+      title: 'From line to ecosystem',
+      text: 'Heat treatment, coatings, and in-house QC came online so we could own the full path from wire to dispatch — not just one operation.',
+    },
+    {
+      year: 'Systems',
+      title: 'Certified, auditable, ready',
+      text: 'ISO-aligned quality, environmental, and safety systems locked in the discipline customers expect from a long-term fastener partner.',
+    },
+    {
+      year: 'Today',
+      title: 'Built for the next drawing',
+      text: 'Catalogue standards and custom OEM work sit side by side — automotive, infrastructure, energy, and everything that needs a joint that lasts.',
+    },
+  ],
+  values: [
+    {
+      title: 'Precision first',
+      text: 'Threads, hardness, and coatings are controlled — not hoped for. Specs are the contract.',
+    },
+    {
+      title: 'Traceable lots',
+      text: 'From incoming material to finished goods, every batch can be followed when audits or field issues demand answers.',
+    },
+    {
+      title: 'Partner mindset',
+      text: 'We work from drawings, PPAP when required, and honest lead times — not vague promises.',
+    },
+  ],
+  gallery: [
+    { src: CINEMATIC_IMG.factoryFloor, alt: 'Production floor' },
+    { src: CINEMATIC_IMG.threading, alt: 'Thread rolling' },
+    { src: CINEMATIC_IMG.qualityCheck, alt: 'Quality inspection' },
+    { src: CINEMATIC_IMG.warehouse, alt: 'Finished goods' },
+  ],
+};
+
 export const CINEMATIC_FOOTER_LINKS = [
-  { label: 'Products', href: '#scatter' },
+  { label: 'Products', href: '/products' },
+  { label: 'About', href: '/about' },
   { label: 'Industries', href: '#industries' },
   { label: 'Quality', href: '#quality' },
-  { label: 'Get a Quote', href: '#quote' },
+  { label: 'Resources', href: '#resources' },
+  { label: 'Contact', href: '/contact' },
   { label: 'Home', href: '/' },
 ];
 
-export const NEWSLETTER = {
-  title: 'Stay in the loop',
-  description: 'Product updates, industry insights, and manufacturing news — once a month, no spam.',
-  placeholder: 'Your work email',
-  button: 'SUBSCRIBE',
-  success: 'Thanks — you\'re on the list.',
-};
+/** PDFs for the cinematic Resources section. Place files in `frontend/public/documents/`. */
+export const CINEMATIC_DOCUMENTS = [
+  {
+    id: 'catalogue',
+    name: 'Product Catalogue',
+    description: 'Full product range, specs, and finishes',
+    file: '/documents/javion-product-catalogue.pdf',
+    featured: true,
+    tag: 'Catalogue',
+  },
+  {
+    id: 'company-profile',
+    name: 'Company Profile',
+    description: 'Capabilities, facilities, and overview',
+    file: '/documents/javion-company-profile.pdf',
+    tag: 'Profile',
+  },
+  ...ISO_CERTIFICATIONS.map(({ id, name, title, pdf }) => ({
+    id,
+    name,
+    description: title,
+    file: pdf,
+    tag: 'Certificate',
+  })),
+];

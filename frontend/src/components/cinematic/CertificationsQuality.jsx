@@ -1,12 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Download, FileCheck, PackageCheck, Search, Cog } from 'lucide-react';
+import { FileCheck, PackageCheck, Search, Cog } from 'lucide-react';
 import {
   ISO_CERTIFICATIONS,
   QC_PROCESS,
   TESTING_STANDARDS,
-  CERTIFICATE_DOWNLOADS,
   CERT_ISSUER_LOGOS,
 } from '../../mock';
 import { headlineBlurIn } from '../../utils/cinematicAnimations';
@@ -174,30 +173,6 @@ export default function CertificationsQuality({ reduced }) {
               <span style={{ color: 'var(--cin-text-muted)' }}>{std.desc}</span>
               <span className="mx-8 md:mx-10 opacity-25" aria-hidden>·</span>
             </span>
-          ))}
-        </div>
-      </div>
-
-      <div className="cert-reveal px-8 md:px-16 pt-10 md:pt-12 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-        <div>
-          <h3 className="cert-subhead font-body text-[10px] uppercase tracking-[0.24em]">Download certificates</h3>
-          <p className="mt-2 text-[13px] font-body max-w-md" style={{ color: 'var(--cin-text-muted)' }}>
-            Official ISO PDFs for procurement and audit records.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-x-8 gap-y-3">
-          {CERTIFICATE_DOWNLOADS.map((dl) => (
-            <a
-              key={dl.id}
-              href={dl.pdf}
-              download
-              data-cursor
-              className="cert-dl-link inline-flex items-center gap-2 text-[12px] font-body uppercase tracking-[0.14em] transition-colors hover:text-[var(--cin-cyan-dark)]"
-              style={{ color: 'var(--cin-navy)' }}
-            >
-              <Download size={14} style={{ color: 'var(--cin-cyan-dark)' }} />
-              {dl.name}
-            </a>
           ))}
         </div>
       </div>

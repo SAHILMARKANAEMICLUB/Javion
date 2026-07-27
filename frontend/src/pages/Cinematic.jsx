@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, Volume2, VolumeX } from 'lucide-react';
-import { HERO_VIDEO, JAVION_LOGO, NEWSLETTER, CINEMATIC_IMG, onCinematicImgError } from '../mock';
+import { CINEMATIC_IMG, onCinematicImgError } from '../mock';
 import useReducedMotion from '../hooks/useReducedMotion';
 import useCinematicScroll from '../hooks/useCinematicScroll';
+import ProductsNav from '../components/ProductsNav';
 import CertificationsQuality from '../components/cinematic/CertificationsQuality';
 import IndustriesWeServe from '../components/cinematic/IndustriesWeServe';
+import DocumentsResources from '../components/cinematic/DocumentsResources';
 import GlobalFeatures from '../components/GlobalFeatures';
 import { headlineBlurIn } from '../utils/cinematicAnimations';
 import './Cinematic.css';
@@ -95,140 +96,6 @@ function updateCoverflow(track) {
     panel.style.transform = `rotateY(${rotY}deg) translateZ(${z}px) scale(${scale})`;
     panel.style.opacity = String(opacity);
   });
-}
-
-/* ============== CUSTOM CURSOR ============== */
-function Cursor() {
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
-  const [hover, setHover] = useState(false);
-
-  useEffect(() => {
-    const dot = dotRef.current;
-    const ring = ringRef.current;
-    if (!dot || !ring) return;
-    let x = window.innerWidth / 2;
-    let y = window.innerHeight / 2;
-    let rx = x;
-    let ry = y;
-    const onMove = (e) => { x = e.clientX; y = e.clientY; };
-    window.addEventListener('mousemove', onMove);
-    const raf = () => {
-      rx += (x - rx) * 0.18;
-      ry += (y - ry) * 0.18;
-      dot.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
-      ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
-      requestAnimationFrame(raf);
-    };
-    const id = requestAnimationFrame(raf);
-    const enter = () => setHover(true);
-    const leave = () => setHover(false);
-    document.querySelectorAll('[data-cursor]').forEach((el) => {
-      el.addEventListener('mouseenter', enter);
-      el.addEventListener('mouseleave', leave);
-    });
-    return () => {
-      window.removeEventListener('mousemove', onMove);
-      cancelAnimationFrame(id);
-    };
-  }, []);
-
-  return (
-    <>
-      <div
-        ref={dotRef}
-        className="cin-cursor-dot hidden md:block pointer-events-none fixed top-0 left-0 z-[9999] rounded-full"
-        style={{ width: 6, height: 6 }}
-      />
-      <div
-        ref={ringRef}
-        className="cin-cursor-ring hidden md:block pointer-events-none fixed top-0 left-0 z-[9998] rounded-full transition-[width,height,border] duration-200"
-        style={{
-          width: hover ? 70 : 36,
-          height: hover ? 70 : 36,
-        }}
-      />
-    </>
-  );
-}
-
-/* ============== TOP HUD ============== */
-function NavDivider({ className = '' }) {
-  return <span className={`cin-nav-divider ${className}`.trim()} aria-hidden />;
-}
-
-function TopHUD({ muted, setMuted, chapter }) {
-  const barRef = useRef(null);
-
-  useEffect(() => {
-    const update = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      const sc = max > 0 ? window.scrollY / max : 0;
-      if (barRef.current) barRef.current.style.transform = `scaleX(${sc})`;
-    };
-    update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    return () => {
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
-    };
-  }, []);
-
-  const islandClass = 'cin-glass-island--solid';
-
-  return (
-    <>
-      <div className="cin-progress-track">
-        <div ref={barRef} className="cin-progress-fill" style={{ transform: 'scaleX(0)' }} />
-      </div>
-      <header className="cin-nav-shell fixed top-0 left-0 right-0 z-[999] pointer-events-none">
-        <div className="cin-nav-shell-inner flex items-start justify-between gap-2 sm:gap-3 md:gap-4 px-3 sm:px-4 md:px-6 pt-3 md:pt-4">
-          {/* Island 1 — logo only */}
-          <div className={`cin-glass-island cin-glass-island--logo pointer-events-auto ${islandClass}`}>
-            <Link to="/" className="cin-nav-logo-wrap" data-cursor aria-label="Javion Fasteners home">
-              <img
-                src={JAVION_LOGO}
-                alt="Javion Fasteners"
-                className="cin-nav-logo h-7 md:h-8 w-auto object-contain"
-                draggable={false}
-              />
-            </Link>
-          </div>
-
-          {/* Island 2 — menu (center, separate glass blob) */}
-          <nav
-            className={`cin-glass-island cin-glass-island--menu hidden md:flex items-center pointer-events-auto ${islandClass}`}
-            aria-label="Primary"
-          >
-            <a href="#scatter" className="cin-nav-link font-body font-medium" data-cursor>Products</a>
-            <NavDivider />
-            <a href="#industries" className="cin-nav-link font-body font-medium" data-cursor>Industries</a>
-            <NavDivider />
-            <a href="#quality" className="cin-nav-link font-body font-medium" data-cursor>Quality</a>
-            <NavDivider />
-            <a href="#quote" className="cin-nav-link font-body font-medium" data-cursor>Quote</a>
-          </nav>
-
-          {/* Island 3 — chapter + audio */}
-          <div className={`cin-glass-island cin-glass-island--meta flex items-center pointer-events-auto ${islandClass}`}>
-            <span className="hidden sm:inline cin-nav-chapter text-[10px] font-body tracking-[0.16em] whitespace-nowrap">
-              CHAPTER {chapter.current} / {chapter.total}
-            </span>
-            <NavDivider className="hidden sm:block" />
-            <button
-              onClick={() => setMuted((m) => !m)}
-              className="cin-nav-btn w-9 h-9 inline-flex items-center justify-center rounded-full shrink-0"
-              data-cursor
-              aria-label={muted ? 'Unmute ambient audio' : 'Mute ambient audio'}
-            >
-              {muted ? <VolumeX size={14} strokeWidth={1.5} /> : <Volume2 size={14} strokeWidth={1.5} />}
-            </button>
-          </div>
-        </div>
-      </header>
-    </>
-  );
 }
 
 /* ============== SCENE 1: FACTORY SHOWCASE COLLAGE (HERO) ============== */
@@ -491,7 +358,15 @@ function HorizontalAct({ reduced }) {
         blur: 14,
       });
 
-      const distance = () => track.scrollWidth - window.innerWidth;
+      /** Scroll far enough that the last panel (Pack & Ship) centers in the viewport. */
+      const distance = () => {
+        const panels = track.querySelectorAll('.h-panel');
+        if (!panels.length) return Math.max(0, track.scrollWidth - window.innerWidth);
+
+        const last = panels[panels.length - 1];
+        const lastCenter = last.offsetLeft + last.offsetWidth / 2;
+        return Math.max(0, lastCenter - window.innerWidth / 2);
+      };
 
       gsap.to(track, {
         x: () => -distance(),
@@ -500,17 +375,21 @@ function HorizontalAct({ reduced }) {
           trigger: wrap,
           scroller,
           start: 'top top',
-          end: () => '+=' + distance(),
+          end: () => '+=' + Math.max(distance(), window.innerHeight * 0.5),
           pin: true,
           pinSpacing: true,
           scrub: 1,
           anticipatePin: 0,
           invalidateOnRefresh: true,
           onUpdate: () => updateCoverflow(track),
+          onRefresh: () => updateCoverflow(track),
         },
       });
 
-      requestAnimationFrame(() => updateCoverflow(track));
+      requestAnimationFrame(() => {
+        updateCoverflow(track);
+        ScrollTrigger.refresh();
+      });
     }, wrapRef);
     return () => ctx.revert();
   }, [reduced]);
@@ -542,7 +421,8 @@ function HorizontalAct({ reduced }) {
           {PROCESS_PANELS.map((p) => (
             <Panel3D key={p.n} panel={p} />
           ))}
-          <div className="shrink-0" style={{ minWidth: '18vw' }} aria-hidden />
+          {/* End pad so Pack & Ship can scroll into viewport center */}
+          <div className="process-act-end-pad shrink-0" aria-hidden />
         </div>
       </div>
 
@@ -757,8 +637,6 @@ function ClipReveal({ reduced }) {
 /* ============== FINALE — page footer ============== */
 function FinaleOutro({ reduced }) {
   const sectionRef = useRef(null);
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -805,13 +683,6 @@ function FinaleOutro({ reduced }) {
 
   const t = 'You bring the vision. We bring the fire.'.split(' ');
   const year = new Date().getFullYear();
-
-  const onNewsletter = (e) => {
-    e.preventDefault();
-    if (!email.trim()) return;
-    setSubscribed(true);
-    setEmail('');
-  };
 
   return (
     <footer
@@ -861,50 +732,6 @@ function FinaleOutro({ reduced }) {
             ))}
           </h2>
 
-          <div id="newsletter" className="finale-newsletter-block relative z-[3] mt-12 md:mt-16 max-w-5xl mx-auto">
-            <div className="cin-eyebrow mb-4">Newsletter</div>
-            {subscribed ? (
-              <div className="finale-newsletter-form flex flex-col md:flex-row items-center justify-center gap-3">
-                <p className="text-[13px] font-body cin-gradient-text font-medium shrink-0">{NEWSLETTER.success}</p>
-                <a
-                  href="#scatter"
-                  data-cursor
-                  className="finale-action-btn cin-btn-primary inline-flex items-center gap-2 px-6 py-3.5 text-[11px] tracking-[0.1em] font-semibold whitespace-nowrap rounded-full"
-                >
-                  EXPLORE PRODUCTS <ArrowRight size={14} />
-                </a>
-              </div>
-            ) : (
-              <form
-                onSubmit={onNewsletter}
-                className="finale-newsletter-form flex flex-col md:flex-row items-stretch md:items-center gap-2 md:gap-3 justify-center"
-              >
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={NEWSLETTER.placeholder}
-                  className="finale-newsletter-input w-full md:flex-1 md:min-w-[200px] md:max-w-[280px] px-5 py-3.5 rounded-full text-[13px] font-body outline-none text-left"
-                  aria-label="Email for newsletter"
-                />
-                <button
-                  type="submit"
-                  className="finale-action-btn cin-btn-primary shrink-0 px-6 py-3.5 text-[11px] font-semibold tracking-[0.12em] whitespace-nowrap rounded-full"
-                >
-                  {NEWSLETTER.button}
-                </button>
-                <a
-                  href="#scatter"
-                  data-cursor
-                  className="finale-action-btn cin-btn-ghost inline-flex items-center justify-center gap-2 px-6 py-3.5 text-[11px] tracking-[0.1em] font-semibold whitespace-nowrap rounded-full"
-                >
-                  EXPLORE PRODUCTS <ArrowRight size={14} />
-                </a>
-              </form>
-            )}
-          </div>
-
           <div className="finale-footer-brand relative z-[3] mt-12 md:mt-16">
             <div className="finale-footer-meta relative z-10 px-4 pb-6 md:pb-8">
               <p className="text-[10px] font-body uppercase tracking-[0.28em]" style={{ color: THEME.textLight }}>
@@ -943,12 +770,7 @@ function FinaleOutro({ reduced }) {
 }
 
 /* ============== ROOT ============== */
-const CHAPTER_VOLUME = { '01': 0.35, '02': 0.45, '03': 0.3 };
-
 export default function Cinematic() {
-  const [muted, setMuted] = useState(true);
-  const [chapter, setChapter] = useState({ current: '01', total: '03' });
-  const audioRef = useRef(null);
   const reduced = useReducedMotion();
   useCinematicScroll(!reduced);
 
@@ -963,64 +785,16 @@ export default function Cinematic() {
     };
   }, []);
 
-  useEffect(() => {
-    const video = audioRef.current;
-    if (!video) return;
-    video.muted = muted;
-    if (!muted) {
-      gsap.to(video, {
-        volume: CHAPTER_VOLUME[chapter.current] || 0.4,
-        duration: 0.8,
-        ease: 'power2.out',
-      });
-      video.play().catch(() => {});
-    }
-  }, [muted, chapter]);
-
-  useEffect(() => {
-    const triggers = [];
-    const sections = [
-      { sel: '.ov-section', ch: '01' },
-      { sel: '[data-chapter="02"]', ch: '02' },
-      { sel: '[data-chapter="03"]', ch: '03' },
-    ];
-
-    sections.forEach(({ sel, ch }) => {
-      const el = document.querySelector(sel);
-      if (!el) return;
-      triggers.push(
-        ScrollTrigger.create({
-          trigger: el,
-          start: 'top center',
-          end: 'bottom center',
-          onEnter: () => setChapter({ current: ch, total: '03' }),
-          onEnterBack: () => setChapter({ current: ch, total: '03' }),
-        })
-      );
-    });
-
-    return () => triggers.forEach((t) => t.kill());
-  }, []);
-
   return (
     <div className="cinematic-page" style={{ background: THEME.bg, color: THEME.text, cursor: 'auto' }}>
-      <video
-        ref={audioRef}
-        src={HERO_VIDEO}
-        loop
-        playsInline
-        muted
-        className="hidden"
-        aria-hidden
-      />
-      <Cursor />
-      <TopHUD muted={muted} setMuted={setMuted} chapter={chapter} />
+      <ProductsNav active="cinematic" showProgress />
       <ScatterCollage reduced={reduced} />
       <IndustriesWeServe reduced={reduced} />
       <HorizontalAct reduced={reduced} />
       <Counters reduced={reduced} />
       <ClipReveal reduced={reduced} />
       <CertificationsQuality reduced={reduced} />
+      <DocumentsResources reduced={reduced} />
       <FinaleOutro reduced={reduced} />
       <GlobalFeatures variant="cinematic" />
     </div>

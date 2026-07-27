@@ -1,0 +1,200 @@
+/* About / Story — cinematic */
+
+.about-page .about-stat-value {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.about-page .about-mission-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .about-page .about-mission-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+}
+
+.about-page .about-timeline-wrap {
+  position: relative;
+  padding-left: 5.5rem;
+}
+
+@media (min-width: 768px) {
+  .about-page .about-timeline-wrap {
+    padding-left: 7rem;
+  }
+}
+
+.about-page .about-timeline-rail {
+  position: absolute;
+  left: calc(2.75rem - 1px);
+  top: 1.4rem;
+  bottom: 0.4rem;
+  width: 2px;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .about-page .about-timeline-rail {
+    left: calc(3.5rem - 1px);
+  }
+}
+
+.about-page .about-timeline-rail-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: rgba(10, 29, 55, 0.1);
+}
+
+.about-page .about-timeline-rail-progress {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--cin-cyan) 0%, var(--cin-cyan-dark) 100%);
+  box-shadow: 0 0 16px rgba(56, 182, 255, 0.35);
+  transform: scaleY(0);
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.about-page .about-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.about-page .about-timeline-item {
+  position: relative;
+  padding: 1.35rem 0 1.6rem;
+  border-bottom: 1px solid var(--cin-border-light);
+}
+
+.about-page .about-timeline-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0.25rem;
+}
+
+.about-page .about-timeline-dot {
+  position: absolute;
+  left: calc(-2.75rem - 6px);
+  top: 1.4rem;
+  width: 12px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .about-page .about-timeline-dot {
+    left: calc(-3.5rem - 7px);
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.about-page .about-timeline-dot span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(10, 29, 55, 0.2);
+  background: var(--cin-bg);
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+
+@media (min-width: 768px) {
+  .about-page .about-timeline-dot span {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.about-page .about-timeline-item.is-active .about-timeline-dot span {
+  background: var(--cin-cyan);
+  border-color: var(--cin-cyan-dark);
+  box-shadow: 0 0 0 4px rgba(56, 182, 255, 0.18);
+  transform: scale(1.15);
+}
+
+.about-page .about-timeline-item.is-active .about-timeline-year {
+  color: var(--cin-cyan-dark);
+}
+
+.about-page .about-timeline-year {
+  color: var(--cin-text-light);
+  transition: color 0.3s ease;
+}
+
+.about-page .about-timeline-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .about-page .about-timeline-grid {
+    grid-template-columns: 160px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+}
+
+.about-page .about-value-card {
+  padding: 1.35rem 1.4rem;
+  border-radius: 16px;
+  border: 1px solid var(--cin-border-light);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  height: 100%;
+}
+
+.about-page .about-gallery-section {
+  overflow: hidden;
+}
+
+.about-page .about-gallery-marquee {
+  width: 100%;
+  overflow: hidden;
+  padding: 1.25rem 0;
+}
+
+.about-page .about-gallery-track {
+  display: flex;
+  align-items: stretch;
+  gap: 0.85rem;
+  width: max-content;
+  padding: 0 0.85rem;
+  will-change: transform;
+}
+
+.about-page .about-gallery-item {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(220px, 28vw, 340px);
+  height: clamp(160px, 20vw, 240px);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--cin-border-light);
+  background: var(--cin-bg-alt);
+}
+
+.about-page .about-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

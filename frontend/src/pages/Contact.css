@@ -1,0 +1,140 @@
+/* Contact page — cinematic UI */
+
+.contact-page .contact-info-cell {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.contact-page .contact-info-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.contact-page .contact-info-link:hover .cin-eyebrow {
+  color: var(--cin-cyan-dark);
+}
+
+.contact-page .contact-info-icon {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  color: var(--cin-cyan-dark);
+  background: rgba(56, 182, 255, 0.12);
+  border: 1px solid rgba(56, 182, 255, 0.18);
+}
+
+.contact-page .contact-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .contact-page .contact-layout {
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 3.5rem;
+  }
+}
+
+.contact-page .contact-whatsapp {
+  padding: 0.7rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.12), rgba(18, 140, 126, 0.08));
+  color: #0d7a56;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.contact-page .contact-whatsapp:hover {
+  transform: translateY(-1px);
+  border-color: rgba(37, 211, 102, 0.55);
+}
+
+.contact-page .contact-form,
+.contact-page .contact-success {
+  padding: 1.35rem 1.4rem 1.5rem;
+  border-radius: 16px;
+  border: 1px solid var(--cin-border-light);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 14px 40px -24px rgba(10, 29, 55, 0.28);
+}
+
+.contact-page .contact-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
+@media (min-width: 640px) {
+  .contact-page .contact-form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.contact-page .contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+  font-family: inherit;
+}
+
+.contact-page .contact-field span {
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cin-text-light);
+  font-weight: 600;
+}
+
+.contact-page .contact-field input,
+.contact-page .contact-field select,
+.contact-page .contact-field textarea {
+  appearance: none;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--cin-border);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--cin-navy);
+  padding: 0.8rem 0.95rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-page .contact-field textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.55;
+}
+
+.contact-page .contact-field input:focus,
+.contact-page .contact-field select:focus,
+.contact-page .contact-field textarea:focus {
+  border-color: var(--cin-cyan);
+  box-shadow: 0 0 0 3px rgba(56, 182, 255, 0.15);
+}
+
+.contact-page .contact-field select {
+  cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--cin-navy-mid) 50%),
+    linear-gradient(135deg, var(--cin-navy-mid) 50%, transparent 50%);
+  background-position: calc(100% - 18px) calc(50% - 3px), calc(100% - 13px) calc(50% - 3px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 2rem;
+}
