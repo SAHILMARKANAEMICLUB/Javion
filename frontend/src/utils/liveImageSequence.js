@@ -1,11 +1,11 @@
-export const LIVE_IMAGE_FRAME_COUNT = 51;
+export const LIVE_IMAGE_FRAME_COUNT = 52;
 /** vh of scroll per frame transition inside the sequence track */
 export const SEQUENCE_SCROLL_VH_PER_FRAME = 3.25;
 
-const LIVE_IMAGE_BASE = '/images/live_image_new/ezgif-frame-';
+const LIVE_IMAGE_BASE = '/images/nut_bolt_animation_optimized/frame-';
 
 export function liveImageSrc(index) {
-  return `${LIVE_IMAGE_BASE}${String(index + 1).padStart(3, '0')}.jpg`;
+  return `${LIVE_IMAGE_BASE}${String(index + 1).padStart(3, '0')}.webp`;
 }
 
 export function sequenceScrollRoomVh(frameCount = LIVE_IMAGE_FRAME_COUNT) {
@@ -30,12 +30,28 @@ function loadImage(index) {
   });
 }
 
+const PRELOAD_BATCH_SIZE = 8;
+
 export async function preloadLiveImages(onFrameLoaded) {
   const images = new Array(LIVE_IMAGE_FRAME_COUNT);
-  for (let i = 0; i < LIVE_IMAGE_FRAME_COUNT; i += 1) {
-    images[i] = await loadImage(i);
-    onFrameLoaded?.(i, images[i]);
+
+  // Paint the first frame quickly, then decode small batches in parallel.
+  images[0] = await loadImage(0);
+  onFrameLoaded?.(0, images[0]);
+
+  for (let start = 1; start < LIVE_IMAGE_FRAME_COUNT; start += PRELOAD_BATCH_SIZE) {
+    const indices = Array.from(
+      { length: Math.min(PRELOAD_BATCH_SIZE, LIVE_IMAGE_FRAME_COUNT - start) },
+      (_, offset) => start + offset
+    );
+    const batch = await Promise.all(indices.map(loadImage));
+    batch.forEach((image, offset) => {
+      const index = indices[offset];
+      images[index] = image;
+      onFrameLoaded?.(index, image);
+    });
   }
+
   return images;
 }
 

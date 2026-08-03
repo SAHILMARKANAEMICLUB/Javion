@@ -1,0 +1,118 @@
+/* Industries We Cater — dedicated page */
+
+.industries-page .ind-page-flow {
+  position: relative;
+  z-index: 1;
+}
+
+.industries-page .ind-page-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+@media (min-width: 900px) {
+  .industries-page .ind-page-list {
+    gap: 3.5rem;
+  }
+}
+
+.industries-page .ind-page-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
+  border: 1px solid var(--cin-border-light);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+}
+
+@media (min-width: 900px) {
+  .industries-page .ind-page-card {
+    grid-template-columns: 1.05fr 1fr;
+    gap: 0;
+    min-height: 340px;
+  }
+
+  .industries-page .ind-page-card--flip {
+    grid-template-columns: 1fr 1.05fr;
+  }
+
+  .industries-page .ind-page-card--flip .ind-page-card-media {
+    order: 2;
+  }
+
+  .industries-page .ind-page-card--flip .ind-page-card-body {
+    order: 1;
+  }
+}
+
+.industries-page .ind-page-card-media {
+  position: relative;
+  min-height: 220px;
+  background: var(--cin-bg-alt);
+  overflow: hidden;
+}
+
+.industries-page .ind-page-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (min-width: 900px) {
+  .industries-page .ind-page-card-media {
+    min-height: 100%;
+  }
+}
+
+.industries-page .ind-page-card-body {
+  padding: 1.5rem 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (min-width: 900px) {
+  .industries-page .ind-page-card-body {
+    padding: 2rem 2.25rem;
+  }
+}
+
+.industries-page .ind-page-products {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.industries-page .ind-page-products li {
+  font-family: var(--font-body, inherit);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--cin-navy);
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--cin-border-light);
+  border-radius: 999px;
+  background: rgba(244, 246, 248, 0.9);
+}
+
+/* Slightly tighter menu for longer labels */
+.cinematic-page .cin-glass-island--menu-wide .cin-nav-link {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  letter-spacing: 0.08em;
+}
+
+@media (min-width: 1100px) {
+  .cinematic-page .cin-glass-island--menu-wide .cin-nav-link {
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+}

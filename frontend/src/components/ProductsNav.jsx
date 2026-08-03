@@ -7,18 +7,37 @@ function NavDivider({ className = '' }) {
   return <span className={`cin-nav-divider ${className}`.trim()} aria-hidden />;
 }
 
+const NAV_ITEMS = [
+  { id: 'home', label: 'Home', to: '/cinematic' },
+  { id: 'about', label: 'About Us', to: '/about' },
+  { id: 'products', label: 'Products', to: '/products' },
+  { id: 'industries', label: 'Industries We Cater', to: '/industries' },
+  { id: 'contact', label: 'Connect Us', to: '/contact' },
+];
+
 /**
  * Shared glass-island header for cinematic brand pages.
- * Menu: Products · About · Quality · Resources · Contact
+ * Menu: Home · About Us · Products · Industries We Cater · Connect Us
  */
 export default function ProductsNav({ active = null, showProgress = false }) {
   const { pathname } = useLocation();
   const barRef = useRef(null);
   const catalogue = CINEMATIC_DOCUMENTS.find((d) => d.id === 'catalogue');
   const island = 'cin-glass-island cin-glass-island--solid';
-  const onCinematic = pathname === '/cinematic';
-  const qualityTo = onCinematic ? '#quality' : '/cinematic#quality';
-  const resourcesTo = onCinematic ? '#resources' : '/cinematic#resources';
+
+  const resolvedActive =
+    active ||
+    (pathname === '/cinematic'
+      ? 'home'
+      : pathname.startsWith('/products')
+        ? 'products'
+        : pathname.startsWith('/about')
+          ? 'about'
+          : pathname.startsWith('/industries')
+            ? 'industries'
+            : pathname.startsWith('/contact')
+              ? 'contact'
+              : null);
 
   useEffect(() => {
     if (!showProgress) return undefined;
@@ -35,26 +54,6 @@ export default function ProductsNav({ active = null, showProgress = false }) {
       window.removeEventListener('resize', update);
     };
   }, [showProgress]);
-
-  const qualityLink = onCinematic ? (
-    <a href={qualityTo} className="cin-nav-link font-body font-medium" data-cursor>
-      Quality
-    </a>
-  ) : (
-    <Link to={qualityTo} className="cin-nav-link font-body font-medium">
-      Quality
-    </Link>
-  );
-
-  const resourcesLink = onCinematic ? (
-    <a href={resourcesTo} className="cin-nav-link font-body font-medium" data-cursor>
-      Resources
-    </a>
-  ) : (
-    <Link to={resourcesTo} className="cin-nav-link font-body font-medium">
-      Resources
-    </Link>
-  );
 
   return (
     <>
@@ -77,36 +76,25 @@ export default function ProductsNav({ active = null, showProgress = false }) {
           </div>
 
           <nav
-            className={`${island} cin-glass-island--menu hidden md:flex items-center pointer-events-auto`}
+            className={`${island} cin-glass-island--menu cin-glass-island--menu-wide hidden md:flex items-center pointer-events-auto`}
             aria-label="Primary"
           >
-            <Link
-              to="/products"
-              className={`cin-nav-link font-body font-medium ${active === 'products' ? 'is-active' : ''}`}
-              data-cursor
-            >
-              Products
-            </Link>
-            <NavDivider />
-            <Link
-              to="/about"
-              className={`cin-nav-link font-body font-medium ${active === 'about' ? 'is-active' : ''}`}
-              data-cursor
-            >
-              About
-            </Link>
-            <NavDivider />
-            {qualityLink}
-            <NavDivider />
-            {resourcesLink}
-            <NavDivider />
-            <Link
-              to="/contact"
-              className={`cin-nav-link font-body font-medium ${active === 'contact' ? 'is-active' : ''}`}
-              data-cursor
-            >
-              Contact
-            </Link>
+            {NAV_ITEMS.map((item, idx) => (
+              <React.Fragment key={item.id}>
+                {idx > 0 && <NavDivider />}
+                <Link
+                  to={item.to}
+                  className={`cin-nav-link font-body font-medium ${
+                    resolvedActive === item.id || (item.id === 'home' && resolvedActive === 'cinematic')
+                      ? 'is-active'
+                      : ''
+                  }`}
+                  data-cursor
+                >
+                  {item.label}
+                </Link>
+              </React.Fragment>
+            ))}
           </nav>
 
           <div className={`${island} cin-glass-island--meta flex items-center pointer-events-auto`}>

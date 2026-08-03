@@ -14,6 +14,7 @@ import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import Contact from './pages/Contact';
 import About from './pages/About';
+import Industries from './pages/Industries';
 import NotFound from './pages/NotFound';
 import useLenisScroll from './hooks/useLenisScroll';
 
@@ -50,6 +51,7 @@ function Shell() {
         <Route path="/products/:productId" element={<ProductDetail />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
+        <Route path="/industries" element={<Industries />} />
         <Route path="/comming-soon" element={<Navigate to="/" replace />} />
         <Route path="/coming-soon" element={<Navigate to="/" replace />} />
         <Route path="/new" element={<New />} />

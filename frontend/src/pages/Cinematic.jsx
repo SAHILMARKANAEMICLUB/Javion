@@ -787,7 +787,7 @@ export default function Cinematic() {
 
   return (
     <div className="cinematic-page" style={{ background: THEME.bg, color: THEME.text, cursor: 'auto' }}>
-      <ProductsNav active="cinematic" showProgress />
+      <ProductsNav active="home" showProgress />
       <ScatterCollage reduced={reduced} />
       <IndustriesWeServe reduced={reduced} />
       <HorizontalAct reduced={reduced} />
