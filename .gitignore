@@ -30,10 +30,49 @@ next-env.d.ts
 dist/
 dist
 
-# Environment files (comprehensive coverage)
+# Secrets & credentials (never commit real values)
+# Keep templates via !.env.example below
 
 *token.json*
+credentials.json
+**/credentials.json
 *credentials.json*
+*secrets.json*
+*secret.json*
+service_role*
+*service_role*
+*SERVICE_ROLE*
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+id_rsa
+id_rsa.*
+*.keystore
+cookie*.txt
+*-cookies.txt
+javion-cookies.txt
+.credentials
+
+# Real env files (all locations)
+.env
+.env.*
+*.env
+**/.env
+**/.env.*
+**/.env.local
+**/.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Allow safe templates (no real passwords/secrets)
+!.env.example
+!**/.env.example
+!**/.env*.example
+!*.env.example
 
 # Logs and debug files
 npm-debug.log*
@@ -44,13 +83,13 @@ dump.rdb
 
 # System files
 .DS_Store
-*.pem
 
 # Python
 __pycache__/
 *pyc*
 venv/
 .venv/
+**/.venv/
 
 # Development tools
 chainlit.md
@@ -77,12 +116,8 @@ agenthub/agents/youtube/db
 .cache/
 
 memory/test_credentials.md
+.credentials
+credentials.json
 
 # Mobile development
 android-sdk/
-.env
-.env.*
-*.env
-credentials.json
-*.key
-.credentials
