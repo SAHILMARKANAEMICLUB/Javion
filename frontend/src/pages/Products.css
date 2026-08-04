@@ -7,6 +7,7 @@
   background: var(--cin-bg);
   color: var(--cin-text);
   overflow-x: clip;
+  overflow-y: visible;
 }
 
 .products-page .prod-bg {

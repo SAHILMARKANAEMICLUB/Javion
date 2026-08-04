@@ -1,12 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ArrowRight, Check } from 'lucide-react';
-import {
-  getProductById,
-  getRelatedProducts,
-  onCinematicImgError,
-} from '../mock';
+import { fetchProductBySlug, fetchRelatedProducts } from '../api/productsApi';
+import { onCinematicImgError } from '../mock';
 import { headlineBlurIn } from '../utils/cinematicAnimations';
 import useReducedMotion from '../hooks/useReducedMotion';
 import ProductsNav from '../components/ProductsNav';
@@ -15,10 +12,12 @@ import './Products.css';
 
 export default function ProductDetail() {
   const { productId } = useParams();
-  const product = useMemo(() => getProductById(productId), [productId]);
-  const related = useMemo(() => getRelatedProducts(productId, 3), [productId]);
   const rootRef = useRef(null);
   const reduced = useReducedMotion();
+  const [product, setProduct] = useState(null);
+  const [related, setRelated] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
 
   useEffect(() => {
@@ -31,6 +30,31 @@ export default function ProductDetail() {
       document.body.style.background = '';
     };
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setNotFound(false);
+    Promise.all([fetchProductBySlug(productId), fetchRelatedProducts(productId, 3)])
+      .then(([row, relatedRows]) => {
+        if (cancelled) return;
+        setProduct(row);
+        setRelated(relatedRows);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setProduct(null);
+          setRelated([]);
+          setNotFound(true);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [productId]);
 
   useEffect(() => {
     if (!product) return undefined;
@@ -57,8 +81,21 @@ export default function ProductDetail() {
     return () => ctx.revert();
   }, [product, productId, reduced]);
 
-  if (!product) {
+  if (!loading && notFound) {
     return <Navigate to="/products" replace />;
+  }
+
+  if (loading || !product) {
+    return (
+      <div className="cinematic-page products-page product-detail-page">
+        <ProductsNav active="products" />
+        <div className="relative z-[1] px-8 md:px-16 pt-32 pb-20">
+          <p className="font-body" style={{ color: 'var(--cin-text-muted)' }}>
+            Loading product…
+          </p>
+        </div>
+      </div>
+    );
   }
 
   const gallery = product.gallery?.length ? product.gallery : [product.image];

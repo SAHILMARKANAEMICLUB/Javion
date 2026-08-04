@@ -13,10 +13,52 @@
 
 # misc
 .DS_Store
+
+# ── Secrets & env (never commit real values) ──
+.env
+.env.*
 .env.local
+.env.*.local
+.env.development
 .env.development.local
+.env.test
 .env.test.local
+.env.production
 .env.production.local
+**/.env
+**/.env.*
+**/.env.local
+
+# Keys / certs / credentials
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+id_rsa
+id_rsa.*
+*.keystore
+credentials.json
+**/credentials.json
+*credentials.json*
+*secrets.json*
+*secret.json*
+*token.json*
+.credentials
+service_role*
+*service_role*
+*SERVICE_ROLE*
+
+# Cookie / session dumps
+cookie*.txt
+*-cookies.txt
+javion-cookies.txt
+
+# Allow safe templates only (no real passwords/keys)
+!.env.example
+!**/.env.example
+!**/.env*.example
+!*.env.example
 
 npm-debug.log*
 yarn-debug.log*

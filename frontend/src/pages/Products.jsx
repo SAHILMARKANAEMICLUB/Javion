@@ -3,11 +3,8 @@ import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight } from 'lucide-react';
-import {
-  PRODUCT_CATEGORIES,
-  PRODUCTS,
-  onCinematicImgError,
-} from '../mock';
+import { fetchCategories, fetchProducts } from '../api/productsApi';
+import { onCinematicImgError } from '../mock';
 import { headlineBlurIn } from '../utils/cinematicAnimations';
 import useReducedMotion from '../hooks/useReducedMotion';
 import ProductsNav from '../components/ProductsNav';
@@ -41,24 +38,51 @@ export default function Products() {
   const rootRef = useRef(null);
   const reduced = useReducedMotion();
   const [filter, setFilter] = useState('All');
-
-  const visible = useMemo(() => {
-    if (filter === 'All') return PRODUCTS;
-    return PRODUCTS.filter((p) => p.category === filter);
-  }, [filter]);
-
-  const rows = useMemo(() => buildOddEvenRows(visible), [visible]);
+  const [categories, setCategories] = useState(['All']);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     document.body.style.background = '#f4f6f8';
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
     return () => {
       document.body.style.background = '';
     };
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError('');
+    Promise.all([fetchCategories(), fetchProducts()])
+      .then(([cats, rows]) => {
+        if (cancelled) return;
+        setCategories(cats?.length ? cats : ['All']);
+        setProducts(rows);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err.message || 'Could not load products');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const visible = useMemo(() => {
+    if (filter === 'All') return products;
+    return products.filter((p) => p.category === filter);
+  }, [filter, products]);
+
+  const rows = useMemo(() => buildOddEvenRows(visible), [visible]);
+
+  useEffect(() => {
     const root = rootRef.current;
-    if (!root) return undefined;
+    if (!root || loading) return undefined;
 
     const ctx = gsap.context(() => {
       headlineBlurIn('.prod-headline', {
@@ -79,11 +103,11 @@ export default function Products() {
     }, root);
 
     return () => ctx.revert();
-  }, [reduced]);
+  }, [reduced, loading]);
 
   useEffect(() => {
     const root = rootRef.current;
-    if (!root) return undefined;
+    if (!root || loading) return undefined;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -101,7 +125,7 @@ export default function Products() {
     }, root);
 
     return () => ctx.revert();
-  }, [visible]);
+  }, [visible, loading]);
 
   return (
     <div ref={rootRef} className="cinematic-page products-page">
@@ -137,7 +161,7 @@ export default function Products() {
         <div className="prod-filter-band prod-reveal border-y border-[var(--cin-border-light)]">
           <div className="px-8 md:px-16 py-4 flex flex-wrap items-center justify-between gap-3">
             <div className="prod-filter-row flex flex-wrap items-center gap-1">
-              {PRODUCT_CATEGORIES.map((cat) => {
+              {categories.map((cat) => {
                 const active = filter === cat;
                 return (
                   <button
@@ -153,13 +177,23 @@ export default function Products() {
               })}
             </div>
             <p className="prod-count font-body">
-              {visible.length} product{visible.length === 1 ? '' : 's'}
+              {loading ? 'Loading…' : `${visible.length} product${visible.length === 1 ? '' : 's'}`}
             </p>
           </div>
         </div>
       </section>
 
       <section className="relative z-[1] px-8 md:px-16 py-10 md:py-14" aria-label="Product list">
+        {error && (
+          <p className="font-body text-[14px] mb-6" style={{ color: '#b42318' }}>
+            {error}. Check your Supabase connection in `.env.local`.
+          </p>
+        )}
+        {!loading && !error && !visible.length && (
+          <p className="font-body text-[14px]" style={{ color: 'var(--cin-text-muted)' }}>
+            No products in this category yet.
+          </p>
+        )}
         <div className="docs-mosaic prod-mosaic">
           {rows.map((row) => (
             <div

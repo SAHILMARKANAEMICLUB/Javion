@@ -16,6 +16,11 @@ import Contact from './pages/Contact';
 import About from './pages/About';
 import Industries from './pages/Industries';
 import NotFound from './pages/NotFound';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminProductForm from './pages/admin/AdminProductForm';
+import AdminSecurity from './pages/admin/AdminSecurity';
 import useLenisScroll from './hooks/useLenisScroll';
 
 function ScrollToTop() {
@@ -52,6 +57,13 @@ function Shell() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
         <Route path="/industries" element={<Industries />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminProducts />} />
+          <Route path="security" element={<AdminSecurity />} />
+          <Route path="products/new" element={<AdminProductForm />} />
+          <Route path="products/:productId/edit" element={<AdminProductForm />} />
+        </Route>
         <Route path="/comming-soon" element={<Navigate to="/" replace />} />
         <Route path="/coming-soon" element={<Navigate to="/" replace />} />
         <Route path="/new" element={<New />} />
