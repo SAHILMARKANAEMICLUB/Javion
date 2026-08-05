@@ -36,7 +36,7 @@ frontend/build/
 
 That folder is what goes on hosting.
 
-**Optional check:** open `frontend/build/index.html` in a browser. Static assets should load. Routes like `/cinematic` need a host that supports SPA rewrites (covered below).
+**Optional check:** open `frontend/build/index.html` in a browser. Static assets should load. Routes like `/home` need a host that supports SPA rewrites (covered below).
 
 ---
 
@@ -56,7 +56,7 @@ Pick one option. For a React marketing site, **Netlify** or **Vercel** is simple
    - Under **Environment**, if install fails: set `NPM_FLAGS=--legacy-peer-deps` (or use Netlify’s install command override).
 4. Deploy. Netlify gives you a URL like `https://random-name.netlify.app`.
 
-**SPA routing (required for `/cinematic`, `/old`, etc.):**  
+**SPA routing (required for `/home`, `/old`, etc.):**  
 Create this file in the frontend folder **before** build, or add it so it ends up in `build/`:
 
 `frontend/public/_redirects`
@@ -176,7 +176,7 @@ If the site files are already in `public_html` for that domain:
 1. Open `https://yourdomain.com` (and `https://www.yourdomain.com`).
 2. Confirm:
    - Home / Coming Soon page loads
-   - `/cinematic` works (and refresh does not 404)
+   - `/home` works (and refresh does not 404)
    - Images and fonts load over HTTPS
 3. If you see an old page, hard refresh (`Cmd+Shift+R`) or wait for CDN/DNS cache.
 
@@ -228,7 +228,7 @@ Useful routes:
 |------|------|
 | `/` | Coming Soon (home) |
 | `/old` | Previous home |
-| `/cinematic` | Cinematic page |
+| `/home` | Brand home page |
 | `/new` | New page |
 
 ---
@@ -239,7 +239,7 @@ Useful routes:
 |---------|-----|
 | `npm install` peer dependency errors | Use `npm install --legacy-peer-deps` |
 | Site works on host URL but not on domain | DNS not updated yet, or wrong A/CNAME values |
-| `/cinematic` works once, 404 on refresh | Add SPA rewrite (`_redirects`, `vercel.json`, or `.htaccess`) |
+| `/home` works once, 404 on refresh | Add SPA rewrite (`_redirects`, `vercel.json`, or `.htaccess`) |
 | Mixed content / broken images | Use HTTPS and relative paths under `public/` |
 | “Already up to date” but GitHub has changes | You may be pulling a different remote/repo than the one you edited |
 
