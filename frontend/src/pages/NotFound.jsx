@@ -5,6 +5,8 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { headlineBlurIn } from '../utils/cinematicAnimations';
 import useReducedMotion from '../hooks/useReducedMotion';
 import ProductsNav from '../components/ProductsNav';
+import Seo from '../components/Seo';
+import { PAGE_SEO } from '../seo/site';
 import './Cinematic.css';
 import './Products.css';
 import './NotFound.css';
@@ -68,6 +70,7 @@ export default function NotFound() {
 
   return (
     <div ref={rootRef} className="cinematic-page products-page not-found-page">
+      <Seo {...PAGE_SEO.notFound} />
       <div className="prod-bg pointer-events-none" aria-hidden>
         <div className="prod-bg-base" />
         <div className="prod-bg-patch prod-bg-patch--cyan" />

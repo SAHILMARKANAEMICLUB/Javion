@@ -51,6 +51,15 @@ npm run build
 Upload contents of `frontend/build/` to `public_html`.  
 SPA routing uses `public/.htaccess`.
 
+## 7. SEO (after domain is live)
+1. Set in `.env.local` before build:
+   ```env
+   REACT_APP_SITE_URL=https://javionfasteners.com
+   ```
+2. Update `public/robots.txt` and `public/sitemap.xml` if the domain changes from `javionfasteners.com`.
+3. Rebuild (`npm run build`) and upload `build/`.
+4. In [Google Search Console](https://search.google.com/search-console), add the property and submit `https://javionfasteners.com/sitemap.xml`.
+
 ## Security notes
 - Never put the **service_role** key in the frontend bundle or git
 - Use only the **anon** key in `REACT_APP_SUPABASE_*`

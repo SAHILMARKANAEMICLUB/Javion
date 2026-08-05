@@ -1,0 +1,9 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Keep admin out of search indexes
+Disallow: /admin
+Disallow: /admin/
+
+Sitemap: https://javionfasteners.com/sitemap.xml

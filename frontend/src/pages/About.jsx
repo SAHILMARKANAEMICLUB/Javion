@@ -7,6 +7,8 @@ import { ABOUT_STORY, onCinematicImgError } from '../mock';
 import { headlineBlurIn } from '../utils/cinematicAnimations';
 import useReducedMotion from '../hooks/useReducedMotion';
 import ProductsNav from '../components/ProductsNav';
+import Seo from '../components/Seo';
+import { PAGE_SEO } from '../seo/site';
 import './Cinematic.css';
 import './Products.css';
 import './About.css';
@@ -122,6 +124,7 @@ export default function About() {
 
   return (
     <div ref={rootRef} className="cinematic-page products-page about-page">
+      <Seo {...PAGE_SEO.about} />
       <div className="prod-bg pointer-events-none" aria-hidden>
         <div className="prod-bg-base" />
         <div className="prod-bg-patch prod-bg-patch--cyan" />

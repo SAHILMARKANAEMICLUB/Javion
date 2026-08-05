@@ -114,12 +114,12 @@ Vercel usually handles React Router rewrites automatically for CRA-style apps. I
 You need two things:
 
 1. A **live site** (Netlify / Vercel / cPanel URL from Step 2).
-2. Your **domain** managed in GoDaddy (e.g. `javion.com`).
+2. Your **domain** managed in GoDaddy (e.g. `javionfasteners.com`).
 
 ### 3A — Domain on Netlify
 
 1. In Netlify → your site → **Domain management** → **Add a domain**.
-2. Enter your domain (e.g. `javion.com` and optionally `www.javion.com`).
+2. Enter your domain (e.g. `javionfasteners.com` and optionally `www.javionfasteners.com`).
 3. Netlify will show DNS records to add. Typical setup:
 
 | Type | Name / Host | Value |
@@ -135,7 +135,7 @@ You need two things:
 
 ### 3B — Domain on Vercel
 
-1. Vercel → your project → **Settings → Domains** → add `javion.com` and `www.javion.com`.
+1. Vercel → your project → **Settings → Domains** → add `javionfasteners.com` and `www.javionfasteners.com`.
 2. Vercel shows records. Common pattern:
 
 | Type | Name | Value |

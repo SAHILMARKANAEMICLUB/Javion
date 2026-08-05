@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { adminLogin, adminMe } from '../../api/productsApi';
+import Seo from '../../components/Seo';
+import { PAGE_SEO } from '../../seo/site';
 import '../Admin.css';
 
 export default function AdminLogin() {
@@ -80,6 +82,7 @@ export default function AdminLogin() {
 
   return (
     <div className="admin-shell admin-shell--center">
+      <Seo {...PAGE_SEO.admin} title="Admin Login" />
       <form className="admin-card" onSubmit={onSubmit} noValidate>
         <div className="admin-eyebrow">Admin</div>
         <h1 className="admin-title">Sign in</h1>

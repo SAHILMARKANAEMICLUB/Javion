@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { JAVION_LOGO } from '../mock';
 import useReducedMotion from '../hooks/useReducedMotion';
+import Seo from '../components/Seo';
+import { PAGE_SEO } from '../seo/site';
 import './Cinematic.css';
 import './ComingSoon.css';
 
@@ -76,6 +78,7 @@ export default function ComingSoon() {
       className="cinematic-page coming-soon-page"
       style={{ color: '#0A1D37' }}
     >
+      <Seo {...PAGE_SEO.comingSoon} />
       <div className="cs-bg" aria-hidden>
         <div className="cs-bg-base" />
         <div className="cs-patch cs-patch--cyan" />

@@ -7,6 +7,8 @@ import { onCinematicImgError } from '../mock';
 import { headlineBlurIn } from '../utils/cinematicAnimations';
 import useReducedMotion from '../hooks/useReducedMotion';
 import ProductsNav from '../components/ProductsNav';
+import Seo from '../components/Seo';
+import { PAGE_SEO } from '../seo/site';
 import './Cinematic.css';
 import './Products.css';
 
@@ -88,6 +90,7 @@ export default function ProductDetail() {
   if (loading || !product) {
     return (
       <div className="cinematic-page products-page product-detail-page">
+        <Seo title="Product" description="Loading product details." path={`/products/${productId}`} />
         <ProductsNav active="products" />
         <div className="relative z-[1] px-8 md:px-16 pt-32 pb-20">
           <p className="font-body" style={{ color: 'var(--cin-text-muted)' }}>
@@ -103,6 +106,15 @@ export default function ProductDetail() {
 
   return (
     <div ref={rootRef} className="cinematic-page products-page product-detail-page">
+      <Seo
+        title={product.name}
+        description={
+          product.description || `${product.name} — precision fasteners from Javion.`
+        }
+        path={`/products/${product.slug || productId}`}
+        image={product.image}
+        type="product"
+      />
       <div className="prod-bg pointer-events-none" aria-hidden>
         <div className="prod-bg-base" />
         <div className="prod-bg-patch prod-bg-patch--cyan" />

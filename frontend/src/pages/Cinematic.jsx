@@ -10,6 +10,8 @@ import CertificationsQuality from '../components/cinematic/CertificationsQuality
 import IndustriesWeServe from '../components/cinematic/IndustriesWeServe';
 import DocumentsResources from '../components/cinematic/DocumentsResources';
 import GlobalFeatures from '../components/GlobalFeatures';
+import Seo from '../components/Seo';
+import { PAGE_SEO } from '../seo/site';
 import { headlineBlurIn } from '../utils/cinematicAnimations';
 import './Cinematic.css';
 
@@ -787,6 +789,7 @@ export default function Cinematic() {
 
   return (
     <div className="cinematic-page" style={{ background: THEME.bg, color: THEME.text, cursor: 'auto' }}>
+      <Seo {...PAGE_SEO.home} />
       <ProductsNav active="home" showProgress />
       <ScatterCollage reduced={reduced} />
       <IndustriesWeServe reduced={reduced} />

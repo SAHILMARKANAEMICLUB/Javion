@@ -6,6 +6,8 @@ import { JAVION_CONTACT } from '../mock';
 import { headlineBlurIn } from '../utils/cinematicAnimations';
 import useReducedMotion from '../hooks/useReducedMotion';
 import ProductsNav from '../components/ProductsNav';
+import Seo from '../components/Seo';
+import { PAGE_SEO } from '../seo/site';
 import './Cinematic.css';
 import './Products.css';
 import './Contact.css';
@@ -78,6 +80,7 @@ export default function Contact() {
 
   return (
     <div ref={rootRef} className="cinematic-page products-page contact-page">
+      <Seo {...PAGE_SEO.contact} />
       <div className="prod-bg pointer-events-none" aria-hidden>
         <div className="prod-bg-base" />
         <div className="prod-bg-patch prod-bg-patch--cyan" />

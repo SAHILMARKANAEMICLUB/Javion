@@ -8,6 +8,8 @@ import { headlineBlurIn } from '../utils/cinematicAnimations';
 import useReducedMotion from '../hooks/useReducedMotion';
 import ProductsNav from '../components/ProductsNav';
 import IndustriesWeServe from '../components/cinematic/IndustriesWeServe';
+import Seo from '../components/Seo';
+import { PAGE_SEO } from '../seo/site';
 import './Cinematic.css';
 import './Products.css';
 import './Industries.css';
@@ -62,6 +64,7 @@ export default function Industries() {
 
   return (
     <div ref={rootRef} className="cinematic-page products-page industries-page">
+      <Seo {...PAGE_SEO.industries} />
       <ProductsNav active="industries" />
 
       {/* Flow sequence video — same scroll scrub as home industries block */}

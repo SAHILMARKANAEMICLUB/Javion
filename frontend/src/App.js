@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Loader from './components/Loader';
@@ -83,9 +84,11 @@ function App() {
   return (
     <div className="App">
       {!ready && <Loader onFinish={() => setReady(true)} />}
-      <BrowserRouter>
-        <Shell />
-      </BrowserRouter>
+      <HelmetProvider>
+        <BrowserRouter>
+          <Shell />
+        </BrowserRouter>
+      </HelmetProvider>
     </div>
   );
 }

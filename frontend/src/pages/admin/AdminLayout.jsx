@@ -3,6 +3,8 @@ import { Link, Navigate, NavLink, Outlet, useLocation, useNavigate } from 'react
 import { ExternalLink, LogOut, Menu, Package, Shield, X } from 'lucide-react';
 import { adminLogout, adminMe } from '../../api/productsApi';
 import { JAVION_LOGO } from '../../mock';
+import Seo from '../../components/Seo';
+import { PAGE_SEO } from '../../seo/site';
 import '../Admin.css';
 
 export default function AdminLayout() {
@@ -86,6 +88,7 @@ export default function AdminLayout() {
 
   return (
     <div className="admin-shell">
+      <Seo {...PAGE_SEO.admin} />
       <header className="admin-top">
         <div className="admin-top-left">
           <Link to="/admin" className="admin-brand" aria-label="Javion Admin home">
