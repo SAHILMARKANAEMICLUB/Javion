@@ -108,7 +108,7 @@ export default function NotFound() {
 
           <div className="nf-actions nf-reveal">
             <Link
-              to="/cinematic"
+              to="/home"
               className="cin-btn-primary inline-flex items-center gap-2 px-6 py-3.5 text-[11px] tracking-[0.12em] font-semibold uppercase"
             >
               <ArrowLeft size={14} />
@@ -129,9 +129,9 @@ export default function NotFound() {
           </div>
 
           <div className="nf-links nf-reveal font-body">
-            <Link to="/cinematic#quality">Quality</Link>
+            <Link to="/home#quality">Quality</Link>
             <span aria-hidden>·</span>
-            <Link to="/cinematic#resources">Resources</Link>
+            <Link to="/home#resources">Resources</Link>
             <span aria-hidden>·</span>
             <Link to="/">Coming soon</Link>
           </div>

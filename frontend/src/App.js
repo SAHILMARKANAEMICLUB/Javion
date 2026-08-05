@@ -50,8 +50,9 @@ function Shell() {
         <Route path="/realisations" element={<Realisations />} />
         <Route path="/equipe-metal360" element={<Equipe />} />
         <Route path="/expertise" element={<Home />} />
-        <Route path="/cinamatic" element={<Navigate to="/cinematic" replace />} />
-        <Route path="/cinematic" element={<Cinematic />} />
+        <Route path="/home" element={<Cinematic />} />
+        <Route path="/cinematic" element={<Navigate to="/home" replace />} />
+        <Route path="/cinamatic" element={<Navigate to="/home" replace />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:productId" element={<ProductDetail />} />
         <Route path="/contact" element={<Contact />} />

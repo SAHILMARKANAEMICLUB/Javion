@@ -138,7 +138,7 @@ function Hero({ reduced }) {
           Metal360 Platform unites quoting, 3D previews, and project timelines — so every piece feels like a premiere, not a purchase order.
         </p>
         <div className="new-hero-el mt-10 flex flex-wrap gap-4">
-          <Link to="/cinematic" className="new-btn-primary px-8 py-4 text-sm inline-flex items-center gap-2 cursor-pointer">
+          <Link to="/home" className="new-btn-primary px-8 py-4 text-sm inline-flex items-center gap-2 cursor-pointer">
             Watch the film <ChevronRight size={16} />
           </Link>
           <a href="#work" className="new-btn-ghost px-8 py-4 text-sm inline-flex items-center gap-2 cursor-pointer">

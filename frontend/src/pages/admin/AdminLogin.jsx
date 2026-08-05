@@ -127,7 +127,7 @@ export default function AdminLogin() {
           {loading ? 'Signing in…' : 'Sign in'}
         </button>
 
-        <Link to="/cinematic" className="admin-link admin-back">
+        <Link to="/home" className="admin-link admin-back">
           ← Back to site
         </Link>
       </form>

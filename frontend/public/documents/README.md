@@ -1,6 +1,6 @@
 # Cinematic Resources PDFs
 
-Used by the **Resources** section on `/cinematic` (`#resources`).
+Used by the **Resources** section on `/home` (`#resources`).
 
 Place files here with these names:
 

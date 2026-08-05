@@ -8,7 +8,7 @@ function NavDivider({ className = '' }) {
 }
 
 const NAV_ITEMS = [
-  { id: 'home', label: 'Home', to: '/cinematic' },
+  { id: 'home', label: 'Home', to: '/home' },
   { id: 'about', label: 'About Us', to: '/about' },
   { id: 'products', label: 'Products', to: '/products' },
   { id: 'industries', label: 'Industries We Cater', to: '/industries' },
@@ -27,7 +27,7 @@ export default function ProductsNav({ active = null, showProgress = false }) {
 
   const resolvedActive =
     active ||
-    (pathname === '/cinematic'
+    (pathname === '/home'
       ? 'home'
       : pathname.startsWith('/products')
         ? 'products'
@@ -65,7 +65,7 @@ export default function ProductsNav({ active = null, showProgress = false }) {
       <header className="cin-nav-shell prod-nav-shell fixed top-0 left-0 right-0 z-[999] pointer-events-none">
         <div className="cin-nav-shell-inner flex items-start justify-between gap-2 sm:gap-3 md:gap-4 px-3 sm:px-4 md:px-6 pt-3 md:pt-4">
           <div className={`${island} cin-glass-island--logo pointer-events-auto`}>
-            <Link to="/cinematic" className="cin-nav-logo-wrap" data-cursor aria-label="Javion Fasteners home">
+            <Link to="/home" className="cin-nav-logo-wrap" data-cursor aria-label="Javion Fasteners home">
               <img
                 src={JAVION_LOGO}
                 alt="Javion Fasteners"
@@ -85,7 +85,7 @@ export default function ProductsNav({ active = null, showProgress = false }) {
                 <Link
                   to={item.to}
                   className={`cin-nav-link font-body font-medium ${
-                    resolvedActive === item.id || (item.id === 'home' && resolvedActive === 'cinematic')
+                    resolvedActive === item.id
                       ? 'is-active'
                       : ''
                   }`}

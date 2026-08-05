@@ -327,7 +327,7 @@ export default function Contact() {
               Products <ArrowRight size={14} />
             </Link>
             <Link
-              to="/cinematic#resources"
+              to="/home#resources"
               className="cin-btn-ghost inline-flex items-center gap-2 px-6 py-3.5 text-[11px] tracking-[0.12em] font-semibold uppercase rounded-full"
             >
               Documents
