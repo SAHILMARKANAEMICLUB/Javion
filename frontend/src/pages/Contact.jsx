@@ -9,6 +9,7 @@ import ProductsNav from '../components/ProductsNav';
 import Seo from '../components/Seo';
 import { PAGE_SEO } from '../seo/site';
 import { AEO_FAQS, faqPageJsonLd } from '../seo/aeo';
+import { quoteHowToJsonLd } from '../seo/geo';
 import './Cinematic.css';
 import './Products.css';
 import './Contact.css';
@@ -81,7 +82,7 @@ export default function Contact() {
 
   return (
     <div ref={rootRef} className="cinematic-page products-page contact-page">
-      <Seo {...PAGE_SEO.contact} jsonLd={[faqPageJsonLd()]} />
+      <Seo {...PAGE_SEO.contact} jsonLd={[faqPageJsonLd(), quoteHowToJsonLd()]} />
       <div className="prod-bg pointer-events-none" aria-hidden>
         <div className="prod-bg-base" />
         <div className="prod-bg-patch prod-bg-patch--cyan" />

@@ -6,12 +6,13 @@ import { CINEMATIC_IMG, onCinematicImgError } from '../mock';
 import useReducedMotion from '../hooks/useReducedMotion';
 import useCinematicScroll from '../hooks/useCinematicScroll';
 import ProductsNav from '../components/ProductsNav';
+import Seo from '../components/Seo';
+import { PAGE_SEO } from '../seo/site';
+import { speakableJsonLd, GEO_ENTITY_DEFINITION } from '../seo/geo';
 import CertificationsQuality from '../components/cinematic/CertificationsQuality';
 import IndustriesWeServe from '../components/cinematic/IndustriesWeServe';
 import DocumentsResources from '../components/cinematic/DocumentsResources';
 import GlobalFeatures from '../components/GlobalFeatures';
-import Seo from '../components/Seo';
-import { PAGE_SEO } from '../seo/site';
 import { headlineBlurIn } from '../utils/cinematicAnimations';
 import './Cinematic.css';
 
@@ -789,7 +790,11 @@ export default function Cinematic() {
 
   return (
     <div className="cinematic-page" style={{ background: THEME.bg, color: THEME.text, cursor: 'auto' }}>
-      <Seo {...PAGE_SEO.home} />
+      <Seo
+        {...PAGE_SEO.home}
+        jsonLd={[speakableJsonLd(['.geo-entity-definition', '.hero-headline'])]}
+      />
+      <p className="geo-entity-definition sr-only">{GEO_ENTITY_DEFINITION}</p>
       <ProductsNav active="home" showProgress />
       <ScatterCollage reduced={reduced} />
       <IndustriesWeServe reduced={reduced} />

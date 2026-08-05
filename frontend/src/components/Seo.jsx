@@ -7,9 +7,10 @@ import {
   absoluteUrl,
 } from '../seo/site';
 import { organizationJsonLd, websiteJsonLd } from '../seo/aeo';
+import { localBusinessJsonLd } from '../seo/geo';
 
 /**
- * Per-page SEO + AEO: title, description, OG, and JSON-LD for answer engines.
+ * Per-page SEO + AEO + GEO: titles, OG, and JSON-LD for search + generative engines.
  * @param {{ title?: string, description?: string, path?: string, image?: string, noindex?: boolean, type?: string, jsonLd?: object|object[] }} props
  */
 export default function Seo({
@@ -28,6 +29,7 @@ export default function Seo({
   const graphs = [
     organizationJsonLd(),
     websiteJsonLd(),
+    localBusinessJsonLd(),
     ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : []),
   ].filter(Boolean);
 

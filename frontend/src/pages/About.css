@@ -7,17 +7,37 @@
   line-height: 1;
 }
 
-.about-page .about-mission-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  align-items: start;
+.about-page .about-mission-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  gap: 1.25rem 2rem;
 }
 
-@media (min-width: 900px) {
-  .about-page .about-mission-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+.about-page .about-mission-headline {
+  flex: 0 1 auto;
+  max-width: 22rem;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.about-page .about-mission-copy {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .about-page .about-mission-row {
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .about-page .about-mission-headline {
+    max-width: none;
   }
 }
 

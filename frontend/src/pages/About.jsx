@@ -9,6 +9,7 @@ import useReducedMotion from '../hooks/useReducedMotion';
 import ProductsNav from '../components/ProductsNav';
 import Seo from '../components/Seo';
 import { PAGE_SEO } from '../seo/site';
+import { aboutPageJsonLd, GEO_ENTITY_DEFINITION, GEO_STATS } from '../seo/geo';
 import './Cinematic.css';
 import './Products.css';
 import './About.css';
@@ -124,7 +125,7 @@ export default function About() {
 
   return (
     <div ref={rootRef} className="cinematic-page products-page about-page">
-      <Seo {...PAGE_SEO.about} />
+      <Seo {...PAGE_SEO.about} jsonLd={[aboutPageJsonLd()]} />
       <div className="prod-bg pointer-events-none" aria-hidden>
         <div className="prod-bg-base" />
         <div className="prod-bg-patch prod-bg-patch--cyan" />
@@ -154,14 +155,20 @@ export default function About() {
         >
           {story.intro}
         </p>
+        <p
+          className="geo-entity-definition about-reveal mt-5 font-body text-[14px] max-w-2xl leading-relaxed"
+          style={{ color: 'var(--cin-navy)' }}
+        >
+          {GEO_ENTITY_DEFINITION}
+        </p>
         <p className="about-reveal mt-3 font-body text-[12px] uppercase tracking-[0.18em]" style={{ color: 'var(--cin-text-light)' }}>
           Based in {story.location}
         </p>
       </section>
 
-      <section className="relative z-[1] border-y border-[var(--cin-border-light)]">
+      <section className="relative z-[1] border-y border-[var(--cin-border-light)]" aria-label="Company at a glance">
         <div className="grid grid-cols-2 lg:grid-cols-4">
-          {story.stats.map((stat, idx) => (
+          {GEO_STATS.map((stat, idx) => (
             <div
               key={stat.label}
               className={`about-reveal about-stat px-8 md:px-10 py-8 md:py-10 ${
@@ -180,21 +187,19 @@ export default function About() {
       </section>
 
       <section className="relative z-[1] px-8 md:px-16 py-14 md:py-20">
-        <div className="about-mission-grid">
-          <div className="about-reveal">
-            <div className="cin-eyebrow">Mission</div>
-            <h2
-              className="font-display mt-4 cin-heading"
-              style={{
-                fontSize: 'clamp(1.5rem, 2.8vw, 2.1rem)',
-                fontWeight: 500,
-                letterSpacing: '-0.02em',
-              }}
-            >
-              Hardware you can <span className="cin-gradient-text">specify</span> with confidence.
-            </h2>
-          </div>
-          <p className="about-reveal font-body text-[15px] leading-relaxed" style={{ color: 'var(--cin-text-muted)' }}>
+        <div className="cin-eyebrow about-reveal">Mission</div>
+        <div className="about-mission-row about-reveal mt-4">
+          <h2
+            className="font-display cin-heading about-mission-headline"
+            style={{
+              fontSize: 'clamp(1.5rem, 2.8vw, 2.1rem)',
+              fontWeight: 500,
+              letterSpacing: '-0.02em',
+            }}
+          >
+            Hardware you can <span className="cin-gradient-text">specify</span> with confidence.
+          </h2>
+          <p className="about-mission-copy font-body text-[15px] leading-relaxed" style={{ color: 'var(--cin-text-muted)' }}>
             {story.mission}
           </p>
         </div>

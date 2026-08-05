@@ -68,6 +68,15 @@ Already included in the app:
 
 Keep FAQ answers factual and update contact details in `src/mock.js` + `public/llms.txt` when they change.
 
+## 9. GEO (Generative Engine Optimization)
+Already included:
+- Quotable entity definition on `/about` (+ speakable markup on home)
+- `LocalBusiness` schema with Rajkot geo coordinates
+- `AboutPage` + `HowTo` (request a quote) schema
+- Expanded `llms.txt` for generative citations
+
+Update plant coordinates in `src/seo/geo.js` if you have exact GPS for the facility.
+
 ## Security notes
 - Never put the **service_role** key in the frontend bundle or git
 - Use only the **anon** key in `REACT_APP_SUPABASE_*`
