@@ -8,6 +8,7 @@ import useReducedMotion from '../hooks/useReducedMotion';
 import ProductsNav from '../components/ProductsNav';
 import Seo from '../components/Seo';
 import { PAGE_SEO } from '../seo/site';
+import { AEO_FAQS, faqPageJsonLd } from '../seo/aeo';
 import './Cinematic.css';
 import './Products.css';
 import './Contact.css';
@@ -80,7 +81,7 @@ export default function Contact() {
 
   return (
     <div ref={rootRef} className="cinematic-page products-page contact-page">
-      <Seo {...PAGE_SEO.contact} />
+      <Seo {...PAGE_SEO.contact} jsonLd={[faqPageJsonLd()]} />
       <div className="prod-bg pointer-events-none" aria-hidden>
         <div className="prod-bg-base" />
         <div className="prod-bg-patch prod-bg-patch--cyan" />
@@ -305,6 +306,33 @@ export default function Contact() {
               </form>
             )}
           </div>
+        </div>
+      </section>
+
+      <section className="relative z-[1] px-8 md:px-16 pb-12 md:pb-16" aria-labelledby="contact-faq-heading">
+        <div className="cin-eyebrow contact-reveal">FAQ</div>
+        <h2
+          id="contact-faq-heading"
+          className="font-display mt-4 cin-heading max-w-3xl contact-reveal"
+          style={{
+            fontSize: 'clamp(1.5rem, 2.8vw, 2.1rem)',
+            fontWeight: 500,
+            letterSpacing: '-0.02em',
+          }}
+        >
+          Quick answers for <span className="cin-gradient-text">buyers</span>
+        </h2>
+        <div className="contact-faq mt-8 md:mt-10">
+          {AEO_FAQS.map((item) => (
+            <div key={item.question} className="contact-faq-item contact-reveal">
+              <h3 className="font-display text-[16px] md:text-[17px]" style={{ color: 'var(--cin-navy)', fontWeight: 500 }}>
+                {item.question}
+              </h3>
+              <p className="mt-2 font-body text-[14px] leading-relaxed" style={{ color: 'var(--cin-text-muted)' }}>
+                {item.answer}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 

@@ -2,15 +2,15 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import {
   SITE_NAME,
-  SITE_URL,
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
   absoluteUrl,
 } from '../seo/site';
+import { organizationJsonLd, websiteJsonLd } from '../seo/aeo';
 
 /**
- * Per-page SEO: title, description, canonical, Open Graph, Twitter.
- * @param {{ title?: string, description?: string, path?: string, image?: string, noindex?: boolean, type?: string }} props
+ * Per-page SEO + AEO: title, description, OG, and JSON-LD for answer engines.
+ * @param {{ title?: string, description?: string, path?: string, image?: string, noindex?: boolean, type?: string, jsonLd?: object|object[] }} props
  */
 export default function Seo({
   title,
@@ -19,10 +19,17 @@ export default function Seo({
   image = DEFAULT_OG_IMAGE,
   noindex = false,
   type = 'website',
+  jsonLd = [],
 }) {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
   const canonical = absoluteUrl(path);
   const ogImage = image?.startsWith('http') ? image : absoluteUrl(image || DEFAULT_OG_IMAGE);
+
+  const graphs = [
+    organizationJsonLd(),
+    websiteJsonLd(),
+    ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : []),
+  ].filter(Boolean);
 
   return (
     <Helmet prioritizeSeoTags>
@@ -33,7 +40,7 @@ export default function Seo({
       {noindex ? (
         <meta name="robots" content="noindex, nofollow" />
       ) : (
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
       )}
 
       <meta property="og:site_name" content={SITE_NAME} />
@@ -48,16 +55,11 @@ export default function Seo({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
 
-      <script type="application/ld+json">
-        {JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'Organization',
-          name: SITE_NAME,
-          url: SITE_URL,
-          logo: absoluteUrl('/images/javion-logo.png'),
-          description: DEFAULT_DESCRIPTION,
-        })}
-      </script>
+      {graphs.map((graph, i) => (
+        <script key={`ld-${i}`} type="application/ld+json">
+          {JSON.stringify(graph)}
+        </script>
+      ))}
     </Helmet>
   );
 }

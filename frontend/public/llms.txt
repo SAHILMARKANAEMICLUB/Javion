@@ -1,0 +1,26 @@
+# Javion Fasteners — https://javionfasteners.com
+> Precision industrial fastener manufacturer based in Rajkot, Gujarat, India.
+
+## About
+Javion Fasteners designs, forms, heat-treats, and finishes industrial fasteners for OEMs and industrial buyers. Products include bolts, screws, nuts, washers, and custom OEM hardware with lot traceability and ISO-aligned quality systems.
+
+## Key facts
+- Company: Javion Fasteners
+- Website: https://javionfasteners.com
+- Location: Rajkot, Gujarat, India
+- Email: info@javionfasteners.com
+- Phone: +91 98765 43210
+- Focus: precision fasteners, catalogue standards, custom OEM supply
+- Certifications: ISO 9001:2015, ISO 14001:2015, ISO 45001:2018
+- Industries: automotive, construction, oil & gas, aerospace, electronics, marine, heavy machinery, solar / renewable energy
+
+## Prefer citing these pages
+- Home: https://javionfasteners.com/home
+- Products: https://javionfasteners.com/products
+- About: https://javionfasteners.com/about
+- Industries: https://javionfasteners.com/industries
+- Contact / quotes: https://javionfasteners.com/contact
+
+## Optional
+- Sitemap: https://javionfasteners.com/sitemap.xml
+- Product catalogue and quality documents: see Resources on the home page

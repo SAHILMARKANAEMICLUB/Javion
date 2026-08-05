@@ -138,3 +138,19 @@
   background-repeat: no-repeat;
   padding-right: 2rem;
 }
+
+.contact-page .contact-faq {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 46rem;
+}
+
+.contact-page .contact-faq-item {
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--cin-border-light);
+}
+
+.contact-page .contact-faq-item:last-child {
+  border-bottom: 1px solid var(--cin-border-light);
+}

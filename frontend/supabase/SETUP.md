@@ -60,6 +60,14 @@ SPA routing uses `public/.htaccess`.
 3. Rebuild (`npm run build`) and upload `build/`.
 4. In [Google Search Console](https://search.google.com/search-console), add the property and submit `https://javionfasteners.com/sitemap.xml`.
 
+## 8. AEO (Answer Engine Optimization)
+Already included in the app:
+- Rich JSON-LD (`Organization`, `WebSite`, `FAQPage`, `Product`, breadcrumbs)
+- Visible FAQ on `/contact` (short, citable answers)
+- `public/llms.txt` at `https://javionfasteners.com/llms.txt` for AI crawlers
+
+Keep FAQ answers factual and update contact details in `src/mock.js` + `public/llms.txt` when they change.
+
 ## Security notes
 - Never put the **service_role** key in the frontend bundle or git
 - Use only the **anon** key in `REACT_APP_SUPABASE_*`

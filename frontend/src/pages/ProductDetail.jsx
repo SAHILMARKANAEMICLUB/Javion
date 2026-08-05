@@ -9,6 +9,7 @@ import useReducedMotion from '../hooks/useReducedMotion';
 import ProductsNav from '../components/ProductsNav';
 import Seo from '../components/Seo';
 import { PAGE_SEO } from '../seo/site';
+import { breadcrumbJsonLd, productJsonLd } from '../seo/aeo';
 import './Cinematic.css';
 import './Products.css';
 
@@ -103,6 +104,7 @@ export default function ProductDetail() {
 
   const gallery = product.gallery?.length ? product.gallery : [product.image];
   const heroSrc = gallery[activeImage] || product.image;
+  const productPath = `/products/${product.slug || productId}`;
 
   return (
     <div ref={rootRef} className="cinematic-page products-page product-detail-page">
@@ -111,9 +113,17 @@ export default function ProductDetail() {
         description={
           product.description || `${product.name} — precision fasteners from Javion.`
         }
-        path={`/products/${product.slug || productId}`}
+        path={productPath}
         image={product.image}
         type="product"
+        jsonLd={[
+          productJsonLd(product, productPath),
+          breadcrumbJsonLd([
+            { name: 'Home', path: '/home' },
+            { name: 'Products', path: '/products' },
+            { name: product.name, path: productPath },
+          ]),
+        ]}
       />
       <div className="prod-bg pointer-events-none" aria-hidden>
         <div className="prod-bg-base" />
