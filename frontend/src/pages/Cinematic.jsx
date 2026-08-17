@@ -14,6 +14,7 @@ import IndustriesWeServe from '../components/cinematic/IndustriesWeServe';
 import DocumentsResources from '../components/cinematic/DocumentsResources';
 import GlobalFeatures from '../components/GlobalFeatures';
 import { headlineBlurIn } from '../utils/cinematicAnimations';
+import blueprintFooter from '../assets/blueprint-footer-navy.png';
 import './Cinematic.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -643,6 +644,8 @@ function FinaleOutro({ reduced }) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      gsap.set('.finale-blueprint', { y: '70%', opacity: 0 });
+
       headlineBlurIn('.end-line .cin-word', {
         reduced,
         scrollTrigger: { trigger: '.end-line', start: 'top 80%' },
@@ -660,9 +663,26 @@ function FinaleOutro({ reduced }) {
       });
 
       if (reduced) {
+        gsap.set('.finale-blueprint', { y: 0, opacity: 0.55 });
         gsap.set('.finale-brand-word', { y: 0, filter: 'none', opacity: 1 });
         return;
       }
+
+      gsap.fromTo(
+        '.finale-blueprint',
+        { y: '70%', opacity: 0 },
+        {
+          y: '0%',
+          opacity: 0.55,
+          duration: 1.35,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.finale-brand-stage',
+            start: 'top 95%',
+            once: true,
+          },
+        }
+      );
 
       gsap.fromTo(
         '.finale-brand-word',
@@ -699,6 +719,19 @@ function FinaleOutro({ reduced }) {
           background: `linear-gradient(180deg, ${THEME.bg} 0%, ${THEME.bgWhite} 18%, ${THEME.bg} 100%)`,
         }}
       />
+
+      {/* Blueprint band — behind JAVION wordmark */}
+      <div
+        className="finale-blueprint pointer-events-none select-none absolute inset-x-0 bottom-0 z-[1]"
+        aria-hidden="true"
+      >
+        <img
+          src={blueprintFooter}
+          alt=""
+          loading="lazy"
+          className="block w-full h-auto"
+        />
+      </div>
 
       <div className="relative z-[2]">
         <div className="overflow-hidden pt-16 md:pt-24 pb-0">

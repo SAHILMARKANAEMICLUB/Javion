@@ -9,7 +9,7 @@ import { JAVION_CONTACT } from '../mock';
 
 /** One-sentence entity definition generative models can quote. */
 export const GEO_ENTITY_DEFINITION =
-  'Javion Fasteners is an industrial fastener manufacturer in Rajkot, Gujarat, India that produces precision bolts, screws, nuts, washers, and custom OEM hardware with lot traceability and ISO-aligned quality systems.';
+  'Javion Fasteners is an industrial fastener manufacturer in Vadodara, Gujarat, India that produces precision bolts, screws, nuts, washers, and custom OEM hardware with lot traceability and ISO-aligned quality systems.';
 
 /** Short stats generative engines prefer to cite. */
 export const GEO_STATS = [
@@ -19,10 +19,10 @@ export const GEO_STATS = [
   { label: 'Lot traceability', value: '100%' },
 ];
 
-/** Approximate geo for LocalBusiness (Rajkot, Gujarat). Update if you have exact plant coords. */
+/** Approximate geo for LocalBusiness (Vadodara, Gujarat). Update if you have exact plant coords. */
 export const GEO_COORDINATES = {
-  latitude: 22.3039,
-  longitude: 70.8022,
+  latitude: 22.3072,
+  longitude: 72.1672,
 };
 
 export function localBusinessJsonLd() {
@@ -39,9 +39,9 @@ export function localBusinessJsonLd() {
     address: {
       '@type': 'PostalAddress',
       streetAddress: JAVION_CONTACT.address,
-      addressLocality: 'Rajkot',
+      addressLocality: 'Vadodara',
       addressRegion: 'Gujarat',
-      postalCode: '360001',
+      postalCode: '390001',
       addressCountry: 'IN',
     },
     geo: {

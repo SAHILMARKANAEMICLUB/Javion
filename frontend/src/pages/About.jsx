@@ -51,6 +51,45 @@ export default function About() {
         scrollTrigger: { trigger: '.about-hero', start: 'top 78%' },
       });
 
+      const facility = root.querySelector('.about-facility');
+      if (facility) {
+        if (reduced) {
+          gsap.set(facility, { clearProps: 'all' });
+        } else {
+          gsap.fromTo(
+            facility,
+            { y: 80, opacity: 0, scale: 0.96 },
+            {
+              y: 0,
+              opacity: 1,
+              scale: 1,
+              duration: 1.15,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: facility,
+                start: 'top 88%',
+                once: true,
+              },
+            }
+          );
+          gsap.fromTo(
+            facility.querySelector('img'),
+            { yPercent: 12, scale: 1.08 },
+            {
+              yPercent: 0,
+              scale: 1,
+              duration: 1.35,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: facility,
+                start: 'top 88%',
+                once: true,
+              },
+            }
+          );
+        }
+      }
+
       const timelineWrap = root.querySelector('.about-timeline-wrap');
       const progress = root.querySelector('.about-timeline-rail-progress');
       const items = gsap.utils.toArray('.about-timeline-item');
@@ -203,6 +242,20 @@ export default function About() {
             {story.mission}
           </p>
         </div>
+      </section>
+
+      <section className="relative z-[1] px-8 md:px-16 pb-14 md:pb-20" aria-label="Our facility">
+        <div className="about-facility overflow-hidden">
+          <img
+            src={story.facility.src}
+            alt={story.facility.alt}
+            loading="lazy"
+            onError={onCinematicImgError}
+          />
+        </div>
+        <p className="about-reveal mt-4 font-body text-[12px] uppercase tracking-[0.18em]" style={{ color: 'var(--cin-text-light)' }}>
+          Our plant · {story.location}
+        </p>
       </section>
 
       <section className="relative z-[1] border-y border-[var(--cin-border-light)]">

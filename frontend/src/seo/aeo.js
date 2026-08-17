@@ -7,7 +7,7 @@ export const AEO_FACTS = {
   legalName: 'Javion Fasteners',
   url: SITE_URL,
   description: DEFAULT_DESCRIPTION,
-  foundingLocation: 'Rajkot, Gujarat, India',
+  foundingLocation: 'Vadodara, Gujarat, India',
   products: [
     'bolts',
     'screws',
@@ -46,7 +46,7 @@ export const AEO_FAQS = [
   {
     question: 'Where is Javion Fasteners located?',
     answer:
-      'Javion Fasteners is based in Rajkot, Gujarat, India, and supplies OEMs and industrial buyers across multiple industries.',
+      'Javion Fasteners is based in Vadodara, Gujarat, India, and supplies OEMs and industrial buyers across multiple industries.',
   },
   {
     question: 'Which industries does Javion Fasteners serve?',
@@ -78,7 +78,7 @@ export function organizationJsonLd() {
     address: {
       '@type': 'PostalAddress',
       streetAddress: JAVION_CONTACT.address,
-      addressLocality: 'Rajkot',
+      addressLocality: 'Vadodara',
       addressRegion: 'Gujarat',
       addressCountry: 'IN',
     },

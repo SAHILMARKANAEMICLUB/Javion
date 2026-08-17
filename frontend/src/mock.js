@@ -662,7 +662,7 @@ export const INDUSTRIES = [
 export const JAVION_CONTACT = {
   phone: '+91 98765 43210',
   email: 'info@javionfasteners.com',
-  address: 'Industrial Estate, Rajkot, Gujarat, India',
+  address: 'Industrial Estate, Vadodara, Gujarat, India',
   whatsapp: '919876543210',
 };
 
@@ -674,7 +674,7 @@ export const ABOUT_STORY = {
     'Javion Fasteners began with a simple belief: every joint in a machine, structure, or vehicle deserves hardware that holds — batch after batch, year after year.',
   mission:
     'We design, form, heat-treat, and finish fasteners for OEMs and industrial buyers who need traceable quality, reliable lead times, and partners who speak the language of drawings and tolerances.',
-  location: 'Rajkot, Gujarat, India',
+  location: 'Vadodara, Gujarat, India',
   stats: [
     { value: '25+', label: 'Years of craft' },
     { value: '3', label: 'ISO systems' },
@@ -717,6 +717,10 @@ export const ABOUT_STORY = {
       text: 'We work from drawings, PPAP when required, and honest lead times — not vague promises.',
     },
   ],
+  facility: {
+    src: '/images/about/facility-exterior.jpg',
+    alt: 'Javion Industries facility exterior in Vadodara',
+  },
   gallery: [
     { src: CINEMATIC_IMG.factoryFloor, alt: 'Production floor' },
     { src: CINEMATIC_IMG.threading, alt: 'Thread rolling' },

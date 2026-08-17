@@ -915,6 +915,11 @@
   background: transparent;
 }
 
+.cin-page-footer .finale-brand-stage {
+  /* Keep wordmark above the blueprint band */
+  z-index: 3;
+}
+
 .finale-brand-word {
   position: absolute;
   left: 0;

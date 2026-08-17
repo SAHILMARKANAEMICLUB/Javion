@@ -182,6 +182,23 @@
   height: 100%;
 }
 
+.about-page .about-facility {
+  border-radius: 16px;
+  border: 1px solid var(--cin-border-light);
+  overflow: hidden;
+  background: var(--cin-bg-alt);
+  aspect-ratio: 16 / 9;
+  will-change: transform, opacity;
+}
+
+.about-page .about-facility img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  will-change: transform;
+}
+
 .about-page .about-gallery-section {
   overflow: hidden;
 }
