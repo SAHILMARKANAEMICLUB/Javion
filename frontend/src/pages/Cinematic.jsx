@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { CINEMATIC_IMG, onCinematicImgError } from '../mock';
+import { CINEMATIC_IMG, HERO_COLLAGE_IMAGES, onCinematicImgError } from '../mock';
 import useReducedMotion from '../hooks/useReducedMotion';
 import useCinematicScroll from '../hooks/useCinematicScroll';
 import ProductsNav from '../components/ProductsNav';
 import Seo from '../components/Seo';
 import { PAGE_SEO } from '../seo/site';
-import { speakableJsonLd, GEO_ENTITY_DEFINITION } from '../seo/geo';
+import { homePageJsonLd, GEO_ENTITY_DEFINITION } from '../seo/geo';
 import CertificationsQuality from '../components/cinematic/CertificationsQuality';
 import IndustriesWeServe from '../components/cinematic/IndustriesWeServe';
 import DocumentsResources from '../components/cinematic/DocumentsResources';
@@ -85,50 +85,269 @@ function useTilt(max = 8, glow = false) {
   return ref;
 }
 
-function updateCoverflow(track) {
+function updateCoverflow(track, stageEl) {
   if (!track) return;
   const panels = track.querySelectorAll('.h-panel');
-  const center = window.innerWidth / 2;
+  const stage = stageEl || track.closest('.process-act-stage');
+  const stageRect = stage?.getBoundingClientRect();
+  const center = stageRect
+    ? stageRect.left + stageRect.width / 2
+    : window.innerWidth / 2;
+  const span = stageRect?.width ?? window.innerWidth;
+  const isMobile = span < 768;
+  const rotScale = isMobile ? 22 : 38;
+  const opacityFalloff = isMobile ? 0.65 : 0.9;
+
   panels.forEach((panel) => {
     const rect = panel.getBoundingClientRect();
     const panelCenter = rect.left + rect.width / 2;
-    const dist = (panelCenter - center) / window.innerWidth;
-    const rotY = dist * -38;
+    const dist = (panelCenter - center) / span;
+    const rotY = dist * -rotScale;
     const z = 80 - Math.abs(dist) * 120;
-    const opacity = 1 - Math.min(Math.abs(dist) * 0.9, 0.55);
-    const scale = 1 - Math.min(Math.abs(dist) * 0.12, 0.1);
+    const opacity = 1 - Math.min(Math.abs(dist) * opacityFalloff, isMobile ? 0.35 : 0.55);
+    const scale = 1 - Math.min(Math.abs(dist) * 0.12, isMobile ? 0.06 : 0.1);
     panel.style.transform = `rotateY(${rotY}deg) translateZ(${z}px) scale(${scale})`;
     panel.style.opacity = String(opacity);
   });
 }
 
+/** Horizontal travel so the last process card centers in the stage (not raw window). */
+function getProcessScrollDistance(track, wrap) {
+  const panels = track.querySelectorAll('.h-panel');
+  if (!panels.length) return 0;
+
+  const stage = wrap.querySelector('.process-act-stage');
+  const viewportW = stage?.clientWidth ?? window.innerWidth;
+  const viewportCenter = viewportW / 2;
+  const last = panels[panels.length - 1];
+  const trackX = Number(gsap.getProperty(track, 'x')) || 0;
+  const trackRect = track.getBoundingClientRect();
+  const lastRect = last.getBoundingClientRect();
+  const lastCenterInTrack =
+    lastRect.left - trackRect.left - trackX + lastRect.width / 2;
+
+  return Math.max(0, lastCenterInTrack - viewportCenter);
+}
+
+function processActScrollLength(track, wrap) {
+  const travel = getProcessScrollDistance(track, wrap);
+  const isMobile = window.matchMedia('(max-width: 767px)').matches;
+  const minScroll = window.innerHeight * (isMobile ? 0.85 : 0.5);
+  return Math.max(travel * (isMobile ? 1.25 : 1.05), minScroll);
+}
+
 /* ============== SCENE 1: FACTORY SHOWCASE COLLAGE (HERO) ============== */
-const SCATTER_TILES = [
-  { src: IMG.factoryFloor,   alt: 'Javion Fasteners production floor',           l: 6,  t: 5,   w: 13, h: 62, z: -200, rotY: 12,  rotX: -4,  curve: -18 },
-  { src: IMG.cncMachine,     alt: 'CNC machining centre',                        l: 24, t: -1,  w: 19, h: 50, z: -120, rotY: -8,  rotX: 3,   curve: -10 },
-  { src: IMG.fasteners,      alt: 'Precision bolts and fasteners',               l: 57, t: 8,   w: 16, h: 55, z: -60,  rotY: 6,   rotX: -2,  curve: 0 },
-  { src: IMG.threading,      alt: 'Thread rolling and lathe work',               l: 80, t: 3,   w: 14, h: 66, z: 80,   rotY: -14, rotX: 5,   curve: 10 },
-  { src: IMG.warehouse,      alt: 'Finished goods warehouse',                    l: 9,  t: 60,  w: 14, h: 36, z: 40,   rotY: 10,  rotX: -6,  curve: -14 },
-  { src: IMG.qualityCheck,   alt: 'Quality inspection on the line',              l: 27, t: 56,  w: 25, h: 42, z: -150, rotY: -5,  rotX: 4,   curve: -6 },
-  { src: IMG.assemblyLine,   alt: 'Assembly and packaging area',                 l: 62, t: 62,  w: 13, h: 34, z: 100,  rotY: 8,   rotX: -3,  curve: 14 },
-  { src: IMG.industrialPlant, alt: 'Manufacturing facility overview',            l: 80, t: 56,  w: 14, h: 42, z: 150,  rotY: -10, rotX: 2,   curve: 18 },
+/* Landscape blueprint PNGs — wider tiles so object-contain shows the full drawing */
+const SCATTER_LAYOUT = [
+  { alt: 'Hex head bolt — engineering drawing',           l: 2,  t: 6,   w: 32, h: 24, z: -200, rotY: 12,  rotX: -4,  curve: -18 },
+  { alt: 'Fastener technical schematic',                  l: 34, t: 4,   w: 22, h: 26, z: -120, rotY: -8,  rotX: 3,   curve: -10 },
+  { alt: 'Precision bolt blueprint',                      l: 56, t: 8,   w: 22, h: 24, z: -60,  rotY: 6,   rotX: -2,  curve: 0 },
+  { alt: 'Threaded fastener drawing',                     l: 78, t: 6,   w: 20, h: 26, z: 80,   rotY: -14, rotX: 5,   curve: 10 },
+  { alt: 'Hex head and socket cap screw drawings',        l: 3,  t: 34,  w: 34, h: 32, z: 40,   rotY: 10,  rotX: -6,  curve: -14 },
+  { alt: 'Industrial fastener specification',             l: 38, t: 38,  w: 22, h: 28, z: -150, rotY: -5,  rotX: 4,   curve: -6 },
+  { alt: 'Mechanical fastener detail',                    l: 62, t: 40,  w: 20, h: 26, z: 100,  rotY: 8,   rotX: -3,  curve: 14 },
+  { alt: 'Fastener family — technical overview',          l: 8,  t: 66,  w: 84, h: 28, z: 150,  rotY: -6,  rotX: 2,   curve: 12 },
 ];
+
+/*
+ * Mobile grid — top/bottom bands hug a ~34–52% text band (no huge vertical gap).
+ * Tile 8 spans full width on the bottom row.
+ */
+const SCATTER_LAYOUT_MOBILE = [
+  { alt: 'Hex head bolt — engineering drawing',           l: 1.5, t: 8,   w: 48, h: 12, z: -60,  rotY: 2,  rotX: 0,  curve: -3 },
+  { alt: 'Fastener technical schematic',                  l: 50.5, t: 8,   w: 48, h: 12, z: -50,  rotY: -2, rotX: 0,  curve: -2 },
+  { alt: 'Precision bolt blueprint',                      l: 1.5, t: 20,  w: 48, h: 12, z: -40,  rotY: 2,  rotX: 0,  curve: 0 },
+  { alt: 'Threaded fastener drawing',                     l: 50.5, t: 20,  w: 48, h: 12, z: 35,   rotY: -2, rotX: 0,  curve: 2 },
+  { alt: 'Hex head and socket cap screw drawings',        l: 1.5, t: 52,  w: 48, h: 11, z: 30,   rotY: 2,  rotX: 0,  curve: -2 },
+  { alt: 'Industrial fastener specification',             l: 50.5, t: 52,  w: 48, h: 11, z: -45, rotY: -2, rotX: 0,  curve: -2 },
+  { alt: 'Mechanical fastener detail',                    l: 1.5, t: 63,  w: 48, h: 10, z: 45,   rotY: 2,  rotX: 0,  curve: 2 },
+  { alt: 'Fastener family — technical overview',          l: 3,   t: 73,  w: 94, h: 10, z: 55,   rotY: 0,  rotX: 0,  curve: 0 },
+];
+
+function scatterTilesFromLayout(layout) {
+  return layout.map((tile, i) => ({
+    ...tile,
+    src: HERO_COLLAGE_IMAGES[i] || CINEMATIC_IMG.factoryFloor,
+  }));
+}
 
 function applyTileParallax(section, mouse) {
   if (!section) return;
   section.querySelectorAll('[data-tile-index]').forEach((el) => {
-    const i = Number(el.dataset.tileIndex);
-    const tile = SCATTER_TILES[i];
-    if (!tile) return;
-    const px = -mouse.x * (Math.abs(tile.z) / 50);
-    const py = -mouse.y * (Math.abs(tile.z) / 50);
+    const z = Number(el.dataset.tileZ) || 0;
+    const px = -mouse.x * (Math.abs(z) / 50);
+    const py = -mouse.y * (Math.abs(z) / 50);
     el.style.transform = `translate3d(${px}px, ${py}px, 0)`;
   });
+}
+
+function buildScatterTimeline(scatter, layout, {
+  scrollEnd = '+=600%',
+  tunnelZoom = 2.35,
+  tunnelHoldScale = 1.35,
+  textZoomScale = 5.5,
+  curveMult = 1,
+} = {}) {
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: scatter,
+      start: 'top top',
+      end: scrollEnd,
+      pin: true,
+      pinSpacing: true,
+      scrub: 0.55,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+    },
+  });
+
+  tl.fromTo('.tile',
+    {
+      xPercent: -50,
+      yPercent: -50,
+      left: '50%',
+      top: '50%',
+      width: '8%',
+      height: '8%',
+      scale: 0.35,
+      opacity: 0,
+    },
+    {
+      xPercent: 0,
+      yPercent: 0,
+      left:   (i) => `${layout[i].l}%`,
+      top:    (i) => `${layout[i].t}%`,
+      width:  (i) => `${layout[i].w}%`,
+      height: (i) => `${layout[i].h}%`,
+      scale: 1,
+      opacity: 1,
+      ease: 'power2.out',
+      stagger: 0.02,
+      duration: 0.52,
+    },
+    0
+  );
+
+  tl.fromTo('.tile-3d',
+    { rotateY: 0, rotateX: 0, z: -300 },
+    {
+      rotateY: (i) => layout[i].rotY,
+      rotateX: (i) => layout[i].rotX,
+      z: (i) => layout[i].z,
+      ease: 'power2.out',
+      stagger: 0.02,
+      duration: 0.52,
+    },
+    0
+  );
+
+  tl.from('.ornament', { y: -20, opacity: 0, duration: 0.3, ease: 'power2.out' }, 0.1);
+
+  const zoomStart = 0.3;
+  const zoomHold = 0.95;
+  const zoomExit = 0.14;
+  const textZoomExit = 0.38;
+
+  tl.to('.tunnel-wrap', {
+    rotateY: 14,
+    scale: tunnelHoldScale,
+    z: 48,
+    ease: 'none',
+    duration: zoomHold,
+  }, zoomStart);
+
+  tl.to('.scatter-text', {
+    scale: 1.06,
+    opacity: 1,
+    y: 0,
+    ease: 'none',
+    duration: zoomHold,
+  }, zoomStart);
+
+  tl.to('.tile', {
+    scale: 1.06,
+    opacity: 0.92,
+    ease: 'none',
+    duration: zoomHold,
+  }, zoomStart);
+
+  tl.to('.tile-3d', {
+    rotateY: (i) => layout[i].rotY + layout[i].curve * 0.45 * curveMult,
+    rotateX: (i) => layout[i].rotX * 0.55,
+    z: (i) => layout[i].z + 60,
+    ease: 'none',
+    duration: zoomHold,
+  }, zoomStart);
+
+  const zoomFinish = zoomStart + zoomHold;
+
+  tl.to('.tunnel-wrap', {
+    rotateY: 34,
+    scale: tunnelZoom,
+    z: 180,
+    ease: 'power4.in',
+    duration: zoomExit,
+  }, zoomFinish);
+
+  tl.to('.scatter-text', {
+    scale: textZoomScale,
+    opacity: 0,
+    y: -40,
+    ease: 'power3.inOut',
+    duration: textZoomExit,
+  }, zoomFinish);
+
+  tl.to('.tile', {
+    scale: 1.45,
+    opacity: 0,
+    ease: 'power4.in',
+    duration: zoomExit,
+  }, zoomFinish);
+
+  tl.to('.tile-3d', {
+    rotateY: (i) => layout[i].rotY + layout[i].curve * 2.2 * curveMult,
+    rotateX: (i) => layout[i].rotX * 1.4,
+    z: (i) => layout[i].z + 320,
+    ease: 'power4.in',
+    duration: zoomExit,
+  }, zoomFinish);
+
+  return tl;
 }
 
 function ScatterCollage({ reduced }) {
   const sectionRef = useRef(null);
   const mouseRef = useRef({ x: 0, y: 0 });
+  const [isMobileLayout, setIsMobileLayout] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches
+  );
+  const [finePointer, setFinePointer] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches
+  );
+
+  const activeLayout = isMobileLayout ? SCATTER_LAYOUT_MOBILE : SCATTER_LAYOUT;
+  const scatterTiles = useMemo(() => scatterTilesFromLayout(activeLayout), [activeLayout]);
+
+  useEffect(() => {
+    const mobileMq = window.matchMedia('(max-width: 767px)');
+    const pointerMq = window.matchMedia('(pointer: fine)');
+    const onMobile = () => setIsMobileLayout(mobileMq.matches);
+    const onPointer = () => setFinePointer(pointerMq.matches);
+    onMobile();
+    onPointer();
+    mobileMq.addEventListener('change', onMobile);
+    pointerMq.addEventListener('change', onPointer);
+    return () => {
+      mobileMq.removeEventListener('change', onMobile);
+      pointerMq.removeEventListener('change', onPointer);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (reduced) return undefined;
+    const id = requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => cancelAnimationFrame(id);
+  }, [isMobileLayout, reduced]);
 
   const onMouseMove = useCallback((e) => {
     const rect = sectionRef.current?.getBoundingClientRect();
@@ -153,95 +372,26 @@ function ScatterCollage({ reduced }) {
         return;
       }
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: scatter,
-          start: 'top top',
-          end: '+=480%',
-          pin: true,
-          pinSpacing: true,
-          scrub: 1.15,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
+      ScrollTrigger.matchMedia({
+        '(min-width: 768px)': () => {
+          buildScatterTimeline(scatter, SCATTER_LAYOUT, {
+            scrollEnd: '+=600%',
+            tunnelZoom: 2.35,
+            tunnelHoldScale: 1.35,
+            textZoomScale: 5.5,
+            curveMult: 1,
+          });
+        },
+        '(max-width: 767px)': () => {
+          buildScatterTimeline(scatter, SCATTER_LAYOUT_MOBILE, {
+            scrollEnd: '+=400%',
+            tunnelZoom: 1.65,
+            tunnelHoldScale: 1.12,
+            textZoomScale: 3.2,
+            curveMult: 0.35,
+          });
         },
       });
-
-      tl.fromTo('.tile',
-        {
-          xPercent: -50,
-          yPercent: -50,
-          left: '50%',
-          top: '50%',
-          width: '8%',
-          height: '8%',
-          scale: 0.35,
-          opacity: 0,
-        },
-        {
-          xPercent: 0,
-          yPercent: 0,
-          left:   (i) => `${SCATTER_TILES[i].l}%`,
-          top:    (i) => `${SCATTER_TILES[i].t}%`,
-          width:  (i) => `${SCATTER_TILES[i].w}%`,
-          height: (i) => `${SCATTER_TILES[i].h}%`,
-          scale: 1,
-          opacity: 1,
-          ease: 'power3.out',
-          stagger: 0.04,
-          duration: 0.85,
-        },
-        0
-      );
-
-      tl.fromTo('.tile-3d',
-        { rotateY: 0, rotateX: 0, z: -300 },
-        {
-          rotateY: (i) => SCATTER_TILES[i].rotY,
-          rotateX: (i) => SCATTER_TILES[i].rotX,
-          z: (i) => SCATTER_TILES[i].z,
-          ease: 'power3.out',
-          stagger: 0.04,
-          duration: 0.85,
-        },
-        0
-      );
-
-      tl.from('.ornament', { y: -20, opacity: 0, duration: 0.45, ease: 'power2.out' }, 0.15);
-
-      /* Long zoom-out — keeps running through scroll into section 3 handoff */
-      const zoomStart = 0.42;
-      const zoomDuration = 1.75;
-
-      tl.to('.tunnel-wrap', {
-        rotateY: 34,
-        scale: 2.35,
-        z: 180,
-        ease: 'power1.in',
-        duration: zoomDuration,
-      }, zoomStart);
-
-      tl.to('.scatter-text', {
-        scale: 5.5,
-        opacity: 0,
-        y: -40,
-        ease: 'power1.in',
-        duration: zoomDuration,
-      }, zoomStart);
-
-      tl.to('.tile', {
-        scale: 1.45,
-        opacity: 0,
-        ease: 'power1.in',
-        duration: zoomDuration,
-      }, zoomStart);
-
-      tl.to('.tile-3d', {
-        rotateY: (i) => SCATTER_TILES[i].rotY + SCATTER_TILES[i].curve * 2.2,
-        rotateX: (i) => SCATTER_TILES[i].rotX * 1.4,
-        z: (i) => SCATTER_TILES[i].z + 320,
-        ease: 'power1.in',
-        duration: zoomDuration,
-      }, zoomStart);
     }, scatter);
 
     return () => ctx.revert();
@@ -251,9 +401,9 @@ function ScatterCollage({ reduced }) {
     <section
       ref={sectionRef}
       id="scatter"
-      className="ov-section relative w-full overflow-hidden cin-section-flow"
-      style={{ height: '100vh', perspective: '1200px' }}
-      onMouseMove={onMouseMove}
+      className="ov-section scatter-section relative w-full overflow-hidden cin-section-flow"
+      style={{ perspective: '1200px' }}
+      onMouseMove={finePointer ? onMouseMove : undefined}
       data-chapter="01"
     >
       <div className="scatter-bg pointer-events-none absolute inset-0 z-0" aria-hidden>
@@ -266,57 +416,50 @@ function ScatterCollage({ reduced }) {
         <div className="scatter-bg-grain" />
       </div>
       <div className="tunnel-wrap absolute inset-0 z-[1]" style={{ transformStyle: 'preserve-3d', transformOrigin: '50% 50%' }}>
-        {SCATTER_TILES.map((tile, i) => (
+        {scatterTiles.map((tile, i) => (
           <div
             key={i}
-            className="tile absolute"
+            className="tile scatter-tile absolute"
             style={{
-              borderRadius: 4,
               willChange: 'left, top, width, height, filter, opacity',
-              boxShadow: `${tile.z > 0 ? '0 20px 50px -12px' : '0 12px 32px -16px'} rgba(15,23,42,${0.12 + Math.abs(tile.z) / 800})`,
               transformStyle: 'preserve-3d',
             }}
           >
-            <div className="tile-3d w-full h-full overflow-hidden" style={{ transformStyle: 'preserve-3d', borderRadius: 4 }}>
-              <div className="tile-parallax relative w-full h-full" data-tile-index={i}>
+            <div className="tile-3d scatter-tile-3d w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
+              <div
+                className="tile-parallax relative w-full h-full flex items-center justify-center"
+                data-tile-index={i}
+                data-tile-z={tile.z}
+              >
                 <img
                   src={tile.src}
-                  alt={tile.alt || 'Manufacturing'}
-                  className="w-full h-full object-cover"
-                  style={{ filter: 'brightness(1.02) contrast(1.06) saturate(0.95)' }}
-                  loading="eager"
+                  alt={tile.alt || 'Fastener blueprint'}
+                  className="scatter-hero-img max-w-full max-h-full w-full h-full"
+                  loading={i < 2 ? 'eager' : 'lazy'}
                   decoding="async"
+                  fetchPriority={i === 0 ? 'high' : undefined}
                   onError={onCinematicImgError}
                 />
-                <div className="absolute inset-0 pointer-events-none" style={{
-                  background: `linear-gradient(${135 + tile.rotY}deg, transparent 0%, transparent 50%, rgba(15,29,55,0.06) 100%)`,
-                }} />
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="relative h-full w-full flex flex-col items-center justify-center px-6 pointer-events-none z-[2]" style={{ transformStyle: 'preserve-3d' }}>
+      <div className="scatter-copy-wrap relative h-full w-full flex flex-col items-center justify-center pointer-events-none z-[2]" style={{ transformStyle: 'preserve-3d' }}>
         <div
           className="scatter-text text-center"
           style={{
             color: THEME.text,
-            maxWidth: 560,
             willChange: 'transform, opacity, filter',
             transformOrigin: '50% 50%',
           }}
         >
-          <div className="cin-eyebrow mb-4">Inside the factory</div>
-          <h2 className="font-body" style={{
-            fontSize: 'clamp(20px, 2.2vw, 30px)',
-            fontWeight: 500,
-            lineHeight: 1.45,
-            letterSpacing: '-0.005em',
-          }}>
-            A visual showcase of{' '}
+          <div className="cin-eyebrow scatter-eyebrow mb-4">Engineering &amp; precision</div>
+          <h2 className="scatter-text-lede hero-headline font-body">
+            Technical drawings and fastener specifications from{' '}
             <em className="cin-gradient-text italic" style={{ fontWeight: 700 }}>Javion Fasteners</em>
-            {' '}— our factory floor, precision machinery, and the manufacturing environment where every bolt is engineered to spec.
+            {' '}— engineered at our G.I.D.C Waghodia, Vadodara plant before every bolt hits the line.
           </h2>
         </div>
       </div>
@@ -328,8 +471,22 @@ function ScatterCollage({ reduced }) {
 
 /* ============== SCENE 4: 3D HORIZONTAL CAROUSEL ============== */
 const PROCESS_PANELS = [
-  { n: '01', t: 'Design & Spec', d: 'Drawings, tolerances, and material grades locked before a single bar hits the line.', img: IMG.designSpec },
-  { n: '02', t: 'Cold Forming', d: 'Headers, threads, and shanks shaped on multi-stage cold headers and thread rollers.', img: IMG.threading },
+  {
+    n: '01',
+    t: 'Design & Spec',
+    d: 'Drawings, tolerances, and material grades locked before a single bar hits the line.',
+    img: '/images/process/design-spec-blueprint.jpg',
+    imgPosition: '50% 42%',
+    imgFilter: 'brightness(1.02) contrast(1.05) saturate(0.98)',
+  },
+  {
+    n: '02',
+    t: 'Cold Forming',
+    d: 'Headers, threads, and shanks shaped on multi-stage cold headers and thread rollers.',
+    img: '/images/process/cold-forming.jpg',
+    imgPosition: '50% 42%',
+    imgFilter: 'brightness(0.95) contrast(1.06) saturate(1.02)',
+  },
   { n: '03', t: 'Heat Treat', d: 'Quench, temper, and case hardening to Grade 8.8, 10.9, and customer spec.', img: IMG.forge },
   { n: '04', t: 'QC & Testing', d: 'Dimensional checks, tensile tests, and coating verification on every batch.', img: IMG.qualityCheck },
   { n: '05', t: 'Pack & Ship', d: 'Bagged, labelled, and dispatched — traceable from furnace to your site.', img: IMG.warehouse },
@@ -362,40 +519,40 @@ function HorizontalAct({ reduced }) {
         blur: 14,
       });
 
-      /** Scroll far enough that the last panel (Pack & Ship) centers in the viewport. */
-      const distance = () => {
-        const panels = track.querySelectorAll('.h-panel');
-        if (!panels.length) return Math.max(0, track.scrollWidth - window.innerWidth);
-
-        const last = panels[panels.length - 1];
-        const lastCenter = last.offsetLeft + last.offsetWidth / 2;
-        return Math.max(0, lastCenter - window.innerWidth / 2);
-      };
+      const stage = wrap.querySelector('.process-act-stage');
+      const isMobile = () => window.matchMedia('(max-width: 767px)').matches;
 
       gsap.to(track, {
-        x: () => -distance(),
+        x: () => -getProcessScrollDistance(track, wrap),
         ease: 'none',
         scrollTrigger: {
           trigger: wrap,
           scroller,
           start: 'top top',
-          end: () => '+=' + Math.max(distance(), window.innerHeight * 0.5),
+          end: () => `+=${processActScrollLength(track, wrap)}`,
           pin: true,
           pinSpacing: true,
-          scrub: 1,
+          scrub: isMobile() ? 0.65 : 1,
           anticipatePin: 0,
           invalidateOnRefresh: true,
-          onUpdate: () => updateCoverflow(track),
-          onRefresh: () => updateCoverflow(track),
+          onUpdate: () => updateCoverflow(track, stage),
+          onRefresh: () => updateCoverflow(track, stage),
         },
       });
 
       requestAnimationFrame(() => {
-        updateCoverflow(track);
+        updateCoverflow(track, stage);
         ScrollTrigger.refresh();
       });
     }, wrapRef);
-    return () => ctx.revert();
+
+    const onResize = () => ScrollTrigger.refresh();
+    window.addEventListener('resize', onResize, { passive: true });
+
+    return () => {
+      window.removeEventListener('resize', onResize);
+      ctx.revert();
+    };
   }, [reduced]);
 
   return (
@@ -419,7 +576,7 @@ function HorizontalAct({ reduced }) {
       <div className="process-act-stage">
         <div
           ref={trackRef}
-          className="process-act-track h-full flex items-center pl-[6vw] md:pl-[8vw]"
+          className="process-act-track h-full flex items-center pl-4 sm:pl-[6vw] md:pl-[8vw]"
           style={{ willChange: 'transform', perspective: '1200px', transformStyle: 'preserve-3d' }}
         >
           {PROCESS_PANELS.map((p) => (
@@ -441,13 +598,24 @@ function Panel3D({ panel: p }) {
   const tiltRef = useTilt(8, true);
 
   return (
-    <div className="h-panel shrink-0 mr-8 md:mr-14 flex flex-col justify-center" style={{ transformStyle: 'preserve-3d', opacity: 0.7 }}>
+    <div className="h-panel shrink-0 mr-5 sm:mr-8 md:mr-14 flex flex-col justify-center" style={{ transformStyle: 'preserve-3d', opacity: 0.7 }}>
       <div
         ref={tiltRef}
         className="h-panel-inner relative overflow-hidden w-full h-full"
         style={{ borderRadius: 8, transformStyle: 'preserve-3d', boxShadow: '0 24px 60px -16px rgba(15,23,42,0.18), 0 0 0 1px rgba(15,23,42,0.06)' }}
       >
-        <img src={p.img} alt={p.t} className="w-full h-full object-cover" style={{ filter: 'brightness(0.88) contrast(1.05)' }} loading="eager" decoding="async" onError={onCinematicImgError} />
+        <img
+          src={p.img}
+          alt={p.t}
+          className="w-full h-full object-cover"
+          style={{
+            filter: p.imgFilter || 'brightness(0.88) contrast(1.05)',
+            objectPosition: p.imgPosition || '50% 50%',
+          }}
+          loading="eager"
+          decoding="async"
+          onError={onCinematicImgError}
+        />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(10,29,55,0.15) 0%, rgba(10,29,55,0) 35%, rgba(10,29,55,0.75) 100%)' }} />
         <div className="absolute top-5 left-5 font-display italic cin-gradient-text" style={{ fontSize: 'clamp(40px, 5vw, 64px)', fontWeight: 400, lineHeight: 1, letterSpacing: '-0.02em' }}>
           {p.n}
@@ -825,7 +993,7 @@ export default function Cinematic() {
     <div className="cinematic-page" style={{ background: THEME.bg, color: THEME.text, cursor: 'auto' }}>
       <Seo
         {...PAGE_SEO.home}
-        jsonLd={[speakableJsonLd(['.geo-entity-definition', '.hero-headline'])]}
+        jsonLd={[homePageJsonLd()]}
       />
       <p className="geo-entity-definition sr-only">{GEO_ENTITY_DEFINITION}</p>
       <ProductsNav active="home" showProgress />

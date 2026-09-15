@@ -8,8 +8,18 @@ export function liveImageSrc(index) {
   return `${LIVE_IMAGE_BASE}${String(index + 1).padStart(3, '0')}.webp`;
 }
 
-export function sequenceScrollRoomVh(frameCount = LIVE_IMAGE_FRAME_COUNT) {
-  return (frameCount - 1) * SEQUENCE_SCROLL_VH_PER_FRAME;
+export function sequenceScrollRoomVh(
+  frameCount = LIVE_IMAGE_FRAME_COUNT,
+  vhPerFrame = SEQUENCE_SCROLL_VH_PER_FRAME
+) {
+  return (frameCount - 1) * vhPerFrame;
+}
+
+/** Portrait / narrow viewports — show full 16:9 assembly instead of cropping */
+export function sequenceFitMode(viewportWidth, viewportHeight) {
+  if (!viewportWidth || !viewportHeight) return 'cover';
+  const aspect = viewportWidth / viewportHeight;
+  return aspect < 1.05 ? 'contain' : 'cover';
 }
 
 function loadImage(index) {
@@ -80,6 +90,16 @@ function drawCover(ctx, img, w, h) {
   ctx.drawImage(img, Math.round((w - dw) / 2), Math.round((h - dh) / 2), dw, dh);
 }
 
+function drawContain(ctx, img, w, h) {
+  if (!img?.naturalWidth) return;
+  const iw = img.naturalWidth;
+  const ih = img.naturalHeight;
+  const scale = Math.min(w / iw, h / ih);
+  const dw = Math.round(iw * scale);
+  const dh = Math.round(ih * scale);
+  ctx.drawImage(img, Math.round((w - dw) / 2), Math.round((h - dh) / 2), dw, dh);
+}
+
 function resolveFrame(images, index) {
   if (images[index]?.naturalWidth) return images[index];
   for (let d = 1; d < images.length; d += 1) {
@@ -89,15 +109,20 @@ function resolveFrame(images, index) {
   return null;
 }
 
-export function drawSequenceFrame(ctx, images, floatIndex, w, h) {
+export function drawSequenceFrame(ctx, images, floatIndex, w, h, fit = 'auto') {
   if (!images?.length || !ctx) return;
   const max = LIVE_IMAGE_FRAME_COUNT - 1;
   const idx = Math.max(0, Math.min(Math.floor(floatIndex + 1e-5), max));
   const img = resolveFrame(images, idx);
   if (!img) return;
-  ctx.fillStyle = '#000';
+  ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, w, h);
-  drawCover(ctx, img, w, h);
+  const mode =
+    fit === 'contain' ? 'contain'
+      : fit === 'cover' ? 'cover'
+        : sequenceFitMode(w, h);
+  if (mode === 'contain') drawContain(ctx, img, w, h);
+  else drawCover(ctx, img, w, h);
 }
 
 export function scrollProgressToFrameFloat(progress, frameCount = LIVE_IMAGE_FRAME_COUNT) {

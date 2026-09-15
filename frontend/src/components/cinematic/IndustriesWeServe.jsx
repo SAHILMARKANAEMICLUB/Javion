@@ -32,22 +32,60 @@ export default function IndustriesWeServe({ reduced }) {
   const progressRef = useRef(0);
   const lastFrameRef = useRef(-1);
   const activePartRef = useRef(-1);
+  const lastProgressRef = useRef(0);
   const [sequenceReady, setSequenceReady] = useState(false);
   const [loadProgress, setLoadProgress] = useState(0);
-
-  const scrollRoomVh = sequenceScrollRoomVh();
+  const [scrollRoomVh, setScrollRoomVh] = useState(() => sequenceScrollRoomVh());
 
   useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const update = () => {
+      setScrollRoomVh(
+        sequenceScrollRoomVh(LIVE_IMAGE_FRAME_COUNT, mq.matches ? 2.35 : undefined)
+      );
+    };
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return undefined;
+
     let cancelled = false;
-    preloadLiveImages((i) => {
-      if (!cancelled) setLoadProgress(Math.round(((i + 1) / LIVE_IMAGE_FRAME_COUNT) * 100));
-    }).then((images) => {
-      if (cancelled) return;
-      imagesRef.current = images;
-      setSequenceReady(true);
-    });
+    let observer;
+
+    const startPreload = () => {
+      preloadLiveImages((i) => {
+        if (!cancelled) setLoadProgress(Math.round(((i + 1) / LIVE_IMAGE_FRAME_COUNT) * 100));
+      }).then((images) => {
+        if (cancelled) return;
+        imagesRef.current = images;
+        setSequenceReady(true);
+      });
+    };
+
+    if (typeof IntersectionObserver === 'undefined') {
+      startPreload();
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        observer?.disconnect();
+        startPreload();
+      },
+      { root: null, rootMargin: '120% 0px', threshold: 0 }
+    );
+    observer.observe(section);
+
     return () => {
       cancelled = true;
+      observer?.disconnect();
     };
   }, []);
 
@@ -71,44 +109,61 @@ export default function IndustriesWeServe({ reduced }) {
       if (frameIdx === lastFrameRef.current) return;
       lastFrameRef.current = frameIdx;
 
-      drawSequenceFrame(ctx, imagesRef.current, floatFrame, w, h);
+      drawSequenceFrame(ctx, imagesRef.current, floatFrame, w, h, 'auto');
     };
 
-    const updatePartLabel = (progress) => {
-      const index = Math.min(
+    const hideAllPartLabels = (exceptIndex = -1) => {
+      partLabels.forEach((el, i) => {
+        if (!el || i === exceptIndex) return;
+        gsap.set(el, {
+          autoAlpha: 0,
+          y: 0,
+          scale: 1,
+          filter: 'blur(0px)',
+        });
+      });
+    };
+
+    const partIndexForProgress = (progress) =>
+      Math.min(
         ASSEMBLY_PARTS.length - 1,
         Math.floor(Math.max(0, Math.min(progress, 0.9999)) * ASSEMBLY_PARTS.length)
       );
+
+    const showPartLabel = (index, { animate } = { animate: true }) => {
       if (index === activePartRef.current) return;
 
-      const previous = partLabels[activePartRef.current];
+      gsap.killTweensOf(partLabels);
+      hideAllPartLabels(index);
+
       const next = partLabels[index];
-      if (previous) {
-        gsap.to(previous, {
-          autoAlpha: 0,
-          y: -14,
-          scale: 1.08,
-          filter: 'blur(14px)',
-          duration: 0.32,
-          ease: 'power2.in',
-        });
+      if (!next) {
+        activePartRef.current = index;
+        return;
       }
-      if (next) {
+
+      if (animate) {
         gsap.fromTo(
           next,
-          { autoAlpha: 0, y: 18, scale: 0.88, filter: 'blur(16px)' },
+          { autoAlpha: 0, y: 12, scale: 0.94, filter: 'blur(10px)' },
           {
             autoAlpha: 1,
             y: 0,
             scale: 1,
             filter: 'blur(0px)',
-            duration: 0.55,
-            ease: 'power3.out',
-            delay: 0.08,
+            duration: 0.28,
+            ease: 'power2.out',
+            overwrite: 'auto',
           }
         );
+      } else {
+        gsap.set(next, { autoAlpha: 1, y: 0, scale: 1, filter: 'blur(0px)' });
       }
       activePartRef.current = index;
+    };
+
+    const updatePartLabel = (progress, { fastScroll = false } = {}) => {
+      showPartLabel(partIndexForProgress(progress), { animate: !fastScroll });
     };
 
     const syncCanvas = () => {
@@ -134,7 +189,7 @@ export default function IndustriesWeServe({ reduced }) {
           start: 'top top',
           end: 'bottom bottom',
           pin: viewport,
-          scrub: true,
+          scrub: 0.35,
           pinSpacing: false,
           anticipatePin: 0,
           invalidateOnRefresh: true,
@@ -143,9 +198,12 @@ export default function IndustriesWeServe({ reduced }) {
     }, section);
 
     const tick = () => {
-      progressRef.current = playhead.progress;
+      const progress = playhead.progress;
+      const jump = Math.abs(progress - lastProgressRef.current);
+      lastProgressRef.current = progress;
+      progressRef.current = progress;
       paint();
-      updatePartLabel(playhead.progress);
+      updatePartLabel(progress, { fastScroll: jump > 0.022 });
     };
     gsap.ticker.add(tick);
 
@@ -164,7 +222,7 @@ export default function IndustriesWeServe({ reduced }) {
       window.removeEventListener('resize', onResize);
       ctx.revert();
     };
-  }, [sequenceReady, reduced]);
+  }, [sequenceReady, reduced, scrollRoomVh]);
 
   if (reduced) {
     return (
@@ -183,10 +241,10 @@ export default function IndustriesWeServe({ reduced }) {
     <section
       ref={sectionRef}
       id="industries"
-      className="ind-sequence-track"
+      className="ind-sequence-track ind-sequence-track--assembly"
       data-chapter="02"
     >
-      <div ref={viewportRef} className="ind-sequence-viewport">
+      <div ref={viewportRef} className="ind-sequence-viewport ind-sequence-viewport--assembly">
         <canvas ref={canvasRef} className="ind-sequence-canvas" aria-hidden />
         <div className="ind-sequence-edge ind-sequence-edge--top" aria-hidden />
         <div className="ind-sequence-edge ind-sequence-edge--bottom" aria-hidden />

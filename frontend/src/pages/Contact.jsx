@@ -120,8 +120,7 @@ export default function Contact() {
             {
               icon: Phone,
               label: 'Call',
-              value: JAVION_CONTACT.phone,
-              href: `tel:${JAVION_CONTACT.phone.replace(/\s/g, '')}`,
+              phones: JAVION_CONTACT.phones,
             },
             {
               icon: Mail,
@@ -143,9 +142,29 @@ export default function Contact() {
                   <Icon size={18} strokeWidth={1.6} />
                 </div>
                 <div className="cin-eyebrow mb-2">{item.label}</div>
-                <p className="font-body text-[14px] leading-relaxed" style={{ color: 'var(--cin-navy)' }}>
-                  {item.value}
-                </p>
+                {item.phones ? (
+                  <p className="font-body text-[14px] leading-relaxed" style={{ color: 'var(--cin-navy)' }}>
+                    {item.phones.map((p, i) => (
+                      <React.Fragment key={p.tel}>
+                        {i > 0 && (
+                          <>
+                            <br />
+                            <span className="text-[12px]" style={{ color: 'var(--cin-text-light)' }}>
+                              {' '}
+                            </span>
+                          </>
+                        )}
+                        <a href={`tel:${p.tel}`} className="contact-info-link inline-block">
+                          {p.display}
+                        </a>
+                      </React.Fragment>
+                    ))}
+                  </p>
+                ) : (
+                  <p className="font-body text-[14px] leading-relaxed" style={{ color: 'var(--cin-navy)' }}>
+                    {item.value}
+                  </p>
+                )}
               </>
             );
             return (

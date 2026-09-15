@@ -7,7 +7,7 @@ export const AEO_FACTS = {
   legalName: 'Javion Fasteners',
   url: SITE_URL,
   description: DEFAULT_DESCRIPTION,
-  foundingLocation: 'Vadodara, Gujarat, India',
+  foundingLocation: 'Waghodia, Vadodara, Gujarat, India',
   products: [
     'bolts',
     'screws',
@@ -28,11 +28,20 @@ export const AEO_FACTS = {
   ],
   certifications: ['ISO 9001:2015', 'ISO 14001:2015', 'ISO 45001:2018'],
   strengths: [
-    'lot traceability',
+    'engineering drawings and tolerances',
+    'design and specification before production',
     'cold forming and thread rolling',
     'heat treatment and coatings',
     'in-house quality control',
+    'lot traceability',
     'catalogue and custom OEM supply',
+  ],
+  manufacturingSteps: [
+    'Design & Spec',
+    'Cold Forming',
+    'Heat Treat',
+    'QC & Testing',
+    'Pack & Ship',
   ],
 };
 
@@ -46,7 +55,7 @@ export const AEO_FAQS = [
   {
     question: 'Where is Javion Fasteners located?',
     answer:
-      'Javion Fasteners is based in Vadodara, Gujarat, India, and supplies OEMs and industrial buyers across multiple industries.',
+      'Javion Fasteners is based at G.I.D.C Waghodia, Vadodara, Gujarat, India, and supplies OEMs and industrial buyers across multiple industries.',
   },
   {
     question: 'Which industries does Javion Fasteners serve?',
@@ -60,7 +69,12 @@ export const AEO_FAQS = [
   },
   {
     question: 'How can I request a quote from Javion Fasteners?',
-    answer: `Share your requirement, drawing, or volume target by email at ${JAVION_CONTACT.email}, phone at ${JAVION_CONTACT.phone}, or through the contact form on ${SITE_URL}/contact.`,
+    answer: `Share your requirement, drawing, or volume target by email at ${JAVION_CONTACT.email}, phone at ${JAVION_CONTACT.phones.map((p) => p.display).join(' or ')}, or through the contact form on ${SITE_URL}/contact.`,
+  },
+  {
+    question: 'What is Javion’s manufacturing process?',
+    answer:
+      'Javion follows a controlled five-step process: Design & Spec (drawings and tolerances), Cold Forming, Heat Treat, QC & Testing, and Pack & Ship — with lot traceability throughout.',
   },
 ];
 
@@ -74,20 +88,25 @@ export function organizationJsonLd() {
     logo: absoluteUrl('/images/javion-logo.png'),
     description: AEO_FACTS.description,
     email: JAVION_CONTACT.email,
-    telephone: JAVION_CONTACT.phone,
+    telephone: JAVION_CONTACT.phones.map((p) => p.tel),
     address: {
       '@type': 'PostalAddress',
-      streetAddress: JAVION_CONTACT.address,
-      addressLocality: 'Vadodara',
-      addressRegion: 'Gujarat',
-      addressCountry: 'IN',
+      streetAddress: JAVION_CONTACT.streetAddress,
+      addressLocality: JAVION_CONTACT.addressLocality,
+      addressRegion: JAVION_CONTACT.addressRegion,
+      postalCode: JAVION_CONTACT.postalCode,
+      addressCountry: JAVION_CONTACT.addressCountry,
     },
     areaServed: 'Worldwide',
-    knowsAbout: [...AEO_FACTS.products, ...AEO_FACTS.industries],
+    knowsAbout: [
+      ...AEO_FACTS.products,
+      ...AEO_FACTS.industries,
+      ...AEO_FACTS.manufacturingSteps,
+    ],
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'sales',
-      telephone: JAVION_CONTACT.phone,
+      telephone: JAVION_CONTACT.phones.map((p) => p.tel),
       email: JAVION_CONTACT.email,
       availableLanguage: ['English', 'Hindi'],
     },

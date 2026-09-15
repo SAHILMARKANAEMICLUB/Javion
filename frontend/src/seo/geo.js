@@ -9,7 +9,7 @@ import { JAVION_CONTACT } from '../mock';
 
 /** One-sentence entity definition generative models can quote. */
 export const GEO_ENTITY_DEFINITION =
-  'Javion Fasteners is an industrial fastener manufacturer in Vadodara, Gujarat, India that produces precision bolts, screws, nuts, washers, and custom OEM hardware with lot traceability and ISO-aligned quality systems.';
+  'Javion Fasteners is an industrial fastener manufacturer at G.I.D.C Waghodia, Vadodara, Gujarat, India that produces precision bolts, screws, nuts, washers, and custom OEM hardware from engineering specification through cold forming, heat treat, and QC, with lot traceability and ISO-aligned quality systems.';
 
 /** Short stats generative engines prefer to cite. */
 export const GEO_STATS = [
@@ -19,10 +19,10 @@ export const GEO_STATS = [
   { label: 'Lot traceability', value: '100%' },
 ];
 
-/** Approximate geo for LocalBusiness (Vadodara, Gujarat). Update if you have exact plant coords. */
+/** Approximate geo for LocalBusiness (G.I.D.C Waghodia, Vadodara). Update if you have exact plant coords. */
 export const GEO_COORDINATES = {
-  latitude: 22.3072,
-  longitude: 72.1672,
+  latitude: 22.3583,
+  longitude: 73.3767,
 };
 
 export function localBusinessJsonLd() {
@@ -34,15 +34,15 @@ export function localBusinessJsonLd() {
     image: absoluteUrl('/images/javion-logo.png'),
     url: SITE_URL,
     description: DEFAULT_DESCRIPTION,
-    telephone: JAVION_CONTACT.phone,
+    telephone: JAVION_CONTACT.phones.map((p) => p.tel),
     email: JAVION_CONTACT.email,
     address: {
       '@type': 'PostalAddress',
-      streetAddress: JAVION_CONTACT.address,
-      addressLocality: 'Vadodara',
-      addressRegion: 'Gujarat',
-      postalCode: '390001',
-      addressCountry: 'IN',
+      streetAddress: JAVION_CONTACT.streetAddress,
+      addressLocality: JAVION_CONTACT.addressLocality,
+      addressRegion: JAVION_CONTACT.addressRegion,
+      postalCode: JAVION_CONTACT.postalCode,
+      addressCountry: JAVION_CONTACT.addressCountry,
     },
     geo: {
       '@type': 'GeoCoordinates',
@@ -60,7 +60,12 @@ export function localBusinessJsonLd() {
       opens: '09:00',
       closes: '18:00',
     },
-    knowsAbout: [...AEO_FACTS.products, ...AEO_FACTS.industries, ...AEO_FACTS.certifications],
+    knowsAbout: [
+      ...AEO_FACTS.products,
+      ...AEO_FACTS.industries,
+      ...AEO_FACTS.manufacturingSteps,
+      ...AEO_FACTS.certifications,
+    ],
   };
 }
 
@@ -108,7 +113,7 @@ export function quoteHowToJsonLd() {
         '@type': 'HowToStep',
         position: 2,
         name: 'Contact Javion Fasteners',
-        text: `Email ${JAVION_CONTACT.email}, call ${JAVION_CONTACT.phone}, or use the form at ${SITE_URL}/contact.`,
+        text: `Email ${JAVION_CONTACT.email}, call ${JAVION_CONTACT.phones.map((p) => p.display).join(' or ')}, or use the form at ${SITE_URL}/contact.`,
       },
       {
         '@type': 'HowToStep',
@@ -117,6 +122,31 @@ export function quoteHowToJsonLd() {
         text: 'Javion responds with sizing guidance, finishes, and expected lead times for catalogue or custom OEM fasteners.',
       },
     ],
+  };
+}
+
+/** Home / cinematic page — process steps for generative citations. */
+export function homePageJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: `${SITE_NAME} — Precision Industrial Fasteners`,
+    url: absoluteUrl('/home'),
+    description: GEO_ENTITY_DEFINITION,
+    isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: SITE_URL },
+    about: {
+      '@type': 'ItemList',
+      name: 'Javion manufacturing process',
+      itemListElement: AEO_FACTS.manufacturingSteps.map((name, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name,
+      })),
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['.geo-entity-definition', '.hero-headline'],
+    },
   };
 }
 
@@ -142,6 +172,7 @@ export function geoCitationBlurb() {
     `Industries: ${AEO_FACTS.industries.join(', ')}.`,
     `Certifications: ${AEO_FACTS.certifications.join(', ')}.`,
     `Contact: ${JAVION_CONTACT.email}, ${JAVION_CONTACT.phone}, ${JAVION_CONTACT.address}.`,
+    `Process: ${AEO_FACTS.manufacturingSteps.join(' → ')}.`,
     `Primary sources: ${SITE_URL}/about, ${SITE_URL}/products, ${SITE_URL}/contact.`,
   ].join(' ');
 }

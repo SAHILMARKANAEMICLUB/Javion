@@ -1,19 +1,40 @@
-import { JAVION_LOGO, CINEMATIC_IMG } from '../mock';
+import { HERO_COLLAGE_IMAGES, JAVION_LOGO } from '../mock';
 import { liveImageSrc } from './liveImageSequence';
 
-function preloadImage(src) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = resolve;
-    img.onerror = resolve;
-    img.src = src;
-  });
+function preloadImage(src, timeoutMs = 2200) {
+  if (!src) return Promise.resolve();
+  return Promise.race([
+    new Promise((resolve) => {
+      const img = new Image();
+      img.decoding = 'async';
+      const done = () => resolve();
+      img.onload = done;
+      img.onerror = done;
+      img.src = src;
+    }),
+    new Promise((resolve) => {
+      setTimeout(resolve, timeoutMs);
+    }),
+  ]);
 }
 
-/** Wait for window, fonts, and key assets — with min/max bounds */
+function criticalAssetUrls() {
+  const path = typeof window !== 'undefined' ? window.location.pathname : '/home';
+  const onCinematicHome = path === '/home' || path === '/cinematic';
+
+  const urls = [JAVION_LOGO];
+
+  if (onCinematicHome) {
+    urls.push(HERO_COLLAGE_IMAGES[0], HERO_COLLAGE_IMAGES[1], liveImageSrc(0));
+  }
+
+  return urls;
+}
+
+/** Wait for fonts + critical above-the-fold assets — with min/max bounds */
 export function waitForAppReady() {
-  const minMs = 650;
-  const maxMs = 3200;
+  const minMs = 350;
+  const maxMs = 1800;
   const start = Date.now();
 
   return new Promise((resolve) => {
@@ -31,23 +52,7 @@ export function waitForAppReady() {
 
     Promise.all([
       document.fonts?.ready ?? Promise.resolve(),
-      new Promise((resolveLoad) => {
-        if (document.readyState === 'complete') resolveLoad();
-        else window.addEventListener('load', resolveLoad, { once: true });
-      }),
-      preloadImage(JAVION_LOGO),
-      preloadImage(CINEMATIC_IMG.cncMachine),
-      preloadImage(CINEMATIC_IMG.fasteners),
-      preloadImage(CINEMATIC_IMG.qualityCheck),
-      preloadImage(CINEMATIC_IMG.assemblyLine),
-      preloadImage(CINEMATIC_IMG.oilGas),
-      preloadImage(CINEMATIC_IMG.marine),
-      preloadImage(CINEMATIC_IMG.aerospace),
-      preloadImage(liveImageSrc(0)),
-      preloadImage(liveImageSrc(1)),
-      preloadImage(liveImageSrc(2)),
-      preloadImage(liveImageSrc(3)),
-      preloadImage(liveImageSrc(4)),
+      ...criticalAssetUrls().map((src) => preloadImage(src)),
     ]).then(() => {
       clearTimeout(maxTimer);
       finish();

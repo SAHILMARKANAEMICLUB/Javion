@@ -71,7 +71,7 @@ Keep FAQ answers factual and update contact details in `src/mock.js` + `public/l
 ## 9. GEO (Generative Engine Optimization)
 Already included:
 - Quotable entity definition on `/about` (+ speakable markup on home)
-- `LocalBusiness` schema with Rajkot geo coordinates
+- `LocalBusiness` schema with G.I.D.C Waghodia (Vadodara) geo coordinates
 - `AboutPage` + `HowTo` (request a quote) schema
 - Expanded `llms.txt` for generative citations
 

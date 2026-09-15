@@ -72,7 +72,7 @@ export default function Loader({ onFinish }) {
 
       const progressTween = gsap.to(progressRef.current, {
         v: 0.88,
-        duration: 2.2,
+        duration: 1.1,
         ease: 'power1.out',
         onUpdate: () => setProgress(progressRef.current.v),
       });

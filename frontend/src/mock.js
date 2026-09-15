@@ -6,6 +6,9 @@ const CDN2 = 'https://cdn.prod.website-files.com/64e85c16c3e5fe1806b372fc';
 
 export const JAVION_LOGO = '/images/javion-logo.png';
 
+/** Home scatter hero collage — `public/images/hero/hero-1.png` … `hero-8.png` */
+export const HERO_COLLAGE_IMAGES = Array.from({ length: 8 }, (_, i) => `/images/hero/hero-${i + 1}.png`);
+
 export const BRAND = {
   navy: '#0A1D37',
   navyMid: '#1e4976',
@@ -25,6 +28,12 @@ export const HERO_VIDEO_POSTER = 'https://images.unsplash.com/photo-158109122682
 /* Factory / manufacturing — HD streams load more reliably than UHD */
 export const HERO_VIDEO = 'https://videos.pexels.com/video-files/4488740/4488740-hd_1920_1080_25fps.mp4';
 export const HERO_VIDEO_FALLBACK = 'https://videos.pexels.com/video-files/3195394/3195394-hd_1920_1080_25fps.mp4';
+
+/** Industries page top block: set to `/videos/your-assembly.mp4` for scroll-scrub MP4; `null` uses frame sequence. */
+export const INDUSTRIES_SCROLL_VIDEO = null;
+export const INDUSTRIES_SCROLL_VIDEO_POSTER = '/images/nut_bolt_animation_optimized/frame-001.webp';
+
+const industryVideo = (fileName) => `/videos/${encodeURIComponent(fileName)}`;
 
 const px = (path, w = 2400) =>
   `https://images.pexels.com/photos/${path}?auto=compress&cs=tinysrgb&w=${w}&fit=crop`;
@@ -585,6 +594,7 @@ export const INDUSTRIES = [
       'Fasteners engineered for vehicle assembly lines — chassis connections, engine components, suspension hardware, and interior trim. Torque-controlled, vibration-resistant, and fully traceable to OEM specifications.',
     products: ['Hex head bolts', 'Flange nuts', 'Engine studs', 'Chassis U-bolts'],
     image: CINEMATIC_IMG.automotive,
+    video: industryVideo('automobile.mp4'),
     icon: 'car',
   },
   {
@@ -595,6 +605,7 @@ export const INDUSTRIES = [
       'Anchor bolts, structural fasteners, and concrete hardware for commercial and infrastructure projects. Hot-dip galvanized and weather-resistant options for long-term load-bearing performance.',
     products: ['Anchor bolts', 'Structural bolts', 'Expansion anchors', 'Threaded rods'],
     image: CINEMATIC_IMG.construction,
+    video: industryVideo('construction.mp4'),
     icon: 'building',
   },
   {
@@ -605,6 +616,7 @@ export const INDUSTRIES = [
       'High-pressure, corrosion-resistant fasteners for pipelines, refineries, and offshore rigs. Specialty alloys and coatings rated for sour service, subsea, and high-temperature environments.',
     products: ['Stud bolts', 'Pipeline flanges', 'B7 alloy studs', 'Inconel fasteners'],
     image: CINEMATIC_IMG.oilGas,
+    video: industryVideo('oil and gas.mp4'),
     icon: 'fuel',
   },
   {
@@ -615,6 +627,7 @@ export const INDUSTRIES = [
       'Lightweight, high-strength fasteners meeting stringent aerospace tolerances. Titanium, A286, and NAS/MS spec hardware for airframe, avionics, and ground support applications.',
     products: ['Titanium bolts', 'Locking nuts', 'Hi-lok pins', 'NAS spec hardware'],
     image: CINEMATIC_IMG.aerospace,
+    video: industryVideo('areospace.mp4'),
     icon: 'plane',
   },
   {
@@ -625,6 +638,7 @@ export const INDUSTRIES = [
       'Micro fasteners, PCB standoffs, and enclosure fittings for consumer electronics, telecom, and industrial control panels. Precision threads and anti-vibration designs for compact assemblies.',
     products: ['PCB standoffs', 'Micro screws', 'Enclosure rivets', 'Cable gland fittings'],
     image: CINEMATIC_IMG.electronics,
+    video: industryVideo('electronis.mp4'),
     icon: 'cpu',
   },
   {
@@ -635,6 +649,7 @@ export const INDUSTRIES = [
       'Stainless steel and anti-corrosion fasteners for shipbuilding, port infrastructure, and offshore platforms. A4 marine-grade stainless, duplex alloys, and specialty coatings for harsh sea environments.',
     products: ['A4 stainless bolts', 'Deck screws', 'Duplex studs', 'Silicon bronze hardware'],
     image: CINEMATIC_IMG.marine,
+    video: industryVideo('Marine.mp4'),
     icon: 'ship',
   },
   {
@@ -645,6 +660,7 @@ export const INDUSTRIES = [
       'Large-diameter bolts and heavy-duty hardware for mining, agriculture, and industrial equipment. Grade 10.9 and 12.9 high-tensile fasteners designed for extreme loads and repeated cycling.',
     products: ['Large hex bolts', 'Plow bolts', 'Track shoe bolts', 'Grade 12.9 studs'],
     image: CINEMATIC_IMG.heavyMachinery,
+    video: industryVideo('Heavy_machinery.mp4'),
     icon: 'truck',
   },
   {
@@ -655,15 +671,29 @@ export const INDUSTRIES = [
       'Solar panel mounting hardware, structural rails, and ground-mount fasteners for utility-scale and rooftop installations. Corrosion-resistant coatings rated for 25+ year outdoor exposure.',
     products: ['Panel mount bolts', 'Rail clamps', 'Ground screw anchors', 'Stainless roof hooks'],
     image: CINEMATIC_IMG.solarEnergy,
+    video: industryVideo('solar.mp4'),
     icon: 'sun',
   },
 ];
 
 export const JAVION_CONTACT = {
-  phone: '+91 98765 43210',
+  name: 'Javion Fasteners',
   email: 'info@javionfasteners.com',
-  address: 'Industrial Estate, Vadodara, Gujarat, India',
-  whatsapp: '919876543210',
+  streetAddress: 'C1B/93, G.I.D.C ESTATE, Waghodia',
+  addressLocality: 'Vadodara',
+  addressRegion: 'Gujarat',
+  postalCode: '391760',
+  addressCountry: 'IN',
+  /** Full address for display */
+  address:
+    'C1B/93, G.I.D.C ESTATE, Waghodia dist., Vadodara, Gujarat — 391760',
+  phones: [
+    { display: '+91 82910 31352', tel: '+918291031352' },
+    { display: '+91 90040 03366', tel: '+919004003366' },
+  ],
+  /** Display string + schema-friendly summary */
+  phone: '+91 82910 31352 / +91 90040 03366',
+  whatsapp: '918291031352',
 };
 
 export const ABOUT_STORY = {
@@ -674,7 +704,7 @@ export const ABOUT_STORY = {
     'Javion Fasteners began with a simple belief: every joint in a machine, structure, or vehicle deserves hardware that holds — batch after batch, year after year.',
   mission:
     'We design, form, heat-treat, and finish fasteners for OEMs and industrial buyers who need traceable quality, reliable lead times, and partners who speak the language of drawings and tolerances.',
-  location: 'Vadodara, Gujarat, India',
+  location: 'Waghodia, Vadodara, Gujarat, India',
   stats: [
     { value: '25+', label: 'Years of craft' },
     { value: '3', label: 'ISO systems' },

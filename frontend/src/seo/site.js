@@ -6,14 +6,15 @@ export const SITE_URL = (
 export const SITE_NAME = 'Javion Fasteners';
 
 export const DEFAULT_DESCRIPTION =
-  'Javion manufactures precision industrial fasteners — bolts, screws, nuts, and custom hardware for automotive, construction, oil & gas, and more.';
+  'Javion Fasteners — precision bolts, screws, nuts, and custom OEM hardware from G.I.D.C Waghodia, Vadodara, Gujarat. Engineering specs, cold forming, heat treat, and lot traceability for automotive, construction, oil & gas, and more.';
 
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/images/javion-logo.png`;
 
 export const PAGE_SEO = {
   home: {
     title: 'Precision Industrial Fasteners',
-    description: DEFAULT_DESCRIPTION,
+    description:
+      'Explore Javion Fasteners — engineering drawings to dispatch: design & spec, cold forming, heat treat, QC, and pack & ship from our Vadodara, Gujarat plant.',
     path: '/home',
   },
   products: {
@@ -31,7 +32,7 @@ export const PAGE_SEO = {
   industries: {
     title: 'Industries We Cater',
     description:
-      'Fasteners specified for automotive, construction, oil & gas, aerospace, electronics, marine, and renewable energy.',
+      'Fasteners for automotive, construction, oil & gas, aerospace, electronics, marine, heavy machinery, and solar energy — specified for demanding joints and environments.',
     path: '/industries',
   },
   contact: {

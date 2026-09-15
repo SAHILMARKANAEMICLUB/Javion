@@ -3,7 +3,14 @@ import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight } from 'lucide-react';
-import { INDUSTRIES, onCinematicImgError } from '../mock';
+import {
+  INDUSTRIES,
+  INDUSTRIES_SCROLL_VIDEO,
+  INDUSTRIES_SCROLL_VIDEO_POSTER,
+  onCinematicImgError,
+} from '../mock';
+import ScrollScrubVideo from '../components/cinematic/ScrollScrubVideo';
+import IndustryCardScrollVideo from '../components/cinematic/IndustryCardScrollVideo';
 import { headlineBlurIn } from '../utils/cinematicAnimations';
 import useReducedMotion from '../hooks/useReducedMotion';
 import ProductsNav from '../components/ProductsNav';
@@ -67,9 +74,17 @@ export default function Industries() {
       <Seo {...PAGE_SEO.industries} />
       <ProductsNav active="industries" />
 
-      {/* Flow sequence video — same scroll scrub as home industries block */}
+      {/* Scroll-scrub assembly: frame sequence (default) or MP4 when INDUSTRIES_SCROLL_VIDEO is set */}
       <div className="ind-page-flow">
-        <IndustriesWeServe reduced={reduced} />
+        {INDUSTRIES_SCROLL_VIDEO ? (
+          <ScrollScrubVideo
+            src={INDUSTRIES_SCROLL_VIDEO}
+            poster={INDUSTRIES_SCROLL_VIDEO_POSTER}
+            reduced={reduced}
+          />
+        ) : (
+          <IndustriesWeServe reduced={reduced} />
+        )}
       </div>
 
       <section className="ind-page-intro relative z-[1] px-8 md:px-16 pt-16 md:pt-24 pb-10 md:pb-14">
@@ -103,14 +118,23 @@ export default function Industries() {
               id={industry.id}
               className={`ind-page-card ${idx % 2 === 1 ? 'ind-page-card--flip' : ''}`}
             >
-              <div className="ind-page-card-media">
-                <img
-                  src={industry.image}
+              {industry.video && !reduced ? (
+                <IndustryCardScrollVideo
+                  src={industry.video}
+                  poster={industry.image}
                   alt={industry.name}
-                  loading="lazy"
-                  onError={onCinematicImgError}
+                  reduced={reduced}
                 />
-              </div>
+              ) : (
+                <div className="ind-page-card-media">
+                  <img
+                    src={industry.image}
+                    alt={industry.name}
+                    loading="lazy"
+                    onError={onCinematicImgError}
+                  />
+                </div>
+              )}
               <div className="ind-page-card-body">
                 <div className="cin-eyebrow" style={{ color: 'var(--cin-cyan-dark)' }}>
                   {String(idx + 1).padStart(2, '0')}
