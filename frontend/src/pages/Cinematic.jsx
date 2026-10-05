@@ -14,7 +14,8 @@ import IndustriesWeServe from '../components/cinematic/IndustriesWeServe';
 import DocumentsResources from '../components/cinematic/DocumentsResources';
 import GlobalFeatures from '../components/GlobalFeatures';
 import { headlineBlurIn } from '../utils/cinematicAnimations';
-import blueprintFooter from '../assets/blueprint-footer-navy.png';
+import blueprintFooterLeft from '../assets/blueprint-footer-left.png';
+import blueprintFooterRight from '../assets/blueprint-footer-right.png';
 import './Cinematic.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -182,11 +183,13 @@ function applyTileParallax(section, mouse) {
 }
 
 function buildScatterTimeline(scatter, layout, {
-  scrollEnd = '+=600%',
+  scrollEnd = '+=420%',
   tunnelZoom = 2.35,
   tunnelHoldScale = 1.35,
   textZoomScale = 5.5,
   curveMult = 1,
+  scrub = true,
+  useDepth = true,
 } = {}) {
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -195,7 +198,7 @@ function buildScatterTimeline(scatter, layout, {
       end: scrollEnd,
       pin: true,
       pinSpacing: true,
-      scrub: 0.55,
+      scrub,
       anticipatePin: 1,
       invalidateOnRefresh: true,
     },
@@ -203,22 +206,14 @@ function buildScatterTimeline(scatter, layout, {
 
   tl.fromTo('.tile',
     {
-      xPercent: -50,
-      yPercent: -50,
-      left: '50%',
-      top: '50%',
-      width: '8%',
-      height: '8%',
+      x: (i) => window.innerWidth * (50 - layout[i].l - layout[i].w / 2) / 100,
+      y: (i) => window.innerHeight * (50 - layout[i].t - layout[i].h / 2) / 100,
       scale: 0.35,
       opacity: 0,
     },
     {
-      xPercent: 0,
-      yPercent: 0,
-      left:   (i) => `${layout[i].l}%`,
-      top:    (i) => `${layout[i].t}%`,
-      width:  (i) => `${layout[i].w}%`,
-      height: (i) => `${layout[i].h}%`,
+      x: 0,
+      y: 0,
       scale: 1,
       opacity: 1,
       ease: 'power2.out',
@@ -228,18 +223,20 @@ function buildScatterTimeline(scatter, layout, {
     0
   );
 
-  tl.fromTo('.tile-3d',
-    { rotateY: 0, rotateX: 0, z: -300 },
-    {
-      rotateY: (i) => layout[i].rotY,
-      rotateX: (i) => layout[i].rotX,
-      z: (i) => layout[i].z,
-      ease: 'power2.out',
-      stagger: 0.02,
-      duration: 0.52,
-    },
-    0
-  );
+  if (useDepth) {
+    tl.fromTo('.tile-3d',
+      { rotateY: 0, rotateX: 0, z: -300 },
+      {
+        rotateY: (i) => layout[i].rotY,
+        rotateX: (i) => layout[i].rotX,
+        z: (i) => layout[i].z,
+        ease: 'power2.out',
+        stagger: 0.02,
+        duration: 0.52,
+      },
+      0
+    );
+  }
 
   tl.from('.ornament', { y: -20, opacity: 0, duration: 0.3, ease: 'power2.out' }, 0.1);
 
@@ -249,9 +246,9 @@ function buildScatterTimeline(scatter, layout, {
   const textZoomExit = 0.38;
 
   tl.to('.tunnel-wrap', {
-    rotateY: 14,
+    rotateY: useDepth ? 14 : 0,
     scale: tunnelHoldScale,
-    z: 48,
+    z: useDepth ? 48 : 0,
     ease: 'none',
     duration: zoomHold,
   }, zoomStart);
@@ -271,20 +268,22 @@ function buildScatterTimeline(scatter, layout, {
     duration: zoomHold,
   }, zoomStart);
 
-  tl.to('.tile-3d', {
-    rotateY: (i) => layout[i].rotY + layout[i].curve * 0.45 * curveMult,
-    rotateX: (i) => layout[i].rotX * 0.55,
-    z: (i) => layout[i].z + 60,
-    ease: 'none',
-    duration: zoomHold,
-  }, zoomStart);
+  if (useDepth) {
+    tl.to('.tile-3d', {
+      rotateY: (i) => layout[i].rotY + layout[i].curve * 0.45 * curveMult,
+      rotateX: (i) => layout[i].rotX * 0.55,
+      z: (i) => layout[i].z + 60,
+      ease: 'none',
+      duration: zoomHold,
+    }, zoomStart);
+  }
 
   const zoomFinish = zoomStart + zoomHold;
 
   tl.to('.tunnel-wrap', {
-    rotateY: 34,
+    rotateY: useDepth ? 34 : 0,
     scale: tunnelZoom,
-    z: 180,
+    z: useDepth ? 180 : 0,
     ease: 'power4.in',
     duration: zoomExit,
   }, zoomFinish);
@@ -304,13 +303,15 @@ function buildScatterTimeline(scatter, layout, {
     duration: zoomExit,
   }, zoomFinish);
 
-  tl.to('.tile-3d', {
-    rotateY: (i) => layout[i].rotY + layout[i].curve * 2.2 * curveMult,
-    rotateX: (i) => layout[i].rotX * 1.4,
-    z: (i) => layout[i].z + 320,
-    ease: 'power4.in',
-    duration: zoomExit,
-  }, zoomFinish);
+  if (useDepth) {
+    tl.to('.tile-3d', {
+      rotateY: (i) => layout[i].rotY + layout[i].curve * 2.2 * curveMult,
+      rotateX: (i) => layout[i].rotX * 1.4,
+      z: (i) => layout[i].z + 320,
+      ease: 'power4.in',
+      duration: zoomExit,
+    }, zoomFinish);
+  }
 
   return tl;
 }
@@ -375,7 +376,7 @@ function ScatterCollage({ reduced }) {
       ScrollTrigger.matchMedia({
         '(min-width: 768px)': () => {
           buildScatterTimeline(scatter, SCATTER_LAYOUT, {
-            scrollEnd: '+=600%',
+            scrollEnd: '+=420%',
             tunnelZoom: 2.35,
             tunnelHoldScale: 1.35,
             textZoomScale: 5.5,
@@ -384,11 +385,13 @@ function ScatterCollage({ reduced }) {
         },
         '(max-width: 767px)': () => {
           buildScatterTimeline(scatter, SCATTER_LAYOUT_MOBILE, {
-            scrollEnd: '+=400%',
+            scrollEnd: '+=250%',
             tunnelZoom: 1.65,
             tunnelHoldScale: 1.12,
             textZoomScale: 3.2,
             curveMult: 0.35,
+            scrub: true,
+            useDepth: false,
           });
         },
       });
@@ -402,7 +405,7 @@ function ScatterCollage({ reduced }) {
       ref={sectionRef}
       id="scatter"
       className="ov-section scatter-section relative w-full overflow-hidden cin-section-flow"
-      style={{ perspective: '1200px' }}
+      style={{ perspective: isMobileLayout ? '720px' : '1200px' }}
       onMouseMove={finePointer ? onMouseMove : undefined}
       data-chapter="01"
     >
@@ -421,7 +424,11 @@ function ScatterCollage({ reduced }) {
             key={i}
             className="tile scatter-tile absolute"
             style={{
-              willChange: 'left, top, width, height, filter, opacity',
+              left: `${tile.l}%`,
+              top: `${tile.t}%`,
+              width: `${tile.w}%`,
+              height: `${tile.h}%`,
+              willChange: 'transform, opacity',
               transformStyle: 'preserve-3d',
             }}
           >
@@ -435,7 +442,7 @@ function ScatterCollage({ reduced }) {
                   src={tile.src}
                   alt={tile.alt || 'Fastener blueprint'}
                   className="scatter-hero-img max-w-full max-h-full w-full h-full"
-                  loading={i < 2 ? 'eager' : 'lazy'}
+                  loading="eager"
                   decoding="async"
                   fetchPriority={i === 0 ? 'high' : undefined}
                   onError={onCinematicImgError}
@@ -685,7 +692,7 @@ function Counters({ reduced }) {
   }, [reduced]);
 
   const items = [
-    { v: 24, suf: '+', l: 'years manufacturing' },
+    { v: 40, suf: '+', l: 'years manufacturing' },
     { v: 1538, suf: '°C', l: 'heat treatment peak' },
     { v: 12, suf: 'M+', l: 'fasteners shipped yearly' },
     { v: 99.7, dec: 1, suf: '%', l: 'dimensional accuracy' },
@@ -831,7 +838,7 @@ function FinaleOutro({ reduced }) {
       });
 
       if (reduced) {
-        gsap.set('.finale-blueprint', { y: 0, opacity: 0.55 });
+        gsap.set('.finale-blueprint', { y: 0, opacity: 0.85 });
         gsap.set('.finale-brand-word', { y: 0, filter: 'none', opacity: 1 });
         return;
       }
@@ -841,7 +848,7 @@ function FinaleOutro({ reduced }) {
         { y: '70%', opacity: 0 },
         {
           y: '0%',
-          opacity: 0.55,
+          opacity: 0.85,
           duration: 1.35,
           ease: 'power3.out',
           scrollTrigger: {
@@ -872,7 +879,7 @@ function FinaleOutro({ reduced }) {
     return () => ctx.revert();
   }, [reduced]);
 
-  const t = 'You bring the vision. We bring the fire.'.split(' ');
+  const t = 'Fastening the Future for Industry Leaders Worldwide'.split(' ');
   const year = new Date().getFullYear();
 
   return (
@@ -894,10 +901,16 @@ function FinaleOutro({ reduced }) {
         aria-hidden="true"
       >
         <img
-          src={blueprintFooter}
+          src={blueprintFooterLeft}
           alt=""
           loading="lazy"
-          className="block w-full h-auto"
+          className="finale-blueprint-side finale-blueprint-side--left"
+        />
+        <img
+          src={blueprintFooterRight}
+          alt=""
+          loading="lazy"
+          className="finale-blueprint-side finale-blueprint-side--right"
         />
       </div>
 
@@ -998,7 +1011,7 @@ export default function Cinematic() {
       <p className="geo-entity-definition sr-only">{GEO_ENTITY_DEFINITION}</p>
       <ProductsNav active="home" showProgress />
       <ScatterCollage reduced={reduced} />
-      <IndustriesWeServe reduced={reduced} />
+      <IndustriesWeServe reduced={reduced} showPartLabels={false} />
       <HorizontalAct reduced={reduced} />
       <Counters reduced={reduced} />
       <ClipReveal reduced={reduced} />

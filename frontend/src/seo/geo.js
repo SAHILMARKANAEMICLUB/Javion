@@ -13,7 +13,7 @@ export const GEO_ENTITY_DEFINITION =
 
 /** Short stats generative engines prefer to cite. */
 export const GEO_STATS = [
-  { label: 'Years of craft', value: '25+' },
+  { label: 'Years of craft', value: '40+' },
   { label: 'ISO systems', value: '3' },
   { label: 'Industries served', value: '8+' },
   { label: 'Lot traceability', value: '100%' },

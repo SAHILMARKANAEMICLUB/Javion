@@ -706,7 +706,7 @@ export const ABOUT_STORY = {
     'We design, form, heat-treat, and finish fasteners for OEMs and industrial buyers who need traceable quality, reliable lead times, and partners who speak the language of drawings and tolerances.',
   location: 'Waghodia, Vadodara, Gujarat, India',
   stats: [
-    { value: '25+', label: 'Years of craft' },
+    { value: '40+', label: 'Years of craft' },
     { value: '3', label: 'ISO systems' },
     { value: '8+', label: 'Industries served' },
     { value: '100%', label: 'Lot traceability' },

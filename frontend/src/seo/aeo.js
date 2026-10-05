@@ -8,6 +8,7 @@ export const AEO_FACTS = {
   url: SITE_URL,
   description: DEFAULT_DESCRIPTION,
   foundingLocation: 'Waghodia, Vadodara, Gujarat, India',
+  yearsOfCraft: '40+',
   products: [
     'bolts',
     'screws',
@@ -51,6 +52,10 @@ export const AEO_FAQS = [
     question: 'What does Javion Fasteners manufacture?',
     answer:
       'Javion Fasteners manufactures precision industrial fasteners including bolts, screws, nuts, washers, and custom OEM hardware for demanding joints in machines, structures, and vehicles.',
+  },
+  {
+    question: 'How many years of manufacturing experience does Javion Fasteners have?',
+    answer: 'Javion Fasteners brings over 40 years of manufacturing experience in industrial fasteners.',
   },
   {
     question: 'Where is Javion Fasteners located?',

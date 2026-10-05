@@ -22,7 +22,7 @@ const ASSEMBLY_PARTS = [
   'Hex Nut',
 ];
 
-export default function IndustriesWeServe({ reduced }) {
+export default function IndustriesWeServe({ reduced, showPartLabels = true }) {
   const sectionRef = useRef(null);
   const viewportRef = useRef(null);
   const canvasRef = useRef(null);
@@ -248,22 +248,24 @@ export default function IndustriesWeServe({ reduced }) {
         <canvas ref={canvasRef} className="ind-sequence-canvas" aria-hidden />
         <div className="ind-sequence-edge ind-sequence-edge--top" aria-hidden />
         <div className="ind-sequence-edge ind-sequence-edge--bottom" aria-hidden />
-        <div className="ind-sequence-part-labels" aria-hidden>
-          {ASSEMBLY_PARTS.map((part, index) => (
-            <div
-              key={`${part}-${index}`}
-              ref={(element) => {
-                partLabelRefs.current[index] = element;
-              }}
-              className="ind-sequence-part-label"
-            >
-              <span className="ind-sequence-part-name">{part}</span>
+        {showPartLabels && (
+          <>
+            <div className="ind-sequence-part-labels" aria-hidden>
+              {ASSEMBLY_PARTS.map((part, index) => (
+                <div
+                  key={`${part}-${index}`}
+                  ref={(element) => {
+                    partLabelRefs.current[index] = element;
+                  }}
+                  className="ind-sequence-part-label"
+                >
+                  <span className="ind-sequence-part-name">{part}</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <span className="sr-only">
-          Assembly sequence: {ASSEMBLY_PARTS.join(' to ')}
-        </span>
+            <span className="sr-only">Assembly sequence: {ASSEMBLY_PARTS.join(' to ')}</span>
+          </>
+        )}
 
         {!sequenceReady && (
           <div className="ind-sequence-loader absolute inset-0 z-10 flex flex-col items-center justify-center gap-4">
